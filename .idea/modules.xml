@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/robust.iml" filepath="$PROJECT_DIR$/.idea/robust.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/robustServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/robustServer.main.iml" />
     </modules>
   </component>
