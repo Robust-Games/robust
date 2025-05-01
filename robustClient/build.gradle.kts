@@ -27,7 +27,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("com.robustgames.robustclient")
-    mainClass.set("com.robustgames.robustclient.HelloApplication")
+    mainClass.set("com.robustgames.robustclient.application.RobustApplication")
 }
 
 javafx {

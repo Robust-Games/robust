@@ -4,6 +4,8 @@ module com.robustgames.robustclient {
 
     requires com.almasb.fxgl.all;
 
-    opens com.robustgames.robustclient to javafx.fxml;
-    exports com.robustgames.robustclient;
+
+    opens com.robustgames.robustclient.application to javafx.fxml;
+    exports com.robustgames.robustclient.application;
+
 }

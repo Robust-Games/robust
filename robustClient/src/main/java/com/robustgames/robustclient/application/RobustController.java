@@ -1,9 +1,9 @@
-package com.robustgames.robustclient;
+package com.robustgames.robustclient.application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class RobustController {
     @FXML
     private Label welcomeText;
 
