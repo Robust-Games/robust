@@ -7,5 +7,6 @@ module com.robustgames.robustclient {
 
     opens com.robustgames.robustclient.application to javafx.fxml;
     exports com.robustgames.robustclient.application;
-
+    opens com.robustgames.robustclient.business to javafx.fxml;
+    exports com.robustgames.robustclient.business;
 }

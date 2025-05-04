@@ -1,0 +1,31 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "EnvironmentEdited.tsx": {
+            "dynamicWrapping": false
+        }
+    },
+    "last.imagePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
+    "map.height": 8,
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": "2",
+    "map.tileHeight": 64,
+    "map.tileWidth": 128,
+    "map.width": 8,
+    "openFiles": [
+    ],
+    "project": "robustTiledProject.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 128,
+        "width": 128
+    }
+}
