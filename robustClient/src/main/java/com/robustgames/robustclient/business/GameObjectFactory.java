@@ -12,16 +12,22 @@ import javafx.scene.shape.Rectangle;
 
 public class GameObjectFactory implements EntityFactory {
 
-    @Spawns("Player")
-    public Entity spawnPlayer(SpawnData data) {
+    @Spawns("tank")
+    public Entity spawnTank(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .viewWithBBox("Tank.png")
+                .build();
+    }
+    @Spawns("city")
+    public Entity spawnCity(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .viewWithBBox("city1.png").onClick(System.out::println)
                 .build();
     }
     @Spawns("Background")
     public Entity spawnBackground(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.BLACK))
+                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.GREY))
                 .with(new IrremovableComponent())
                 .zIndex(-100)
                 .build();

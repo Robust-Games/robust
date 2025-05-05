@@ -5,15 +5,6 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
 import com.robustgames.robustclient.business.GameObjectFactory;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-
-
 
 public class RobustApplication extends GameApplication  {
 
@@ -27,9 +18,9 @@ public class RobustApplication extends GameApplication  {
     //HUD und UI
     @Override
     protected void initUI() {
-        Label label = new Label("Hello, FXGL!");
+        /*Label label = new Label("Hello, FXGL!");
         label.setFont(Font.font(20.0));
-        FXGL.addUINode(label, 350.0, 290.0);
+        FXGL.addUINode(label, 350.0, 290.0);*/
     }
 
     //Window settings

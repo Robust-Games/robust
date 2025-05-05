@@ -1,16 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="isometric" renderorder="right-down" width="8" height="8" tilewidth="128" tileheight="64" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" source="EnvironmentEdited.tsx"/>
- <layer id="1" name="Tile Layer 1" width="8" height="8">
+<map version="1.10" tiledversion="1.11.2" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="128" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="30">
+ <tileset firstgid="1" name="EnvironmentEdited" tilewidth="128" tileheight="128" tilecount="160" columns="10" fillmode="preserve-aspect-fit">
+  <grid orientation="isometric" width="128" height="64"/>
+  <image source="EnvironmentEdited.png" width="1280" height="2048"/>
+ </tileset>
+ <tileset firstgid="161" name="EnvironmentOriginal" tilewidth="128" tileheight="128" tilecount="320" columns="10" fillmode="preserve-aspect-fit">
+  <grid orientation="isometric" width="128" height="128"/>
+  <image source="EnvironmentOriginal.png" width="1280" height="2048"/>
+ </tileset>
+ <layer id="1" name="Base Layer" width="10" height="10">
   <data encoding="csv">
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144,
-144,144,144,144,144,144,144,144
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,8,8,8,8,8,8,8,0,
+0,0,8,8,8,8,8,8,8,0,
+0,0,186,186,186,186,8,8,8,0,
+0,0,8,8,8,8,8,8,8,0,
+0,0,8,8,8,186,186,186,186,0,
+0,0,8,8,8,8,8,8,8,0,
+0,0,8,8,8,8,8,8,8,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="7" name="Grid" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,4,4,4,4,4,4,0,0,0,
+0,3,3,3,3,2,2,2,0,0,
+0,0,0,0,0,2,2,2,0,0,
+0,1,2,2,2,3,3,3,0,0,
+0,1,2,2,2,0,0,0,0,0,
+0,1,2,2,2,2,2,2,0,0,
+0,1,2,2,2,2,2,2,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="Tanks" offsetx="0" offsety="-192">
+  <object id="17" name="city" type="city" x="640" y="640" width="64" height="64"/>
+  <object id="18" name="tank" type="tank" x="512" y="640" width="64" height="64"/>
+ </objectgroup>
+ <layer id="5" name="Mountains" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,190,189,181,182,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,190,188,183,181,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
 </map>
