@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "map1.tmx",
+    "activeFile": "maptest.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -12,44 +12,70 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "#sprite": {
+            "scaleInEditor": 1
+        },
         "EnvironmentEdited.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "map1.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 478,
-                "y": 171
+                "x": 529.3333333333333,
+                "y": 358
             }
         },
         "map1.tmx#EnvironmentEdited": {
             "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "map1.tmx#EnvironmentOriginal": {
+            "scaleInDock": 1
+        },
+        "maptest.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 612,
+                "y": 296
+            }
+        },
+        "maptest.tmx#sprite": {
             "scaleInDock": 1
         }
     },
+    "last.exportedFilePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/json",
+    "last.externalTilesetPath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
     "last.imagePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
-    "map.height": 8,
+    "map.height": 10,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "map.orientation": "2",
     "map.tileHeight": 64,
     "map.tileWidth": 128,
-    "map.width": 8,
+    "map.width": 10,
     "openFiles": [
         "map1.tmx",
-        "EnvironmentEdited.tsx"
+        "maptest.tmx"
     ],
     "project": "robustTiledProject.tiled-project",
     "recentFiles": [
-        "EnvironmentEdited.tsx",
-        "map1.tmx"
+        "map1.tmx",
+        "maptest.tmx",
+        "EnvironmentEdited.tsx"
     ],
     "tileset.embedInMap": true,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 64,
+        "height": 128,
         "width": 128
     }
 }

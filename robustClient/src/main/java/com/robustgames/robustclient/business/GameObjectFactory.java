@@ -15,13 +15,13 @@ public class GameObjectFactory implements EntityFactory {
     @Spawns("tank")
     public Entity spawnTank(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .viewWithBBox("Tank.png")
+                .viewWithBBox("sprite1.png")
                 .build();
     }
     @Spawns("city")
     public Entity spawnCity(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .viewWithBBox("city1.png").onClick(System.out::println)
+                .viewWithBBox("sprite3.png").onClick(System.out::println)
                 .build();
     }
     @Spawns("Background")

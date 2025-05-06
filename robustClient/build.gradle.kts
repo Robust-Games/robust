@@ -17,7 +17,7 @@ val junitVersion = "5.10.2"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -36,7 +36,7 @@ javafx {
 }
 
 dependencies {
-    implementation("com.github.almasb:fxgl:17.3") {
+    implementation("com.github.almasb:fxgl:21.1") {
         exclude(group = "org.openjfx")
        // exclude(group = "org.jetbrains.kotlin")
     }
