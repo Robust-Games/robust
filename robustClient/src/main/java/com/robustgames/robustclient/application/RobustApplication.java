@@ -35,7 +35,7 @@ public class RobustApplication extends GameApplication  {
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new GameObjectFactory());
         FXGL.spawn("Background", new SpawnData(0, 0).put("width", WIDTH).put("height", HEIGHT));
-        FXGL.setLevelFromMap("maptest.tmx");
+        FXGL.setLevelFromMap("map2D.tmx");
     }
 
     public static void main(String[] args) {

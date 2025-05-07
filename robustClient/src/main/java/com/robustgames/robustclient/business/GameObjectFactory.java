@@ -12,16 +12,28 @@ import javafx.scene.shape.Rectangle;
 
 public class GameObjectFactory implements EntityFactory {
 
-    @Spawns("tank")
-    public Entity spawnTank(SpawnData data) {
+    @Spawns("tank1")
+    public Entity spawnTankPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .viewWithBBox("sprite1.png")
+                .viewWithBBox("tank2D_left.png")
                 .build();
     }
-    @Spawns("city")
-    public Entity spawnCity(SpawnData data) {
+    @Spawns("city1")
+    public Entity spawnCityPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .viewWithBBox("sprite3.png").onClick(System.out::println)
+                .viewWithBBox("city2D.png").onClick(System.out::println)
+                .build();
+    }
+    @Spawns("tank2")
+    public Entity spawnTankPlayer2(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .viewWithBBox("tank2D_right.png")
+                .build();
+    }
+    @Spawns("city2")
+    public Entity spawnCityPlayer2(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .viewWithBBox("city2D.png").onClick(System.out::println)
                 .build();
     }
     @Spawns("Background")
