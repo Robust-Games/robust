@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maptest.tmx",
+    "activeFile": "map1.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -25,11 +25,15 @@
             "scaleInEditor": 1
         },
         "map1.tmx": {
+            "expandedObjectLayers": [
+                11,
+                4
+            ],
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 649.5,
-                "y": 252.5
+                "x": 630,
+                "y": 310
             }
         },
         "map1.tmx#EnvironmentEdited": {
@@ -40,15 +44,33 @@
         "map1.tmx#EnvironmentOriginal": {
             "scaleInDock": 1
         },
+        "map2D.tmx": {
+            "expandedObjectLayers": [
+                6,
+                5,
+                3
+            ],
+            "scale": 1.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 95.99999999999994,
+                "y": 223.99999999999994
+            }
+        },
+        "map2D.tmx#Tileset": {
+            "scaleInDock": 1
+        },
         "maptest.tmx": {
             "expandedObjectLayers": [
-                2
+                4,
+                2,
+                3
             ],
             "scale": 1,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 560,
-                "y": 249
+                "x": 640,
+                "y": 160
             }
         },
         "maptest.tmx#sprite": {
@@ -67,12 +89,14 @@
     "map.width": 8,
     "openFiles": [
         "map1.tmx",
-        "maptest.tmx"
+        "maptest.tmx",
+        "map2D.tmx"
     ],
     "project": "robustTiledProject.tiled-project",
     "recentFiles": [
-        "map1.tmx",
+        "map2D.tmx",
         "maptest.tmx",
+        "map1.tmx",
         "EnvironmentEdited.tsx"
     ],
     "tileset.embedInMap": true,
