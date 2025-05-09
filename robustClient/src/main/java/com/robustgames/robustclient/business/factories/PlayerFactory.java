@@ -10,7 +10,11 @@ public class PlayerFactory implements EntityFactory {
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .viewWithBBox("tank2D_left.png").onClick(System.out::println)
+                .viewWithBBox("tank2D_left.png")
+                .onClick(e ->{ // OnClick löst Lambda aus
+                    FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
+                    System.out.println("tank1 gewählt");
+                })
                 .build();
     }
     @Spawns("city1")
@@ -22,7 +26,11 @@ public class PlayerFactory implements EntityFactory {
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .viewWithBBox("tank2D_right.png").onClick(System.out::println)
+                .viewWithBBox("tank2D_right.png")
+                .onClick(e ->{ // OnClick löst Lambda aus
+                    FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
+                    System.out.println("tank2 gewählt");
+                })
                 .build();
     }
     @Spawns("city2")
