@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import javafx.geometry.Point2D; // zum speichern
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -19,9 +20,16 @@ public class MapFactory implements EntityFactory {
     public Entity spawnMountain(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .viewWithBBox("mountain2D.png").onClick(System.out::println)
+                .viewWithBBox("mountain2D.png").onClick(tile -> { // wenn tile geklickt wird -> lambda
+                    Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank"); // nimmt das Objekt entgegen
+                    if (selectedTank != null) { // prüft ob was gewähl wurde
+                        Point2D target = tile.getCenter(); // muss angepasst werden glaube ich
+                        selectedTank.setPosition(target);
+                    }
+                })
                 .build();
     }
+
     @Spawns("Background")
     public Entity spawnBackground(SpawnData data) {
         return FXGL.entityBuilder(data)
@@ -30,4 +38,20 @@ public class MapFactory implements EntityFactory {
                 .zIndex(-100)
                 .build();
     }
+
+    /*
+    @Spawns("walkable") // laufbare fläche in tiled machen
+    public Entity spawnTile(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .zIndex(-100)
+                .onClick(tile -> {
+                    Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank");
+                    if (selectedTank != null) {
+                        Point2D target = tile.getCenter();
+                        selectedTank.setPosition(target);
+                    }
+                })
+                .build();
+    }
+    */
 }
