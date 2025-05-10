@@ -5,12 +5,14 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 
 public class PlayerFactory implements EntityFactory {
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_left.png")
+                .with(new RotateComponent())
                 .onClick(e ->{ // OnClick löst Lambda aus
                     FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
                     System.out.println("tank1 gewählt");
@@ -27,6 +29,7 @@ public class PlayerFactory implements EntityFactory {
     public Entity spawnTankPlayer2(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_right.png")
+                .with(new RotateComponent())
                 .onClick(e ->{ // OnClick löst Lambda aus
                     FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
                     System.out.println("tank2 gewählt");

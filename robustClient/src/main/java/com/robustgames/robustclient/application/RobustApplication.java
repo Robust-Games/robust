@@ -41,6 +41,11 @@ public class RobustApplication extends GameApplication  {
         });
 
     }
+
+    protected void intputMove(){
+
+    }
+
     //HUD und UI
     @Override
     protected void initUI() {

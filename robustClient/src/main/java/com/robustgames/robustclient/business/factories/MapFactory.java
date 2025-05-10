@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import javafx.geometry.Point2D; // zum speichern
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -23,8 +24,19 @@ public class MapFactory implements EntityFactory {
                 .viewWithBBox("mountain2D.png").onClick(tile -> { // wenn tile geklickt wird -> lambda
                     Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank"); // nimmt das Objekt entgegen
                     if (selectedTank != null) { // prüft ob was gewähl wurde
-                        Point2D target = tile.getCenter(); // muss angepasst werden glaube ich
-                        selectedTank.setPosition(target);
+
+                        Point2D target = tile.getCenter(); // Zielposition (muss angepasst werden glaube ich)
+                        Point2D from = selectedTank.getCenter(); // Ist-Position
+                        System.out.println("Log: Aktuell -> (x =  " + from.getX() + ", y = " + from.getY() + " )");
+                        System.out.println("Log: Nach -> (x =  " + target.getX() + ", y = " + target.getY() + " )");
+
+                        Point2D dir = target.subtract(from).normalize(); // differenz
+                        System.out.println("Log: Differenz -> (x =  " + dir.getX() + ", y = " + dir.getY() + " )");
+
+                        // In Konsole sieht man das aktuelle Stelle nicht geupdatet wird
+
+                        selectedTank.getComponent(RotateComponent.class).rotateTowards(dir);
+                        selectedTank.setPosition(target); // updated nicht ?
                     }
                 })
                 .build();
