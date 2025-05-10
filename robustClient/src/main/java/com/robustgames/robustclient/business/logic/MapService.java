@@ -2,6 +2,10 @@ package com.robustgames.robustclient.business.logic;
 
 import javafx.geometry.Point2D;
 
+/**
+ * Tracks the tile logic, currently in Orthographic 2D
+ */
+//TODO make it work with isometric
 public class MapService {
     private static final int TILE_WIDTH = 64;
     private static final int TILE_HEIGHT = 64;

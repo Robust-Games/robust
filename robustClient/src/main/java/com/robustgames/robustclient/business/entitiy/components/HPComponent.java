@@ -1,5 +1,7 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
-public class HPComponent {
+import com.almasb.fxgl.entity.component.Component;
+
+public class HPComponent extends Component {
 }
 

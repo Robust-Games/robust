@@ -4,7 +4,6 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.input.UserAction;
 import com.robustgames.robustclient.business.collision.ShellCityHandler;
 import com.robustgames.robustclient.business.collision.ShellTankHandler;
 import com.robustgames.robustclient.business.collision.ShellTileHandler;
@@ -12,7 +11,6 @@ import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -37,7 +35,8 @@ public class RobustApplication extends GameApplication  {
 */
         onBtnDown(MouseButton.PRIMARY, () -> {
             Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
-            System.out.println(MapService.screenToGrid(mouseWorldPos));;
+            System.out.println(MapService.screenToGrid(mouseWorldPos));
+
         });
 
     }
