@@ -6,11 +6,8 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
-import com.almasb.fxgl.physics.BoundingShape;
-import com.almasb.fxgl.physics.HitBox;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
-import com.robustgames.robustclient.business.logic.MapService;
-import javafx.geometry.Point2D; // zum speichern
+import com.robustgames.robustclient.business.logic.MovementService;
+import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -18,36 +15,6 @@ import javafx.scene.shape.Rectangle;
  * For destructible entities on our map. May later include tiles
  */
 public class MapFactory implements EntityFactory {
-    @Spawns("mountain")
-    public Entity spawnMountain(SpawnData data) {
-        return FXGL.entityBuilder(data)
-                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .viewWithBBox("mountain2D.png")
-                .onClick(tile -> { // wenn tile geklickt wird -> lambda
-                    Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank"); // nimmt das Objekt entgegen
-                    if (selectedTank != null) { // prüft ob was gewähl wurde
-
-                        Point2D target = tile.getCenter();
-                        Point2D gridTarget = MapService.screenToGrid(target);
-
-                        Point2D from = selectedTank.getPosition(); 
-                        Point2D gridFrom = MapService.screenToGrid(from);
-
-                        Point2D dir = gridTarget.subtract(gridFrom); // Richtung als Vektor in Weltkoordinaten
-
-                        // debug
-                        System.out.println("Von:  " + from +   " bzw.: " + gridFrom);
-                        System.out.println("Nach: " + target + " bzw.: " + gridTarget);
-                        System.out.println("Differenz: " + dir);
-
-                        selectedTank.getComponent(RotateComponent.class).rotateTowards(dir);
-                        selectedTank.setPosition(target);
-
-                    }
-                })
-                .build();
-    }
-
     @Spawns("Background")
     public Entity spawnBackground(SpawnData data) {
         return FXGL.entityBuilder(data)
@@ -57,19 +24,39 @@ public class MapFactory implements EntityFactory {
                 .build();
     }
 
-    /*
-    @Spawns("walkable") // laufbare fläche in tiled machen
-    public Entity spawnTile(SpawnData data) {
+    @Spawns("mountain")
+    public Entity spawnMountain(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .zIndex(-100)
-                .onClick(tile -> {
-                    Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank");
-                    if (selectedTank != null) {
-                        Point2D target = tile.getCenter();
-                        selectedTank.setPosition(target);
-                    }
-                })
+                .viewWithBBox("mountain2D.png")
                 .build();
     }
-    */
+
+    //Tile Grafik
+    @Spawns("floorTile")
+    public Entity spawnFloor(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .zIndex(-10)
+                .build();
+    }
+
+    //Aufleuchtende Tiles, die können auch dann für die visualisierung von move und shoot verwendet werden
+    @Spawns("hoverTile")
+    public Entity spawnHoverFloor(SpawnData data) {
+        Rectangle rect = new Rectangle(64, 64);
+        rect.setOpacity(0.40);
+
+        var cell = FXGL.entityBuilder(data).viewWithBBox(rect)
+                .onClick(tile -> {
+                    MovementService.moveTank(tile);
+                    MovementService.rotateAutomatically(tile);
+                })
+                .build();
+        rect.fillProperty().bind(
+                Bindings.when(cell.getViewComponent().getParent().hoverProperty())
+                        .then(Color.DARKGREEN)
+                        .otherwise(Color.TRANSPARENT)
+        );
+
+        return cell;
+    }
 }

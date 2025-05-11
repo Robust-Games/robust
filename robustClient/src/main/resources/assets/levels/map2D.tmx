@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="7" nextobjectid="13">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="185">
  <editorsettings>
   <export format="tmx"/>
  </editorsettings>
@@ -9,31 +9,165 @@
  <layer id="1" name="Base" width="10" height="10">
   <data encoding="csv">
 28,29,29,29,29,29,29,29,29,30,
-36,22,10,10,10,10,10,10,10,38,
-36,10,10,10,10,10,10,10,10,38,
-36,4,4,4,4,10,10,10,10,38,
-36,10,10,10,10,10,10,10,10,38,
-36,10,10,10,10,10,10,10,10,38,
-36,10,10,10,10,4,4,4,4,38,
-36,10,10,10,10,10,10,10,10,38,
-36,10,10,10,10,10,10,10,22,38,
+36,0,0,0,0,0,0,0,0,38,
+36,0,0,0,0,0,0,0,0,38,
+36,4,4,4,4,0,0,0,0,38,
+36,0,0,0,0,0,0,0,0,38,
+36,0,0,0,0,0,0,0,0,38,
+36,0,0,0,0,4,4,4,4,38,
+36,0,0,0,0,0,0,0,0,38,
+36,0,0,0,0,0,0,0,0,38,
 44,45,45,45,45,45,45,45,45,46
 </data>
  </layer>
  <layer id="2" name="Grass" width="10" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
-0,0,0,14,0,14,0,6,0,0,
-0,0,0,6,0,0,0,0,0,0,
-0,0,0,0,0,0,0,6,0,0,
-0,14,0,0,0,0,0,0,0,0,
-0,0,0,14,0,6,0,14,0,0,
 0,0,0,0,0,0,0,0,0,0,
-0,0,6,0,0,0,0,14,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="7" name="cells">
+  <object id="44" type="floorTile" gid="22" x="512" y="576" width="64" height="64"/>
+  <object id="48" type="floorTile" gid="10" x="448" y="576" width="64" height="64"/>
+  <object id="49" type="floorTile" gid="10" x="384" y="576" width="64" height="64"/>
+  <object id="50" type="floorTile" gid="10" x="320" y="576" width="64" height="64"/>
+  <object id="51" type="floorTile" gid="10" x="256" y="576" width="64" height="64"/>
+  <object id="52" type="floorTile" gid="10" x="192" y="576" width="64" height="64"/>
+  <object id="53" type="floorTile" gid="10" x="128" y="576" width="64" height="64"/>
+  <object id="54" type="floorTile" gid="10" x="64" y="576" width="64" height="64"/>
+  <object id="55" type="floorTile" gid="10" x="512" y="512" width="64" height="64"/>
+  <object id="56" type="floorTile" gid="14" x="448" y="512" width="64" height="64"/>
+  <object id="57" type="floorTile" gid="10" x="384" y="512" width="64" height="64"/>
+  <object id="58" type="floorTile" gid="10" x="320" y="512" width="64" height="64"/>
+  <object id="59" type="floorTile" gid="10" x="256" y="512" width="64" height="64"/>
+  <object id="60" type="floorTile" gid="10" x="192" y="512" width="64" height="64"/>
+  <object id="61" type="floorTile" gid="6" x="128" y="512" width="64" height="64"/>
+  <object id="62" type="floorTile" gid="10" x="64" y="512" width="64" height="64"/>
+  <object id="88" type="floorTile" gid="10" x="256" y="448" width="64" height="64"/>
+  <object id="89" type="floorTile" gid="10" x="192" y="448" width="64" height="64"/>
+  <object id="90" type="floorTile" gid="10" x="128" y="448" width="64" height="64"/>
+  <object id="91" type="floorTile" gid="10" x="64" y="448" width="64" height="64"/>
+  <object id="92" type="floorTile" gid="10" x="512" y="384" width="64" height="64"/>
+  <object id="93" type="floorTile" gid="14" x="448" y="384" width="64" height="64"/>
+  <object id="94" type="floorTile" gid="10" x="384" y="384" width="64" height="64"/>
+  <object id="95" type="floorTile" gid="6" x="320" y="384" width="64" height="64"/>
+  <object id="96" type="floorTile" gid="10" x="256" y="384" width="64" height="64"/>
+  <object id="97" type="floorTile" gid="14" x="192" y="384" width="64" height="64"/>
+  <object id="98" type="floorTile" gid="10" x="128" y="384" width="64" height="64"/>
+  <object id="99" type="floorTile" gid="10" x="64" y="384" width="64" height="64"/>
+  <object id="100" type="floorTile" gid="10" x="512" y="320" width="64" height="64"/>
+  <object id="101" type="floorTile" gid="10" x="448" y="320" width="64" height="64"/>
+  <object id="102" type="floorTile" gid="10" x="384" y="320" width="64" height="64"/>
+  <object id="103" type="floorTile" gid="10" x="320" y="320" width="64" height="64"/>
+  <object id="104" type="floorTile" gid="10" x="256" y="320" width="64" height="64"/>
+  <object id="105" type="floorTile" gid="10" x="192" y="320" width="64" height="64"/>
+  <object id="106" type="floorTile" gid="10" x="128" y="320" width="64" height="64"/>
+  <object id="107" type="floorTile" gid="14" x="64" y="320" width="64" height="64"/>
+  <object id="108" type="floorTile" gid="10" x="512" y="256" width="64" height="64"/>
+  <object id="109" type="floorTile" gid="6" x="448" y="256" width="64" height="64"/>
+  <object id="110" type="floorTile" gid="10" x="384" y="256" width="64" height="64"/>
+  <object id="111" type="floorTile" gid="10" x="320" y="256" width="64" height="64"/>
+  <object id="112" type="floorTile" gid="10" x="512" y="192" width="64" height="64"/>
+  <object id="113" type="floorTile" gid="10" x="448" y="192" width="64" height="64"/>
+  <object id="114" type="floorTile" gid="10" x="384" y="192" width="64" height="64"/>
+  <object id="115" type="floorTile" gid="10" x="320" y="192" width="64" height="64"/>
+  <object id="116" type="floorTile" gid="10" x="256" y="192" width="64" height="64"/>
+  <object id="117" type="floorTile" gid="6" x="192" y="192" width="64" height="64"/>
+  <object id="118" type="floorTile" gid="10" x="128" y="192" width="64" height="64"/>
+  <object id="119" type="floorTile" gid="10" x="64" y="192" width="64" height="64"/>
+  <object id="120" type="floorTile" gid="10" x="512" y="128" width="64" height="64"/>
+  <object id="121" type="floorTile" gid="10" x="448" y="128" width="64" height="64"/>
+  <object id="122" type="floorTile" gid="10" x="384" y="128" width="64" height="64"/>
+  <object id="123" type="floorTile" gid="14" x="320" y="128" width="64" height="64"/>
+  <object id="124" type="floorTile" gid="10" x="256" y="128" width="64" height="64"/>
+  <object id="125" type="floorTile" gid="14" x="192" y="128" width="64" height="64"/>
+  <object id="126" type="floorTile" gid="10" x="128" y="128" width="64" height="64"/>
+  <object id="127" type="floorTile" gid="22" x="64" y="128" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="8" name="cells2">
+  <object id="128" type="hoverTile" x="512" y="512" width="64" height="64"/>
+  <object id="129" type="hoverTile" x="448" y="512" width="64" height="64"/>
+  <object id="130" type="hoverTile" x="384" y="512" width="64" height="64"/>
+  <object id="131" type="hoverTile" x="320" y="512" width="64" height="64"/>
+  <object id="133" type="hoverTile" x="256" y="512" width="64" height="64"/>
+  <object id="134" type="hoverTile" x="192" y="512" width="64" height="64"/>
+  <object id="135" type="hoverTile" x="128" y="512" width="64" height="64"/>
+  <object id="136" type="hoverTile" x="64" y="512" width="64" height="64"/>
+  <object id="137" type="hoverTile" x="512" y="448" width="64" height="64"/>
+  <object id="138" type="hoverTile" x="448" y="448" width="64" height="64"/>
+  <object id="139" type="hoverTile" x="384" y="448" width="64" height="64"/>
+  <object id="140" type="hoverTile" x="320" y="448" width="64" height="64"/>
+  <object id="141" type="hoverTile" x="256" y="448" width="64" height="64"/>
+  <object id="142" type="hoverTile" x="192" y="448" width="64" height="64"/>
+  <object id="143" type="hoverTile" x="128" y="448" width="64" height="64"/>
+  <object id="144" type="hoverTile" x="64" y="448" width="64" height="64"/>
+  <object id="145" type="hoverTile" x="256" y="384" width="64" height="64"/>
+  <object id="146" type="hoverTile" x="192" y="384" width="64" height="64"/>
+  <object id="147" type="hoverTile" x="128" y="384" width="64" height="64"/>
+  <object id="148" type="hoverTile" x="64" y="384" width="64" height="64"/>
+  <object id="149" type="hoverTile" x="512" y="320" width="64" height="64"/>
+  <object id="150" type="hoverTile" x="448" y="320" width="64" height="64"/>
+  <object id="151" type="hoverTile" x="384" y="320" width="64" height="64"/>
+  <object id="152" type="hoverTile" x="320" y="320" width="64" height="64"/>
+  <object id="153" type="hoverTile" x="256" y="320" width="64" height="64"/>
+  <object id="154" type="hoverTile" x="192" y="320" width="64" height="64"/>
+  <object id="155" type="hoverTile" x="128" y="320" width="64" height="64"/>
+  <object id="156" type="hoverTile" x="64" y="320" width="64" height="64"/>
+  <object id="157" type="hoverTile" x="512" y="256" width="64" height="64"/>
+  <object id="158" type="hoverTile" x="448" y="256" width="64" height="64"/>
+  <object id="159" type="hoverTile" x="384" y="256" width="64" height="64"/>
+  <object id="160" type="hoverTile" x="320" y="256" width="64" height="64"/>
+  <object id="161" type="hoverTile" x="256" y="256" width="64" height="64"/>
+  <object id="162" type="hoverTile" x="192" y="256" width="64" height="64"/>
+  <object id="163" type="hoverTile" x="128" y="256" width="64" height="64"/>
+  <object id="164" type="hoverTile" x="64" y="256" width="64" height="64"/>
+  <object id="165" type="hoverTile" x="512" y="192" width="64" height="64"/>
+  <object id="166" type="hoverTile" x="448" y="192" width="64" height="64"/>
+  <object id="167" type="hoverTile" x="384" y="192" width="64" height="64"/>
+  <object id="168" type="hoverTile" x="320" y="192" width="64" height="64"/>
+  <object id="169" type="hoverTile" x="512" y="128" width="64" height="64"/>
+  <object id="170" type="hoverTile" x="448" y="128" width="64" height="64"/>
+  <object id="171" type="hoverTile" x="384" y="128" width="64" height="64"/>
+  <object id="172" type="hoverTile" x="320" y="128" width="64" height="64"/>
+  <object id="173" type="hoverTile" x="256" y="128" width="64" height="64"/>
+  <object id="174" type="hoverTile" x="192" y="128" width="64" height="64"/>
+  <object id="175" type="hoverTile" x="128" y="128" width="64" height="64"/>
+  <object id="176" type="hoverTile" x="64" y="128" width="64" height="64"/>
+  <object id="177" type="hoverTile" x="512" y="64" width="64" height="64"/>
+  <object id="178" type="hoverTile" x="448" y="64" width="64" height="64"/>
+  <object id="179" type="hoverTile" x="384" y="64" width="64" height="64"/>
+  <object id="180" type="hoverTile" x="320" y="64" width="64" height="64"/>
+  <object id="181" type="hoverTile" x="256" y="64" width="64" height="64"/>
+  <object id="182" type="hoverTile" x="192" y="64" width="64" height="64"/>
+  <object id="183" type="hoverTile" x="128" y="64" width="64" height="64"/>
+  <object id="184" type="hoverTile" x="64" y="64" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="3" name="Player 1" visible="0">
+  <object id="1" name="Player 1" type="city1" x="512" y="512" width="64" height="64"/>
+  <object id="2" name="Player 1" type="tank1" x="384" y="512" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="5" name="Player 2" visible="0">
+  <object id="3" name="Player 2" type="city2" x="64" y="64" width="64" height="64"/>
+  <object id="4" name="Player 2" type="tank2" x="192" y="64" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="6" name="Mountains" visible="0">
+  <object id="5" type="mountain" x="320" y="384" width="64" height="64"/>
+  <object id="6" type="mountain" x="384" y="384" width="64" height="64"/>
+  <object id="7" type="mountain" x="448" y="384" width="64" height="64"/>
+  <object id="8" type="mountain" x="512" y="384" width="64" height="64"/>
+  <object id="9" type="mountain" x="256" y="192" width="64" height="64"/>
+  <object id="10" type="mountain" x="192" y="192" width="64" height="64"/>
+  <object id="11" type="mountain" x="128" y="192" width="64" height="64"/>
+  <object id="12" type="mountain" x="64" y="192" width="64" height="64"/>
+ </objectgroup>
  <layer id="4" name="grid" width="10" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
@@ -48,22 +182,4 @@
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="3" name="Player 1">
-  <object id="1" name="Player 1" type="city1" x="512" y="512" width="64" height="64"/>
-  <object id="2" name="Player 1" type="tank1" x="384" y="512" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="5" name="Player 2">
-  <object id="3" name="Player 2" type="city2" x="64" y="64" width="64" height="64"/>
-  <object id="4" name="Player 2" type="tank2" x="192" y="64" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="6" name="Mountains">
-  <object id="5" type="mountain" x="320" y="384" width="64" height="64"/>
-  <object id="6" type="mountain" x="384" y="384" width="64" height="64"/>
-  <object id="7" type="mountain" x="448" y="384" width="64" height="64"/>
-  <object id="8" type="mountain" x="512" y="384" width="64" height="64"/>
-  <object id="9" type="mountain" x="256" y="192" width="64" height="64"/>
-  <object id="10" type="mountain" x="192" y="192" width="64" height="64"/>
-  <object id="11" type="mountain" x="128" y="192" width="64" height="64"/>
-  <object id="12" type="mountain" x="64" y="192" width="64" height="64"/>
- </objectgroup>
 </map>

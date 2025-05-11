@@ -6,8 +6,11 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
+import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.logic.MapService;
 
 public class PlayerFactory implements EntityFactory {
+
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
         RotateComponent rc = new RotateComponent();
@@ -16,9 +19,9 @@ public class PlayerFactory implements EntityFactory {
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_left.png")
                 .with(rc)
-                .onClick(e ->{ // OnClick löst Lambda aus
-                    FXGL.getGameWorld().getProperties().setValue("selectedTank", e);
-                    System.out.println("tank1 gewählt");
+                .onClick(tank ->{
+                    MapService.deSelectPreviousTank();
+                    tank.addComponent(new SelectableComponent());
                 })
                 .build();
     }
@@ -37,10 +40,12 @@ public class PlayerFactory implements EntityFactory {
                 .viewWithBBox("tank2D_right.png")
                 .with(rc)
                 .with(new RotateComponent())
-                .onClick(e ->{ // OnClick löst Lambda aus
-                    FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
-                    System.out.println("tank2 gewählt");
+                .onClick(tank ->{
+                    MapService.deSelectPreviousTank();
+                    tank.addComponent(new SelectableComponent());
                 })
+
+
                 .build();
     }
     @Spawns("city2")

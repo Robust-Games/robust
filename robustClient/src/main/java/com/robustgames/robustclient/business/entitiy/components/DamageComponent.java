@@ -1,5 +1,7 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
-public class DamageComponent {
+import com.almasb.fxgl.entity.component.Component;
+
+public class DamageComponent extends Component {
 
 }//different vehicles later entities
