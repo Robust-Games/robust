@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
+import com.robustgames.robustclient.business.logic.MapService;
 import javafx.geometry.Point2D; // zum speichern
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -25,18 +26,22 @@ public class MapFactory implements EntityFactory {
                     Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank"); // nimmt das Objekt entgegen
                     if (selectedTank != null) { // prüft ob was gewähl wurde
 
-                        Point2D target = tile.getCenter(); // Zielposition (muss angepasst werden glaube ich)
-                        Point2D from = selectedTank.getCenter(); // Ist-Position
-                        System.out.println("Log: Aktuell -> (x =  " + from.getX() + ", y = " + from.getY() + " )");
-                        System.out.println("Log: Nach -> (x =  " + target.getX() + ", y = " + target.getY() + " )");
+                        Point2D target = tile.getCenter();
+                        Point2D gridTarget = MapService.screenToGrid(target);
 
-                        Point2D dir = target.subtract(from).normalize(); // differenz
-                        System.out.println("Log: Differenz -> (x =  " + dir.getX() + ", y = " + dir.getY() + " )");
+                        Point2D from = selectedTank.getPosition();
+                        Point2D gridFrom = MapService.screenToGrid(from);
 
-                        // In Konsole sieht man das aktuelle Stelle nicht geupdatet wird
+                        Point2D dir = gridTarget.subtract(gridFrom); // Richtung als Vektor in Weltkoordinaten
+
+                        // debug
+                        System.out.println("Von:  " + from +   " bzw.: " + gridFrom);
+                        System.out.println("Nach: " + target + " bzw.: " + gridTarget);
+                        System.out.println("Differenz: " + dir);
 
                         selectedTank.getComponent(RotateComponent.class).rotateTowards(dir);
-                        selectedTank.setPosition(target); // updated nicht ?
+                        selectedTank.setPosition(target);
+
                     }
                 })
                 .build();
