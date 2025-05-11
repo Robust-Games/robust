@@ -5,22 +5,32 @@ import javafx.geometry.Point2D;
 
 public class RotateComponent extends Component {
 
+    double currentAngle = 0;
+
     public void rotateTowards(Point2D direction) {
         double dx = direction.getX(); // horizontale Bewegung
         double dy = direction.getY(); // vertikale Bewegung
-
-        double angle;
+    
+        double targetAngle;
 
         if (Math.abs(dx) > Math.abs(dy)) { // horizontale Bewegung überwiegt
-            angle = dx > 0 ? 90 : 270; // rechts oder links
+            targetAngle = dx > 0 ? 90 : 270; // rechts oder links
 
         } else if (Math.abs(dx) < Math.abs(dy)){ // vertikale Bewegung überwiegt
-            angle = dy > 0 ? 180 : 0; // unten oder oben
+            targetAngle = dy > 0 ? 180 : 0; // unten oder oben
 
         } else return; // gleich -> keine Änderung
 
-        entity.setRotation(angle);
+        if (targetAngle != currentAngle) {
+            entity.setRotation(targetAngle);   // optisch drehen
+            currentAngle = targetAngle;        // internen Zustand updaten
+        }
     }
+
+    public void setCurrentAngle(double angle) {
+        this.currentAngle = angle;
+    }
+
 
 
 }

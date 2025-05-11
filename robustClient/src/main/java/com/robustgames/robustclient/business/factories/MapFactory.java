@@ -22,14 +22,15 @@ public class MapFactory implements EntityFactory {
     public Entity spawnMountain(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-                .viewWithBBox("mountain2D.png").onClick(tile -> { // wenn tile geklickt wird -> lambda
+                .viewWithBBox("mountain2D.png")
+                .onClick(tile -> { // wenn tile geklickt wird -> lambda
                     Entity selectedTank = FXGL.getGameWorld().getProperties().getObject("selectedTank"); // nimmt das Objekt entgegen
                     if (selectedTank != null) { // prüft ob was gewähl wurde
 
                         Point2D target = tile.getCenter();
                         Point2D gridTarget = MapService.screenToGrid(target);
 
-                        Point2D from = selectedTank.getPosition();
+                        Point2D from = selectedTank.getPosition(); 
                         Point2D gridFrom = MapService.screenToGrid(from);
 
                         Point2D dir = gridTarget.subtract(gridFrom); // Richtung als Vektor in Weltkoordinaten

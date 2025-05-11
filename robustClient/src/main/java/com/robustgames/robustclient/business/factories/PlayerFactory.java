@@ -10,11 +10,14 @@ import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 public class PlayerFactory implements EntityFactory {
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
+        RotateComponent rc = new RotateComponent();
+        rc.setCurrentAngle(270); //default -> schaut nach links
+
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_left.png")
-                .with(new RotateComponent())
+                .with(rc)
                 .onClick(e ->{ // OnClick löst Lambda aus
-                    FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
+                    FXGL.getGameWorld().getProperties().setValue("selectedTank", e);
                     System.out.println("tank1 gewählt");
                 })
                 .build();
@@ -27,8 +30,12 @@ public class PlayerFactory implements EntityFactory {
     }
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
+        RotateComponent rc = new RotateComponent();
+        rc.setCurrentAngle(90);// default -> schaut nach rechts
+
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_right.png")
+                .with(rc)
                 .with(new RotateComponent())
                 .onClick(e ->{ // OnClick löst Lambda aus
                     FXGL.getGameWorld().getProperties().setValue("selectedTank", e); // speichert Panzer unter selected Entity
