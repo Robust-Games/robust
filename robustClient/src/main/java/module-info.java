@@ -1,9 +1,10 @@
-module com.robustgames.robustclient {
+open module com.robustgames.robustclient {
     requires javafx.controls;
     requires javafx.fxml;
-
     requires com.almasb.fxgl.all;
 
-    opens com.robustgames.robustclient to javafx.fxml;
-    exports com.robustgames.robustclient;
+    exports com.robustgames.robustclient.business.entitiy.components;
+    exports com.robustgames.robustclient.business.factories;
+    exports com.robustgames.robustclient.application;
+
 }

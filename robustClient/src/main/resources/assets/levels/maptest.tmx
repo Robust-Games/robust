@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="128" tileheight="64" infinite="0" nextlayerid="5" nextobjectid="17">
+ <tileset firstgid="1" name="sprite" tilewidth="128" tileheight="128" tilecount="100" columns="10">
+  <image source="sprite.png" width="1280" height="1280"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+1,2,3,4,5,6,7,8,9,10,
+11,12,13,14,15,16,17,18,19,20,
+21,22,23,24,25,26,27,28,29,30,
+31,32,33,34,35,36,37,38,39,40,
+41,42,43,44,45,46,47,48,49,50,
+51,52,53,54,55,56,57,58,59,60,
+61,62,63,64,65,66,67,68,69,70,
+71,72,73,74,75,76,77,78,79,80,
+81,82,83,84,85,86,87,88,89,0,
+91,92,93,94,95,96,97,98,0,0
+</data>
+ </layer>
+ <objectgroup id="2" name="Player 1">
+  <object id="5" name="Player 1" type="city1" x="448" y="448" width="64" height="64"/>
+  <object id="6" name="Player 1" type="tank1" x="320" y="448" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="3" name="Player 2">
+  <object id="7" name="Player 2" type="city2" x="0" y="0" width="64" height="64"/>
+  <object id="8" name="Player 2" type="tank2" x="128" y="0" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="4" name="mountains">
+  <object id="9" type="mountain" x="256" y="320" width="64" height="64"/>
+  <object id="10" type="mountain" x="320" y="320" width="64" height="64"/>
+  <object id="11" type="mountain" x="384" y="320" width="64" height="64"/>
+  <object id="12" type="mountain" x="448" y="320" width="64" height="64"/>
+  <object id="13" type="mountain" x="192" y="128" width="64" height="64"/>
+  <object id="14" type="mountain" x="128" y="128" width="64" height="64"/>
+  <object id="15" type="mountain" x="64" y="128" width="64" height="64"/>
+  <object id="16" type="mountain" x="0" y="128" width="64" height="64"/>
+ </objectgroup>
+</map>
