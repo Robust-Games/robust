@@ -11,7 +11,7 @@
   <grid orientation="isometric" width="128" height="128"/>
   <image source="EnvironmentOriginal.png" width="1280" height="2048"/>
  </tileset>
- <layer id="1" name="Base Layer" width="10" height="10">
+ <layer id="1" name="Base Layer" width="10" height="10" offsetx="0" offsety="64">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
 0,8,8,8,8,8,8,8,8,0,
@@ -25,7 +25,15 @@
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="7" name="Grid" width="10" height="10">
+ <objectgroup id="4" name="Player 1">
+  <object id="34" name="Player 1" type="city1" x="512" y="512" width="64" height="64"/>
+  <object id="35" name="Player 1" type="tank1" x="384" y="512" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="11" name="Player 2">
+  <object id="36" name="Player 2" type="city2" x="64" y="64" width="64" height="64"/>
+  <object id="37" name="Player 2" type="tank2" x="192" y="64" width="64" height="64"/>
+ </objectgroup>
+ <layer id="7" name="Grid" width="10" height="10" offsetx="0" offsety="64">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
 0,2,1,1,1,1,1,0,0,0,
@@ -39,25 +47,17 @@
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Player 1">
-  <object id="34" name="Player 1" type="city1" x="448" y="448" width="64" height="64"/>
-  <object id="35" name="Player 1" type="tank1" x="320" y="448" width="64" height="64"/>
- </objectgroup>
- <objectgroup id="11" name="Player 2">
-  <object id="36" name="Player 2" type="city2" x="0" y="0" width="64" height="64"/>
-  <object id="37" name="Player 2" type="tank2" x="128" y="0" width="64" height="64"/>
- </objectgroup>
  <objectgroup id="13" name="mountains">
-  <object id="38" type="mountain" x="256" y="320" width="64" height="64"/>
-  <object id="39" type="mountain" x="320" y="320" width="64" height="64"/>
-  <object id="40" type="mountain" x="384" y="320" width="64" height="64"/>
-  <object id="41" type="mountain" x="448" y="320" width="64" height="64"/>
-  <object id="42" type="mountain" x="192" y="128" width="64" height="64"/>
-  <object id="43" type="mountain" x="128" y="128" width="64" height="64"/>
-  <object id="44" type="mountain" x="64" y="128" width="64" height="64"/>
-  <object id="45" type="mountain" x="0" y="128" width="64" height="64"/>
+  <object id="38" type="mountain" x="320" y="384" width="64" height="64"/>
+  <object id="39" type="mountain" x="384" y="384" width="64" height="64"/>
+  <object id="40" type="mountain" x="448" y="384" width="64" height="64"/>
+  <object id="41" type="mountain" x="512" y="384" width="64" height="64"/>
+  <object id="42" type="mountain" x="256" y="192" width="64" height="64"/>
+  <object id="43" type="mountain" x="192" y="192" width="64" height="64"/>
+  <object id="44" type="mountain" x="128" y="192" width="64" height="64"/>
+  <object id="45" type="mountain" x="64" y="192" width="64" height="64"/>
  </objectgroup>
- <layer id="5" name="Mountains" width="10" height="10">
+ <layer id="5" name="Mountains" width="10" height="10" offsetx="0" offsety="64">
   <data encoding="csv">
 0,13,13,13,13,13,13,13,0,0,
 11,3,3,3,3,3,3,3,0,0,
