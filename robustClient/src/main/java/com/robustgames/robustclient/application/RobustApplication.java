@@ -94,7 +94,7 @@ public class RobustApplication extends GameApplication  {
 //            Point2D orthGridPos = MapService.orthScreenToGrid(e.getPosition());
 //            Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
 //            e.setPosition(isoGridPos.getX()-32, isoGridPos.getY());
-//        } blablabla
+//        } blablabla BLA
         //ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER
     }
 
