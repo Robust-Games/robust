@@ -41,14 +41,14 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
-                13,
                 4,
+                13,
                 11
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 640.5,
+                "x": 660,
                 "y": 351.5
             }
         },
@@ -62,16 +62,16 @@
         },
         "map2D.tmx": {
             "expandedObjectLayers": [
-                6,
                 5,
                 7,
-                3
+                3,
+                6
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 221.99999999999994,
-                "y": 346.66666666666663
+                "x": 221.66666666666663,
+                "y": 263
             }
         },
         "map2D.tmx#Tileset": {
@@ -82,11 +82,11 @@
             "expandedObjectLayers": [
                 5
             ],
-            "scale": 1.5,
-            "selectedLayer": 4,
+            "scale": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 616,
-                "y": 338
+                "x": 339.5,
+                "y": 344.5
             }
         },
         "maptest.tmx#sprite": {
