@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="185">
+=======
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="44">
+>>>>>>> main
  <editorsettings>
   <export format="tmx"/>
  </editorsettings>
@@ -9,6 +13,7 @@
  <layer id="1" name="Base" width="10" height="10">
   <data encoding="csv">
 28,29,29,29,29,29,29,29,29,30,
+<<<<<<< HEAD
 36,0,0,0,0,0,0,0,0,38,
 36,0,0,0,0,0,0,0,0,38,
 36,4,4,4,4,0,0,0,0,38,
@@ -17,12 +22,30 @@
 36,0,0,0,0,4,4,4,4,38,
 36,0,0,0,0,0,0,0,0,38,
 36,0,0,0,0,0,0,0,0,38,
+=======
+36,22,10,10,10,10,10,0,0,38,
+36,10,10,10,10,10,10,10,10,38,
+36,4,4,4,4,10,10,10,10,38,
+36,10,10,10,10,10,10,10,10,38,
+36,10,10,10,10,10,10,10,10,38,
+36,10,10,10,10,4,4,4,4,38,
+36,10,10,10,10,10,10,10,10,38,
+36,10,10,10,10,10,10,10,22,38,
+>>>>>>> main
 44,45,45,45,45,45,45,45,45,46
 </data>
  </layer>
  <layer id="2" name="Grass" width="10" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
+<<<<<<< HEAD
+=======
+0,0,0,14,0,14,0,0,0,0,
+0,0,0,6,0,0,0,0,0,0,
+0,0,0,0,0,0,0,6,0,0,
+0,14,0,0,0,0,0,0,0,0,
+0,0,0,14,0,6,0,14,0,0,
+>>>>>>> main
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
@@ -182,4 +205,35 @@
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+<<<<<<< HEAD
+=======
+ <objectgroup id="7" name="cells">
+  <object id="35" type="floor" x="384" y="64" width="64" height="64"/>
+  <object id="36" type="floor" x="320" y="64" width="64" height="64"/>
+  <object id="37" type="floor" x="256" y="64" width="64" height="64"/>
+  <object id="38" type="floor" x="192" y="64" width="64" height="64"/>
+  <object id="39" type="floor" x="128" y="64" width="64" height="64"/>
+  <object id="40" type="floor" x="64" y="64" width="64" height="64"/>
+  <object id="42" type="imagefloor" gid="45" x="512" y="128" width="64" height="64"/>
+  <object id="43" type="imagefloor" gid="45" x="448" y="128" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="3" name="Player 1">
+  <object id="1" name="Player 1" type="city1" x="512" y="512" width="64" height="64"/>
+  <object id="2" name="Player 1" type="tank1" x="384" y="512" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="5" name="Player 2">
+  <object id="3" name="Player 2" type="city2" x="64" y="64" width="64" height="64"/>
+  <object id="4" name="Player 2" type="tank2" x="192" y="64" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="6" name="Mountains">
+  <object id="5" type="mountain" x="320" y="384" width="64" height="64"/>
+  <object id="6" type="mountain" x="384" y="384" width="64" height="64"/>
+  <object id="7" type="mountain" x="448" y="384" width="64" height="64"/>
+  <object id="8" type="mountain" x="512" y="384" width="64" height="64"/>
+  <object id="9" type="mountain" x="256" y="192" width="64" height="64"/>
+  <object id="10" type="mountain" x="192" y="192" width="64" height="64"/>
+  <object id="11" type="mountain" x="128" y="192" width="64" height="64"/>
+  <object id="12" type="mountain" x="64" y="192" width="64" height="64"/>
+ </objectgroup>
+>>>>>>> main
 </map>

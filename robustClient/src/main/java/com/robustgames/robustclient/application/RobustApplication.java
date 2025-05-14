@@ -23,6 +23,38 @@ public class RobustApplication extends GameApplication  {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
 
+<<<<<<< HEAD
+=======
+    //Key input
+    @Override
+    protected void initInput() {
+
+/*
+        getInput().addAction(new UserAction("Up") {
+            @Override
+            protected void onAction() {
+            }
+            @Override
+            protected void onActionEnd() {
+            }
+        }, KeyCode.A);//button pressed
+*/
+        onBtnDown(MouseButton.PRIMARY, () -> {
+            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
+            System.out.println(MapService.screenToGrid(mouseWorldPos));
+
+        });
+
+    }
+    //HUD und UI
+    @Override
+    protected void initUI() {
+        /*Label label = new Label("Hello, FXGL!");
+        label.setFont(Font.font(20.0));
+        FXGL.addUINode(label, 350.0, 290.0);*/
+    }
+
+>>>>>>> main
     //Window settings
     @Override
     protected void initSettings(GameSettings settings) {
