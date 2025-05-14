@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maptest.tmx",
+    "activeFile": "map1.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -24,37 +24,16 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "X:/GameDev/fxglProjects/TowerDefense/src/main/resources/assets/levels/tmx/td1.tmx": {
-            "expandedObjectLayers": [
-                2,
-                5
-            ],
-            "scale": 0.8490625,
-            "selectedLayer": 4,
-            "viewCenter": {
-                "x": 1056.4593301435405,
-                "y": 480.5299963194699
-            }
-        },
-        "X:/GameDev/fxglProjects/TowerDefense/src/main/resources/assets/levels/tmx/td1.tmx#td_tilesheet": {
-            "scaleInDock": 1
-        },
         "map1.tmx": {
             "expandedObjectLayers": [
-                4,
-                13,
-                11
+                11,
+                4
             ],
-            "scale": 1,
-            "selectedLayer": 3,
+            "scale": 2,
+            "selectedLayer": 2,
             "viewCenter": {
-<<<<<<< HEAD
-                "x": 660,
-                "y": 351.5
-=======
                 "x": 970,
                 "y": 472.5
->>>>>>> main
             }
         },
         "map1.tmx#EnvironmentEdited": {
@@ -68,46 +47,30 @@
         "map2D.tmx": {
             "expandedObjectLayers": [
                 5,
-<<<<<<< HEAD
-                7,
-                3,
-                6
-=======
                 6,
                 3
->>>>>>> main
             ],
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 5,
             "viewCenter": {
-<<<<<<< HEAD
-                "x": 221.66666666666663,
-                "y": 263
-=======
                 "x": 282.66666666666663,
                 "y": 281.3333333333333
->>>>>>> main
             }
         },
         "map2D.tmx#Tileset": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInDock": 1
         },
         "maptest.tmx": {
             "expandedObjectLayers": [
-<<<<<<< HEAD
-                5
-=======
                 3,
                 2,
                 4
->>>>>>> main
             ],
             "scale": 1,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 339.5,
-                "y": 344.5
+                "x": 640,
+                "y": 160
             }
         },
         "maptest.tmx#sprite": {
@@ -120,26 +83,20 @@
     "map.height": 10,
     "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
-<<<<<<< HEAD
-    "map.orientation": "2",
-    "map.tileHeight": 64,
-    "map.tileWidth": 128,
-=======
     "map.orientation": "1",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
->>>>>>> main
     "map.width": 10,
     "openFiles": [
         "map1.tmx",
-        "map2D.tmx",
-        "maptest.tmx"
+        "maptest.tmx",
+        "map2D.tmx"
     ],
     "project": "robustTiledProject.tiled-project",
     "recentFiles": [
-        "map1.tmx",
         "map2D.tmx",
         "maptest.tmx",
+        "map1.tmx",
         "EnvironmentEdited.tsx"
     ],
     "tileset.embedInMap": true,

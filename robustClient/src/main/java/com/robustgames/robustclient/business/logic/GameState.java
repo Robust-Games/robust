@@ -9,7 +9,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameController;
 //TODO turn order
 public class GameState {
 
-    private static void gameOver(boolean cityDestroyed, boolean tankDestroyed) {
+    private void gameOver(boolean cityDestroyed, boolean tankDestroyed) {
         if (cityDestroyed || tankDestroyed) {
             getDialogService().showMessageBox("Player " + "[GETPLAYERID]" + " wins", getGameController()::exit);
 
