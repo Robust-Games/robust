@@ -33,13 +33,15 @@ public class MovementService {
             System.out.println("Nach: " + target + " bzw.: " + gridTarget);
             System.out.println("Differenz: " + dir);
 
-            selectedTank.getComponent(RotateComponent.class).rotateTowards(dir);
+
             selectedTank.setPosition(target);
 
         }
     }
     //TODO @burak versuch mal diese hier mit einem Button auf dem Bildschirm (Button wird in initUI() gezeichnet) und wechsel zwischen den Sprites (tank2D_left ect.)
-    public static void rotateManually() {}
+    public static void rotateManually() {
+
+    }
 
     }
 

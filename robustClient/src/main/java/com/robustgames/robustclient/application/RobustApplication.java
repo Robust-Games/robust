@@ -6,14 +6,17 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.input.Input;
 import com.robustgames.robustclient.business.collision.ShellCityHandler;
 import com.robustgames.robustclient.business.collision.ShellTankHandler;
 import com.robustgames.robustclient.business.collision.ShellTileHandler;
+import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.KeyCode; // Für Tastenangabe
 
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class RobustApplication extends GameApplication  {
     //Key input
     @Override
     protected void initInput() {
+        Input input = getInput();
         //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
         String whatWorld = "isometric"; //orthogonal or isometric
 
@@ -58,6 +62,28 @@ public class RobustApplication extends GameApplication  {
             });
         }
         //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
+
+        onKeyDown(KeyCode.W, () -> {
+            var tank = MapService.findSelectedTank();
+            if (tank != null)
+                tank.getComponent(RotateComponent.class).rotateUp();
+        });
+        onKeyDown(KeyCode.S, () -> {
+            var tank = MapService.findSelectedTank();
+            if (tank != null)
+                tank.getComponent(RotateComponent.class).rotateDown();
+        });
+        onKeyDown(KeyCode.A, () -> {
+            var tank = MapService.findSelectedTank();
+            if (tank != null)
+                tank.getComponent(RotateComponent.class).rotateLeft();
+        });
+        onKeyDown(KeyCode.D, () -> {
+            var tank = MapService.findSelectedTank();
+            if (tank != null)
+                tank.getComponent(RotateComponent.class).rotateRight();
+        });
+
 
     }
 

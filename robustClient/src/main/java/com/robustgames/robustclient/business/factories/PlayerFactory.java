@@ -13,12 +13,9 @@ public class PlayerFactory implements EntityFactory {
 
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
-        RotateComponent rc = new RotateComponent();
-        rc.setCurrentAngle(270); //default -> schaut nach links
-
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_left.png")
-                .with(rc)
+                .with(new RotateComponent())
                 .onClick(tank ->{
                     MapService.deSelectPreviousTank();
                     tank.addComponent(new SelectableComponent());
@@ -33,12 +30,8 @@ public class PlayerFactory implements EntityFactory {
     }
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
-        RotateComponent rc = new RotateComponent();
-        rc.setCurrentAngle(90);// default -> schaut nach rechts
-
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank2D_right.png")
-                .with(rc)
                 .with(new RotateComponent())
                 .onClick(tank ->{
                     MapService.deSelectPreviousTank();
