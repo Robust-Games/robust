@@ -4,12 +4,12 @@ on:
   push:
     branches: [main, tests]
     paths:
-      - 'RobustServer/**'
+      - 'robustServer/**'
       - '.github/workflows/**'
   pull_request:
     branches: [main, tests]
     paths:
-      - 'RobustServer/**'
+      - 'robustServer/**'
       - '.github/workflows/**'
 
 jobs:
@@ -27,25 +27,26 @@ jobs:
           java-version: 21
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./robustServer/gradlew
+        run: chmod +x ./gradlew
+        working-directory: robustServer
 
       - name: Build project (without tests)
-        run: ./robustServer/gradlew build -x test
+        run: ./gradlew build -x test
+        working-directory: robustServer
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: robistServer/build/libs/*.jar
+          path: robustServer/build/libs/*.jar
 
       - name: Check Java Version
         run: java -version
-        working-directory: RobustServer
 
       - name: Check Spring Boot Version
         run: ./gradlew dependencyInsight --dependency spring-boot-starter
-        working-directory: RobustServer
+        working-directory: robustServer
 
       - name: Check dependency versions
         run: ./gradlew dependencyUpdates
-        working-directory: RobustServer
+        working-directory: robustServer
