@@ -27,22 +27,25 @@ jobs:
           java-version: 21
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./robustServer/gradlew
 
       - name: Build project (without tests)
-        run: ./gradlew build -x test
+        run: ./robustServer/gradlew build -x test
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: build/libs/*.jar
+          path: robistServer/build/libs/*.jar
 
       - name: Check Java Version
         run: java -version
+        working-directory: RobustServer
 
       - name: Check Spring Boot Version
         run: ./gradlew dependencyInsight --dependency spring-boot-starter
+        working-directory: RobustServer
 
       - name: Check dependency versions
         run: ./gradlew dependencyUpdates
+        working-directory: RobustServer
