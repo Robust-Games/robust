@@ -3,8 +3,14 @@ name: Continuous Integration
 on:
   push:
     branches: [main, tests]
+    paths:
+      - 'RobustServer/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [main, tests]
+    paths:
+      - 'RobustServer/**'
+      - '.github/workflows/**'
 
 jobs:
   test:
