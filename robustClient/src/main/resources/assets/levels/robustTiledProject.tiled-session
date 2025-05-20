@@ -41,15 +41,15 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
-                4,
                 13,
-                11
+                11,
+                4
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 660,
-                "y": 351.5
+                "x": 660.5,
+                "y": 351
             }
         },
         "map1.tmx#EnvironmentEdited": {
@@ -62,16 +62,16 @@
         },
         "map2D.tmx": {
             "expandedObjectLayers": [
+                3,
                 5,
                 7,
-                3,
                 6
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 221.66666666666663,
-                "y": 263
+                "y": 263.3333333333333
             }
         },
         "map2D.tmx#Tileset": {
@@ -80,14 +80,20 @@
         },
         "maptest.tmx": {
             "expandedObjectLayers": [
-                5
+                2,
+                3,
+                5,
+                4
             ],
             "scale": 1,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 339.5,
-                "y": 344.5
+                "x": 652.5,
+                "y": 333
             }
+        },
+        "maptest.tmx#EnvironmentEdited": {
+            "scaleInDock": 1
         },
         "maptest.tmx#sprite": {
             "scaleInDock": 1
@@ -95,7 +101,7 @@
     },
     "last.exportedFilePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
     "last.externalTilesetPath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
-    "last.imagePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
+    "last.imagePath": "X:/GameDev/Wahlprojekt/robustClient/src/main/resources/assets/levels",
     "map.height": 10,
     "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
@@ -119,7 +125,7 @@
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 64,
+        "width": 128
     }
 }

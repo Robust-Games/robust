@@ -9,7 +9,10 @@ import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.logic.MovementService;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**
  * For destructible entities on our map. May later include tiles
@@ -26,15 +29,15 @@ public class MapFactory implements EntityFactory {
 
     @Spawns("mountain")
     public Entity spawnMountain(SpawnData data) {
-        return FXGL.entityBuilder(data)
-                .viewWithBBox("mountain2D.png")
+        return FXGL.entityBuilder(data).type(MOUNTAIN)
+                .viewWithBBox("mountain.png")
                 .build();
     }
 
     //Tile Grafik
     @Spawns("floorTile")
     public Entity spawnFloor(SpawnData data) {
-        return FXGL.entityBuilder(data)
+        return FXGL.entityBuilder(data).type(TILE)
                 .zIndex(-10)
                 .build();
     }
@@ -42,21 +45,44 @@ public class MapFactory implements EntityFactory {
     //Aufleuchtende Tiles, die können auch dann für die visualisierung von move und shoot verwendet werden
     @Spawns("hoverTile")
     public Entity spawnHoverFloor(SpawnData data) {
-        Rectangle rect = new Rectangle(64, 64);
-        rect.setOpacity(0.40);
-
-        var cell = FXGL.entityBuilder(data).viewWithBBox(rect)
+        Polygon diamond = new Polygon();
+        diamond.getPoints().addAll(
+                0.0, 0.0,    // Top
+                64.0, 32.0,  // Right
+                0.0, 64.0,   // Bottom
+                -64.0, 32.0     // Left
+        );
+        diamond.setOpacity(0.40);
+        var cell = FXGL.entityBuilder(data).type(TILE).viewWithBBox(diamond)
                 .onClick(tile -> {
                     MovementService.moveTank(tile);
                     MovementService.rotateAutomatically(tile);
                 })
                 .build();
-        rect.fillProperty().bind(
+        diamond.fillProperty().bind(
                 Bindings.when(cell.getViewComponent().getParent().hoverProperty())
                         .then(Color.DARKGREEN)
                         .otherwise(Color.TRANSPARENT)
         );
 
         return cell;
+    }
+
+    @Spawns("moveTiles")
+    public Entity spawnMoveTiles(SpawnData data) {
+
+        return FXGL.entityBuilder(data)
+                .onClick(MovementService::moveTank).type(ACTIONSELECTION)
+                .viewWithBBox("Tile_move_selection.png")
+                .build();
+    }
+    @Spawns("AttackTargetTiles")
+    public Entity spawnAttackTargetTiles(SpawnData data) {
+        //rein visuell, braucht eigene methode
+
+        return FXGL.entityBuilder(data)
+                .onClick(MovementService::moveTank).type(ACTIONSELECTION)//rein visuell, braucht eigene methode
+                .viewWithBBox("Tile_attack_selection.png")
+                .build();
     }
 }

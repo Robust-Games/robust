@@ -4,6 +4,8 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Tracks the tile logic, currently in Orthographic 2D
@@ -21,6 +23,9 @@ public class MapService {
         int x = (int) ((gridPos2D.getY() - ISO_TILE_ORIGIN_Y) + (gridPos2D.getX() - ISO_TILE_ORIGIN_X));
         int y = (int) ((gridPos2D.getY() - ISO_TILE_ORIGIN_Y) - (gridPos2D.getX() - ISO_TILE_ORIGIN_X));
         return new Point2D(x, y);
+    }
+    public static Point2D isoGridToScreen(Point2D position) {
+        return isoGridToScreen(position.getX(), position.getY());
     }
     // isometric grid indices to screen (not world) coordinates, so it can draw stuff correctly
     public static Point2D isoGridToScreen(double gridX, double gridY) {
@@ -42,6 +47,8 @@ public class MapService {
         return new Point2D(worldX, worldY);
     }
 
+
+
     public static Entity findSelectedTank(){
         for (Entity e : FXGL.getGameWorld().getEntities()) {
             if (e.hasComponent(SelectableComponent.class))
@@ -54,4 +61,20 @@ public class MapService {
         if (tank != null)
             tank.removeComponent(SelectableComponent.class);
     }
+    public static Set<Point2D> getTankNeighbours(Point2D tankPos){
+        Set<Point2D> neighborCells = new HashSet<>();
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -2; y <= 2; y++) {
+                if (x == 0 || y == 0) { //tank itself will not be selectable
+                    continue;
+                }
+                neighborCells.add(new Point2D(tankPos.getX() + x, tankPos.getY()));
+                neighborCells.add(new Point2D(tankPos.getX(), tankPos.getY() + y));
+            }
+        }
+
+        System.out.println(neighborCells); //debug
+        return neighborCells;
+    }
+
 }

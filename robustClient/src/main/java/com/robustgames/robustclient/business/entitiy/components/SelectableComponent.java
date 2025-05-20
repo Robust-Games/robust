@@ -1,23 +1,30 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
-import com.almasb.fxgl.dsl.FXGL;
+
 import com.almasb.fxgl.entity.component.Component;
-import javafx.scene.Node;
+import com.robustgames.robustclient.business.entitiy.components.animations.TankAnimComponent;
+import static com.almasb.fxgl.dsl.FXGL.byType;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
 
 public class SelectableComponent extends Component {
-    Node selectionMarker = FXGL.getAssetLoader().loadTexture("selection.png");
+    //selectionmarker mal mit animation ausprobiert
+    //Node selectionMarker = FXGL.getAssetLoader().loadTexture("selection.png");
 
     @Override
     public void onAdded() {
-        entity.getViewComponent().addChild(selectionMarker);
+        entity.addComponent(new TankAnimComponent());
+
     }
 
     @Override
     public void onRemoved() {
         super.onRemoved();
-        if (entity.getViewComponent().getChildren().contains(selectionMarker)) {
-            entity.getViewComponent().removeChild(selectionMarker);
-        }
+        entity.removeComponent(TankAnimComponent.class);
+        getGameWorld().removeEntities(byType(ACTIONSELECTION));
+//        if (entity.getViewComponent().getChildren().contains(selectionMarker)) {
+//            entity.getViewComponent().removeChild(selectionMarker);
+//        }
 
     }
 }

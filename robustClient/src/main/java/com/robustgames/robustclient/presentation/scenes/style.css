@@ -1,0 +1,32 @@
+.root{
+    /*-fx-font-family: 'Arcade Normal';*/
+
+}
+/*.scoreBox {*/
+/*    -fx-background-color: #ba55c2;*/
+/*    -fx-background-radius: 10;*/
+/*    -fx-border-color: white;*/
+/*    -fx-margin: 10px;*/
+/*    -fx-border-radius: 10;*/
+/*    -fx-border-width: 3px;*/
+/*    -fx-font-size: 40px;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+.robust-btn:hover {
+    -fx-background-color: #2a9300;
+}
+
+.robust-btn:pressed {
+    -fx-background-color: #154700;
+}
+.robust-btn {
+    -fx-text-fill: white;
+    -fx-background-color: #154700;
+    -fx-font-size: 16px;
+    -fx-background-radius: 10px;
+    -fx-border-color: white;
+    -fx-border-radius: 5px;
+    -fx-border-width: 3px;
+    -fx-cursor: hand;
+}
