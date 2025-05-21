@@ -8,18 +8,28 @@ import com.robustgames.robustclient.business.logic.MapService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 
-public class SelectionView extends HBox {
+public class SelectionView extends Pane {
     Button btnMove;
     Button btnShoot;
-    Button btnRotate;
+    Button btnRotateLeft;
+    Button btnRotateRight;
+
 
 
 
     public SelectionView() {
+        String cssPath = getClass().getResource("/style.css").toExternalForm();
+        this.getStylesheets().add(cssPath);
+
+
         btnMove = new Button("Move");
-        //btnMove.getStyleClass().add("robust-btn");
+        btnMove.getStyleClass().add("robust-btn");
         btnMove.setOnAction(e -> {
             System.out.println("Movy groovy");
             Entity tank = MapService.findSelectedTank();
@@ -32,7 +42,7 @@ public class SelectionView extends HBox {
         });
 
         btnShoot = new Button("Shoot");
-        //btnShoot.getStyleClass().add("robust-btn");
+        btnShoot.getStyleClass().add("robust-btn");
         btnShoot.setOnAction(e -> {
             System.out.println("Shooty tooty");
             Entity tank = MapService.findSelectedTank();
@@ -43,10 +53,22 @@ public class SelectionView extends HBox {
             }
         });
 
-        btnRotate = new Button("Rotate");
-        //btnRotate.getStyleClass().add("robust-btn");
-        btnRotate.setOnAction(e -> {
-            System.out.println("Turny roundy");
+        btnRotateLeft = new Button("Rotate Left");
+        btnRotateLeft.getStyleClass().add("robust-btn");
+        btnRotateLeft.setOnAction(e -> {
+            System.out.println("Turn left");
+            Entity tank = MapService.findSelectedTank();
+            if (tank != null) {
+                tank.removeComponent(MovementComponent.class);
+                tank.removeComponent(ShootComponent.class);
+                tank.addComponent(new RotateComponent());
+            }
+
+        });
+        btnRotateRight = new Button("Rotate Right");
+        btnRotateRight.getStyleClass().add("robust-btn");
+        btnRotateRight.setOnAction(e -> {
+            System.out.println("Turn right");
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 tank.removeComponent(MovementComponent.class);
@@ -56,13 +78,17 @@ public class SelectionView extends HBox {
 
         });
 
-        HBox box = new HBox(btnMove, btnShoot, btnRotate);
+        HBox box = new HBox(10);
+        box.getChildren().addAll(
+                btnMove, btnShoot, btnRotateLeft, btnRotateRight
+        );
         box.setAlignment(Pos.CENTER);
-//        box.setTranslateX(getAppWidth() / 2.0 - 100);
-//        box.setTranslateY(getAppHeight() / 4.0 - 100);
+        box.setTranslateX(getAppWidth() / 4.0 - 300);
+        box.setTranslateY(getAppHeight() - 50);
 
         this.getChildren().add(box);
 
 
     }
+
 }

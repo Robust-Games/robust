@@ -26,7 +26,7 @@ public class PlayerFactory implements EntityFactory {
                 .with(rc)
                 .onClick(tank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    MapService.deSelectPreviousTank();
+                    MapService.deSelectTank();
                     tank.addComponent(new SelectableComponent());
                     FXGL.<RobustApplication>getAppCast().onTankClicked(tank);
 
@@ -43,18 +43,19 @@ public class PlayerFactory implements EntityFactory {
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
         RotateComponent rc = new RotateComponent();
-        rc.setCurrentAngle(90);// default -> schaut nach rechts
+        rc.setCurrentAngle(90); //default -> schaut nach links
 
         return FXGL.entityBuilder(data)
+                .type(TANK)
                 .viewWithBBox("tank_down_right.png")
                 .with(rc)
-                .with(new RotateComponent())
                 .onClick(tank ->{
-                    MapService.deSelectPreviousTank();
+                    //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
+                    MapService.deSelectTank();
                     tank.addComponent(new SelectableComponent());
+                    FXGL.<RobustApplication>getAppCast().onTankClicked(tank);
+
                 })
-
-
                 .build();
     }
     @Spawns("city2")
