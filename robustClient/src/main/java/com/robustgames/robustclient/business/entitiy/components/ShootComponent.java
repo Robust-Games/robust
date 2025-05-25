@@ -1,7 +1,10 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.Direction;
+
 import javafx.geometry.Point2D;
 
 import java.util.Set;
@@ -13,20 +16,46 @@ public class ShootComponent extends Component {
 
     @Override
     public void onAdded() {
+        System.out.println("ShootComponent ONADDED!! (Entity ID: " + entity.toString() + ")");
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
-        System.out.println("tank pos CENTER: " + entity.getCenter()); //debug
-        System.out.println("tank pos: " + tankPos); //debug
+        // Für jede der 4 Hauptachsen schießen
+        for (Direction dir : Direction.values()) {
+            Point2D current = tankPos;
+            while (true) {
+                current = step(current, dir); // Einen Schritt in die Richtung gehen
 
-        Set<Point2D> neighborCells = getTankNeighbours(tankPos);
-        for (Point2D neighbor : neighborCells) {
-            Point2D pos = MapService.isoGridToScreen(neighbor);
-            getGameWorld().spawn("AttackTargetTiles", pos.getX()-64, pos.getY()-64);
+                // Prüfe Map-Grenzen
+                if (!MapService.isValidTile(current))
+                    break;
+
+                // Prüfe, ob dort ein Berg ist
+                if (MapService.hasMountainAt(current)) {
+                    Point2D pos = MapService.isoGridToScreen(current);
+                    FXGL.getGameWorld().spawn("AttackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+                    break; // Danach nicht weiter, Schuss endet am Berg
+                }
+
+                // Sonst normales Ziel anzeigen
+                Point2D pos = MapService.isoGridToScreen(current);
+                FXGL.getGameWorld().spawn("AttackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+
+                // Optional: abbrechen, falls dort noch andere Blocker sind (Panzer/City)
+            }
         }
-
     }
 
-    @Override
-    public void onRemoved() {
-        super.onRemoved();
+    // Hilfsmethode: Einen Schritt in die Richtung gehen
+    private Point2D step(Point2D pos, Direction dir) {
+        switch (dir) {
+            case UP:
+                return new Point2D(pos.getX(), pos.getY() - 1);
+            case DOWN:
+                return new Point2D(pos.getX(), pos.getY() + 1);
+            case LEFT:
+                return new Point2D(pos.getX() - 1, pos.getY());
+            case RIGHT:
+                return new Point2D(pos.getX() + 1, pos.getY());
+        }
+        throw new IllegalArgumentException();
     }
 }
