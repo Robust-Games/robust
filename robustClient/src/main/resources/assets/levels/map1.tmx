@@ -57,7 +57,7 @@
   <object id="44" type="mountain" x="128" y="192" width="64" height="64"/>
   <object id="45" type="mountain" x="64" y="192" width="64" height="64"/>
  </objectgroup>
- <layer id="5" name="Mountains" width="10" height="10" offsetx="0" offsety="64">
+ <layer id="5" name="Mountains" width="10" height="10" visible="0" offsetx="0" offsety="64">
   <data encoding="csv">
 0,13,13,13,13,13,13,13,0,0,
 11,3,3,3,3,3,3,3,0,0,
