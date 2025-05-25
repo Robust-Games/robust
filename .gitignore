@@ -1,6 +1,7 @@
 # Default ignored files
 /shelf/
 /logs/
+/MeetingLogs/
 
 /workspace.xml
 /.idea
