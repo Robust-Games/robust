@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    branches: [main, tests]
+    paths:
+      - 'robustServer/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [main, tests]
+    paths:
+      - 'robustServer/**'
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Grant execute permission for gradlew
+        working-directory: robustServer
+        run: chmod +x ./gradlew
+
+      - name: Build project (without tests)
+        run: ./gradlew build -x test
+        working-directory: robustServer
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: robustServer/build/libs/*.jar
+
+      - name: Check Java Version
+        run: java -version
+
+      - name: Check Spring Boot Version
+        run: ./gradlew dependencyInsight --dependency spring-boot-starter
+        working-directory: robustServer
+
+      - name: Check dependency versions
+        run: ./gradlew dependencyUpdates
+        working-directory: robustServer
