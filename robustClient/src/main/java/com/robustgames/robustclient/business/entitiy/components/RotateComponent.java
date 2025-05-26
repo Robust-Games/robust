@@ -1,39 +1,80 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.robustgames.robustclient.business.logic.MapService;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import java.util.List;
 
 public class RotateComponent extends Component {
 
-    public void rotateUp()    {
-        rotateTo("tank2D_up.png");
-    }
-    public void rotateDown()  {
-        rotateTo("tank2D_down.png");
-    }
     public void rotateLeft()  {
-        rotateTo("tank2D_left.png");
+        Entity selectedTank = MapService.findSelectedTank();
+        if (selectedTank != null) {
+            String aktuell = deleteAndGive(selectedTank);
+
+            switch (aktuell) {
+                case "tank_top_right.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_top_left.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+                case "tank_top_left.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_down_left.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+                case "tank_down_left.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_down_right.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+                case "tank_down_right.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_top_right.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+            }
+        }
     }
     public void rotateRight() {
-        rotateTo("tank2D_right.png");
+        Entity selectedTank = MapService.findSelectedTank();
+        if (selectedTank != null) {
+            String aktuell = deleteAndGive(selectedTank);
+
+            switch (aktuell) {
+                case "tank_top_right.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_down_right.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+                case "tank_top_left.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_top_right.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+                case "tank_down_left.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_top_left.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+                case "tank_down_right.png" -> {
+                    Node img = FXGL.getAssetLoader().loadTexture("tank_down_left.png");
+                    selectedTank.getViewComponent().addChild(img);
+                }
+            }
+        }
     }
 
-    void rotateTo(String png ){ // Uneffizient ?
-        List<Node> ch = entity.getViewComponent().getChildren();
-
+    String deleteAndGive(Entity tank){
+        List<Node> ch = tank.getViewComponent().getChildren();
+        String x = "";
         for(Node e: ch) {
             if(e instanceof ImageView iv){
-                if(iv.getImage().getUrl().contains("tank2D")){
-                    entity.getViewComponent().removeChild(e);
+                String url = iv.getImage().getUrl();
+                if(iv.getImage().getUrl().contains("tank")){
+                    x = url.substring(url.lastIndexOf("/") + 1);
+                    System.out.println(x);
+                    tank.getViewComponent().removeChild(e);
+                    break;
                 }
-
-                }
+            }
         }
-
-        Node img = FXGL.getAssetLoader().loadTexture(png);
-        entity.getViewComponent().addChild(img);
+        return x;
     }
 }

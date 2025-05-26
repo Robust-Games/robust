@@ -68,27 +68,6 @@ public class RobustApplication extends GameApplication  {
         }
         //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
 
-        onKeyDown(KeyCode.W, () -> {
-            var tank = MapService.findSelectedTank();
-            if (tank != null)
-                tank.getComponent(RotateComponent.class).rotateUp();
-        });
-        onKeyDown(KeyCode.S, () -> {
-            var tank = MapService.findSelectedTank();
-            if (tank != null)
-                tank.getComponent(RotateComponent.class).rotateDown();
-        });
-        onKeyDown(KeyCode.A, () -> {
-            var tank = MapService.findSelectedTank();
-            if (tank != null)
-                tank.getComponent(RotateComponent.class).rotateLeft();
-        });
-        onKeyDown(KeyCode.D, () -> {
-            var tank = MapService.findSelectedTank();
-            if (tank != null)
-                tank.getComponent(RotateComponent.class).rotateRight();
-        });
-
 
     }
 
