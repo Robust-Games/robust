@@ -2,10 +2,12 @@ package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
 import java.util.HashSet;
 import java.util.Set;
+import com.robustgames.robustclient.business.logic.Direction;
 
 /**
  * Tracks the tile logic, currently in Orthographic 2D
@@ -143,6 +145,48 @@ public class MapService {
             }
         }
         return neighborCells;
+    }
+
+    public static boolean hasMountainAt(Point2D gridPos) {
+        return FXGL.getGameWorld().getEntitiesByType(EntityType.MOUNTAIN)
+                .stream().anyMatch(e -> {
+                    Point2D pos = isoScreenToGrid(e.getCenter());
+                    return pos.equals(gridPos);
+                });
+    }
+
+    // Optional: Map-Grenzen prüfen
+    public static boolean isValidTile(Point2D gridPos) {
+        return gridPos.getX() >= 0 && gridPos.getX() < 8 && gridPos.getY() >= 0 && gridPos.getY() < 8;
+    }
+
+    public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
+        Set<Point2D> moveTargets = new HashSet<>();
+
+        for (Direction dir : Direction.values()) {
+            Point2D current = tankPos;
+            // Bewegung auf maximal 7 Felder beschränken
+            for (int i = 0; i < 8; i++) {
+                current = step(current, dir);
+                if (!isValidTile(current))
+                    break;
+                if (hasMountainAt(current))
+                    break; // Beim ersten Berg stoppen!
+                moveTargets.add(current);
+            }
+        }
+        return moveTargets;
+    }
+
+    // Schritt-Funktion
+    private static Point2D step(Point2D pos, Direction dir) {
+        switch (dir) {
+            case UP:    return new Point2D(pos.getX(), pos.getY() - 1);
+            case DOWN:  return new Point2D(pos.getX(), pos.getY() + 1);
+            case LEFT:  return new Point2D(pos.getX() - 1, pos.getY());
+            case RIGHT: return new Point2D(pos.getX() + 1, pos.getY());
+            default: throw new IllegalArgumentException();
+        }
     }
 
 

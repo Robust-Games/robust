@@ -6,7 +6,6 @@ import javafx.geometry.Point2D;
 import java.util.Set;
 
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.robustgames.robustclient.business.logic.MapService.getTankNeighbours;
 
 public class MovementComponent extends Component {
 
@@ -16,12 +15,11 @@ public class MovementComponent extends Component {
         System.out.println("tank pos CENTER: " + entity.getCenter()); //debug
         System.out.println("tank pos: " + tankPos); //debug
 
-        Set<Point2D> neighborCells = getTankNeighbours(tankPos);
-        for (Point2D neighbor : neighborCells) {
-            Point2D pos1 = MapService.isoGridToScreen(neighbor);
+        Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
+        for (Point2D target : moveTargets) {
+            Point2D pos1 = MapService.isoGridToScreen(target);
             getGameWorld().spawn("moveTiles", pos1.getX()-64, pos1.getY()-64);
         }
-
     }
 
     @Override
