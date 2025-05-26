@@ -34,12 +34,10 @@ public class MovementService {
             System.out.println("Nach: " + target + " bzw.: " + gridTarget);
             System.out.println("Differenz: " + dir);
 
-            selectedTank.getComponent(RotateComponent.class).rotateTowards(dir);
+
             selectedTank.setPosition(target);
 
         }
     }
-    public static void rotateManually() {}
-
-    }
+}
 
