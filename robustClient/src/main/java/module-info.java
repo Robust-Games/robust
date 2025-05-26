@@ -6,5 +6,6 @@ open module com.robustgames.robustclient {
     exports com.robustgames.robustclient.business.entitiy.components;
     exports com.robustgames.robustclient.business.factories;
     exports com.robustgames.robustclient.application;
+    exports com.robustgames.robustclient.business.entitiy.components.animations;
 
 }

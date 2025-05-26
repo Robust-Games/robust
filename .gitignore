@@ -2,6 +2,7 @@
 /shelf/
 /logs/
 /MeetingLogs/
+
 /workspace.xml
 /.idea
 .gradle

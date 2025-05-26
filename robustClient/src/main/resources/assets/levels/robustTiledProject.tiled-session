@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maptest.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         "."
     ],
@@ -41,15 +41,15 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
+                11,
                 4,
-                13,
-                11
+                13
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 660,
-                "y": 351.5
+                "x": 640.5,
+                "y": 351
             }
         },
         "map1.tmx#EnvironmentEdited": {
@@ -62,16 +62,16 @@
         },
         "map2D.tmx": {
             "expandedObjectLayers": [
+                6,
                 5,
                 7,
-                3,
-                6
+                3
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 221.66666666666663,
-                "y": 263
+                "x": 320.3333333333333,
+                "y": 320
             }
         },
         "map2D.tmx#Tileset": {
@@ -80,14 +80,20 @@
         },
         "maptest.tmx": {
             "expandedObjectLayers": [
-                5
+                2,
+                5,
+                4,
+                3
             ],
             "scale": 1,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 339.5,
-                "y": 344.5
+                "x": 653,
+                "y": 333
             }
+        },
+        "maptest.tmx#EnvironmentEdited": {
+            "scaleInDock": 1
         },
         "maptest.tmx#sprite": {
             "scaleInDock": 1
@@ -95,7 +101,8 @@
     },
     "last.exportedFilePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
     "last.externalTilesetPath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
-    "last.imagePath": "X:/GameDev/Wahlprojekt/robust/robustClient/src/main/resources/assets/levels",
+    "last.imagePath": "X:/GameDev/Wahlprojekt/robustClient/src/main/resources/assets/levels",
+    "map.fixedSize": false,
     "map.height": 10,
     "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
@@ -119,7 +126,7 @@
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 64,
+        "width": 128
     }
 }

@@ -2,6 +2,7 @@ package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
+import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
 
 public class MovementService {
@@ -9,9 +10,9 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-            Point2D target = clickedCell.getPosition();
-            selectedTank.setPosition(target);
-            //selectedTank.removeComponent(SelectableComponent.class); //Für später (dann auch bei shoot)
+            Point2D target = clickedCell.getPosition(); //TODO hier checken, ob man selecten darf
+            selectedTank.setPosition(target.getX()-64, target.getY()-64);
+            selectedTank.removeComponent(SelectableComponent.class); //Für später (dann auch bei shoot)
         }
     }
 
@@ -38,10 +39,5 @@ public class MovementService {
 
         }
     }
-    //TODO @burak versuch mal diese hier mit einem Button auf dem Bildschirm (Button wird in initUI() gezeichnet) und wechsel zwischen den Sprites (tank2D_left ect.)
-    public static void rotateManually() {
-
-    }
-
-    }
+}
 
