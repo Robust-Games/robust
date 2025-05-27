@@ -29,7 +29,7 @@ public class SelectionView extends Pane {
 
 
     public SelectionView() {
-        String cssPath = getClass().getResource("/style.css").toExternalForm();
+        String cssPath = getClass().getResource("/assets/ui/css/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);
 
 
@@ -89,8 +89,8 @@ public class SelectionView extends Pane {
                 btnMove, btnShoot, btnRotateLeft, btnRotateRight
         );
         box.setAlignment(Pos.CENTER);
-        box.setTranslateX(getAppWidth() / 4.0 - 300);
-        box.setTranslateY(getAppHeight() - 50);
+        this.setTranslateX(getAppWidth() / 4.0 - 300);
+        this.setTranslateY(getAppHeight() - 50);
 
         this.getChildren().add(box);
 

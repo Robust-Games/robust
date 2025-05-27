@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "maptest.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -41,9 +41,9 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
-                11,
                 4,
-                13
+                13,
+                11
             ],
             "scale": 1,
             "selectedLayer": 3,
@@ -64,8 +64,8 @@
             "expandedObjectLayers": [
                 6,
                 5,
-                7,
-                3
+                3,
+                7
             ],
             "scale": 1.5,
             "selectedLayer": 1,
@@ -80,16 +80,16 @@
         },
         "maptest.tmx": {
             "expandedObjectLayers": [
+                4,
                 2,
                 5,
-                4,
                 3
             ],
             "scale": 1,
-            "selectedLayer": 4,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 653,
-                "y": 333
+                "x": 626,
+                "y": 359
             }
         },
         "maptest.tmx#EnvironmentEdited": {

@@ -1,11 +1,14 @@
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
+import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
+import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.MovementService;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
@@ -55,9 +58,11 @@ public class MapFactory implements EntityFactory {
         diamond.setOpacity(0.40);
         var cell = FXGL.entityBuilder(data).type(TILE).viewWithBBox(diamond)
                 .onClick(tile -> {
-                    MovementService.moveTank(tile);
+                    //MovementService.moveTank(tile);
+                    MapService.shoot(tile);
                     //MovementService.rotateAutomatically(tile);
                 })
+                .with(new HealthIntComponent())
                 .build();
         diamond.fillProperty().bind(
                 Bindings.when(cell.getViewComponent().getParent().hoverProperty())
@@ -81,7 +86,7 @@ public class MapFactory implements EntityFactory {
         //rein visuell, braucht eigene methode
 
         return FXGL.entityBuilder(data)
-                .onClick(MovementService::moveTank).type(ACTIONSELECTION)//rein visuell, braucht eigene methode
+                .onClick(MapService::shoot).type(ACTIONSELECTION)//rein visuell, braucht eigene methode
                 .viewWithBBox("Tile_attack_selection.png")
                 .build();
     }

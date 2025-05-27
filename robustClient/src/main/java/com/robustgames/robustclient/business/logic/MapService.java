@@ -2,6 +2,7 @@ package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
@@ -11,6 +12,9 @@ import java.util.Set;
 import com.robustgames.robustclient.business.logic.Direction;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+
+import static com.almasb.fxgl.dsl.FXGL.spawn;
+import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 /**
  * Tracks the tile logic, currently in Orthographic 2D
@@ -210,8 +214,6 @@ public class MapService {
         return "";
     }
 
-
-
     // Schritt-Funktion
     private static Point2D step(Point2D pos, Direction dir) {
         switch (dir) {
@@ -223,5 +225,26 @@ public class MapService {
         }
     }
 
+    public static void shoot(Entity target) {
+        Entity tank = findSelectedTank();
+        if (tank == null) return;
+        Point2D tankPosition = tank.getCenter();
+        Point2D targetPosition = target.getPosition();
+        System.out.println("Screen " + targetPosition);
+        System.out.println("Grid " + isoScreenToGrid(targetPosition));
+        System.out.println("Grid Screen " + isoGridToScreen(isoScreenToGrid(targetPosition)));
+        if (target.getType() == EntityType.TILE) {
+            targetPosition.add(0,0);
+        }
+        else {}
 
+        Point2D direction = targetPosition.subtract(tankPosition);
+
+        var shell = spawn("shell",
+                new SpawnData(tankPosition)
+                        .put("tank", tank)
+                        .put("target", target)
+        );
+        shell.rotateToVector(direction);
+    }
 }

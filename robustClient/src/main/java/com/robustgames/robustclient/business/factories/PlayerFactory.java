@@ -1,17 +1,19 @@
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.logic.MapService;
 
-import static com.robustgames.robustclient.business.entitiy.EntityType.CITY;
-import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 public class PlayerFactory implements EntityFactory {
 
@@ -20,6 +22,7 @@ public class PlayerFactory implements EntityFactory {
         return FXGL.entityBuilder(data)
                 .viewWithBBox("tank_top_left.png")
                 .with(new RotateComponent())
+                .with(new ShootComponent())
                 .onClick(tank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
                     MapService.deSelectTank();
@@ -29,15 +32,15 @@ public class PlayerFactory implements EntityFactory {
                 })
                 .build();
     }
-  
+
     @Spawns("city1")
     public Entity spawnCityPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .type(CITY)
-                .viewWithBBox("city1.png").onClick(System.out::println)
+                .viewWithBBox("city1.png")
                 .build();
     }
-  
+
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
         return FXGL.entityBuilder(data)
@@ -53,12 +56,26 @@ public class PlayerFactory implements EntityFactory {
                 })
                 .build();
     }
-  
+
     @Spawns("city2")
     public Entity spawnCityPlayer2(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .type(CITY)
-                .viewWithBBox("city1.png").onClick(System.out::println)
+                .viewWithBBox("city1.png")
+                .build();
+    }
+    @Spawns("shell")
+    public Entity spawnShell(SpawnData data) {
+        Entity tank = data.get("tank");
+        Entity target = data.get("target");
+
+        return FXGL.entityBuilder(data)
+                .type(SHELL)
+                .viewWithBBox("shell.gif")
+                .collidable()
+                .with(new ShellComponent(tank, target))
+                //.with(new AutoRotationComponent())
+                //.zIndex(4)
                 .build();
     }
 }

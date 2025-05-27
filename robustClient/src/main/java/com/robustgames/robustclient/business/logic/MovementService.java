@@ -20,7 +20,7 @@ public class MovementService {
             Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
             Point2D gridPos = MapService.isoScreenToGrid(clickedCell.getPosition());
 
-            System.out.println("gridPos: " + gridPos);
+            //System.out.println("gridPos: " + gridPos);
 
             boolean moveable = tileIsMovable(gridPos, moveTargets);
             if(moveable) {

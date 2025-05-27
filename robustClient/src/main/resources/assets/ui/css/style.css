@@ -1,7 +1,4 @@
-.root{
-    /*-fx-font-family: 'Arcade Normal';*/
 
-}
 /*.scoreBox {*/
 /*    -fx-background-color: #ba55c2;*/
 /*    -fx-background-radius: 10;*/
@@ -32,7 +29,6 @@
     -fx-border-color: white;
     -fx-border-radius: 5px;
     -fx-border-width: 3px;
-    -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
 
 }

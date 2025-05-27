@@ -23,7 +23,7 @@ public class TankAnimComponent extends Component {
 
     @Override
     public void onAdded() {
-        entity.getViewComponent().addChild(texture);
+        //entity.getViewComponent().addChild(texture);
         texture.loopAnimationChannel(tankSelectionMarker);
 
     }
