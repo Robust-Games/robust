@@ -6,8 +6,11 @@ import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import com.robustgames.robustclient.business.logic.Direction;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
 /**
  * Tracks the tile logic, currently in Orthographic 2D
@@ -161,22 +164,53 @@ public class MapService {
     }
 
     public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
+
         Set<Point2D> moveTargets = new HashSet<>();
 
-        for (Direction dir : Direction.values()) {
+        Entity tank = findSelectedTank();
+        if (tank == null)
+            return moveTargets;
+
+        String state = getTankImageFilename(tank);
+
+        // 2) Achsen-Auswahl
+        Direction[] axes;
+        if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
+            axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
+        } else {
+            axes = new Direction[]{ Direction.UP, Direction.DOWN };
+        }
+
+        // 3) Entlang jeder Achse so weit springen, bis Rand oder Berg
+        for (Direction dir : axes) {
             Point2D current = tankPos;
-            // Bewegung auf maximal 7 Felder beschränken
-            for (int i = 0; i < 8; i++) {
+            while (true) {
                 current = step(current, dir);
-                if (!isValidTile(current))
+
+                if (!isValidTile(current) || hasMountainAt(current))
                     break;
-                if (hasMountainAt(current))
-                    break; // Beim ersten Berg stoppen!
+
                 moveTargets.add(current);
             }
         }
         return moveTargets;
     }
+
+
+    private static String getTankImageFilename(Entity tank) { // hilfsmethode (andere Klasse?)
+        List<Node> ch = tank.getViewComponent().getChildren();
+        for (Node e : ch) {
+            if (e instanceof ImageView iv) {
+                String url = iv.getImage().getUrl();
+                if (url.contains("tank")) {
+                    return url.substring(url.lastIndexOf("/") + 1);
+                }
+            }
+        }
+        return "";
+    }
+
+
 
     // Schritt-Funktion
     private static Point2D step(Point2D pos, Direction dir) {
