@@ -67,9 +67,8 @@ public class RotateComponent extends Component {
         for(Node e: ch) {
             if(e instanceof ImageView iv){
                 String url = iv.getImage().getUrl();
-                if(iv.getImage().getUrl().contains("tank")){
+                if(url.contains("tank")){
                     x = url.substring(url.lastIndexOf("/") + 1);
-                    System.out.println(x);
                     tank.getViewComponent().removeChild(e);
                     break;
                 }

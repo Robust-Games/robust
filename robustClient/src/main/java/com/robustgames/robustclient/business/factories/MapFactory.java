@@ -56,7 +56,7 @@ public class MapFactory implements EntityFactory {
         var cell = FXGL.entityBuilder(data).type(TILE).viewWithBBox(diamond)
                 .onClick(tile -> {
                     MovementService.moveTank(tile);
-                    MovementService.rotateAutomatically(tile);
+                    //MovementService.rotateAutomatically(tile);
                 })
                 .build();
         diamond.fillProperty().bind(
