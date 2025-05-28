@@ -38,7 +38,6 @@ public class SelectionView extends Pane {
         btnMove.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                //hier rotieren methode
                 resetActionComponents(tank);
                 FXGL.runOnce(() -> tank.addComponent(new MovementComponent()), Duration.seconds(0.01));
             }
