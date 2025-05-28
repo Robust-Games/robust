@@ -12,8 +12,6 @@ public class MovementComponent extends Component {
     @Override
     public void onAdded() {
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
-        System.out.println("tank pos CENTER: " + entity.getCenter()); //debug
-        System.out.println("tank pos: " + tankPos); //debug
 
         Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
         for (Point2D target : moveTargets) {
