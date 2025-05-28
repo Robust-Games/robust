@@ -63,6 +63,13 @@ public class RotateComponent extends Component {
         }
     }
 
+    /**
+     * Removes the first child with an image URL containing the word "tank"
+     * from the given entity's view component and returns the file name of the removed image.
+     *
+     * @param tank the entity from which the tank image is to be removed
+     * @return the file name of the removed tank's image, or an empty string if no such image was found
+     */
     String deleteAndGive(Entity tank) {
         List<Node> ch = tank.getViewComponent().getChildren();
         String x = "";

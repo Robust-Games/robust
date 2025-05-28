@@ -13,6 +13,11 @@ import java.util.Set;
 
 public class MovementService {
 
+    /**
+     * Moves the selected tank to the position of the clicked cell if the target is valid.
+     *
+     * @param clickedCell the cell that was clicked, representing the target position for the tank
+     */
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
@@ -48,7 +53,14 @@ public class MovementService {
 //
 //        }
 //    }
-    // schaut ob gridkoordinaten von clicked in der Liste von blau makierten Feldern ist
+
+    /**
+     * Checks if a tile, represented by the clicked cell, is a valid move target.
+     *
+     * @param clickedCell the position of the clicked tile on the grid
+     * @param moveTargets the set of valid move target positions
+     * @return true if the clicked cell is present in the set of valid move targets, false otherwise
+     */
     static boolean tileIsMovable(Point2D clickedCell, Set<Point2D> moveTargets) {
         for(var t: moveTargets){
             if(clickedCell.equals(t)){
