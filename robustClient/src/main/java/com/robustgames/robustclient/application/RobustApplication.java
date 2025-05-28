@@ -29,7 +29,7 @@ public class RobustApplication extends GameApplication  {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
     SelectionView selectionView;
-    //Window settings
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("ROBUST");
@@ -39,58 +39,28 @@ public class RobustApplication extends GameApplication  {
         settings.setHeight(HEIGHT);
     }
 
-    //Key input
     @Override
     protected void initInput() {
-        Input input = getInput();
-        //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-        String whatWorld = "isometric"; //orthogonal or isometric
-
-        if (whatWorld.equals("orthogonal")) {
-            onBtnDown(MouseButton.PRIMARY, () -> {
-                Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
-                Point2D gridPos = MapService.orthScreenToGrid(mouseWorldPos);
-                System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
-                        + "\northogonal Screen To Grid = " + gridPos
-                        + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(gridPos.getX(), gridPos.getY()));
-            });
-        }
-        else if (whatWorld.equals("isometric")) {
-            onBtnDown(MouseButton.PRIMARY, () -> {
-                Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
-                Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
-                System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
-                        + "\nisometric Screen To Grid = " + gridPos
-                        + "\nisometric Grid To Screen = " + MapService.isoGridToScreen(gridPos.getX(), gridPos.getY())
-                        + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
-                        + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
-            });
-        }
-        //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-
-
+        //Click Debug
+//        onBtnDown(MouseButton.PRIMARY, () -> {
+//            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
+//            Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
+//            System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
+//                    + "\nisometric Screen To Grid = " + gridPos
+//                    + "\nisometric Grid To Screen = " + MapService.isoGridToScreen(gridPos.getX(), gridPos.getY())
+//                    + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
+//                    + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
+//        });
     }
 
-    //HUD und UI
     @Override
     protected void initUI() {
         selectionView.setVisible(false);
 
         addUINode(selectionView);
-        /*Label label = new Label("Hello, FXGL!");
-        label.setFont(Font.font(20.0));
-        FXGL.addUINode(label, 350.0, 290.0);*/
     }
     public void onTankClicked(Entity tank) {
-
-
-    //    selectionView.setCell(tank);
         selectionView.setVisible(true);
-
-        //var x = tank.getX() > getAppWidth() / 2.0 ? tank.getX() - 250 : tank.getX();
-
-//        towerSelectionBox.setTranslateX(x);
-//        towerSelectionBox.setTranslateY(tank.getY());
     }
     @Override
     protected void initPhysics() {
@@ -111,9 +81,7 @@ public class RobustApplication extends GameApplication  {
         FXGL.setLevelFromMap("mapTest.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
 
         GameWorld world = getGameWorld();
-        //ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER
         List<Entity> allEntities = world.getEntities().subList(3, world.getEntities().size());
-        System.out.println(allEntities);
         for (Entity entity : allEntities) {
             Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
             Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
@@ -122,7 +90,6 @@ public class RobustApplication extends GameApplication  {
             else
                 entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
         }
-        //ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER ISOMETRISCHE MAP TRIGGER
     }
 
     public static void main(String[] args) {

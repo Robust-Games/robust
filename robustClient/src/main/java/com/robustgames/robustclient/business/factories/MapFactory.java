@@ -78,10 +78,8 @@ public class MapFactory implements EntityFactory {
     }
     @Spawns("AttackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
-        //rein visuell, braucht eigene methode
-
         return FXGL.entityBuilder(data)
-                .onClick(MovementService::moveTank).type(ACTIONSELECTION)//rein visuell, braucht eigene methode
+                .onClick(MovementService::moveTank).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_attack_selection.png")
                 .build();
     }
