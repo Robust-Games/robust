@@ -15,7 +15,7 @@ public class MovementService {
 
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
-        if (selectedTank != null ) {
+        if (selectedTank != null) {
             Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter());
             Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
             Point2D gridPos = MapService.isoScreenToGrid(clickedCell.getPosition());
@@ -34,7 +34,7 @@ public class MovementService {
     //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
 //        Entity selectedTank = MapService.findSelectedTank();
-//        if (selectedTank != null && false)  { // prüft ob was gewählt wurde
+//        if (selectedTank != null)  { // prüft ob was gewählt wurde
 //
 //            Point2D target = tile.getPosition();
 //            Point2D gridTarget = MapService.orthScreenToGrid(target);

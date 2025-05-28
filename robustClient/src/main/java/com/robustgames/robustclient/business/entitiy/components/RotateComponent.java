@@ -6,11 +6,12 @@ import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+
 import java.util.List;
 
 public class RotateComponent extends Component {
 
-    public void rotateLeft()  {
+    public void rotateLeft() {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
             String aktuell = deleteAndGive(selectedTank);
@@ -35,6 +36,7 @@ public class RotateComponent extends Component {
             }
         }
     }
+
     public void rotateRight() {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
@@ -61,13 +63,13 @@ public class RotateComponent extends Component {
         }
     }
 
-    String deleteAndGive(Entity tank){
+    String deleteAndGive(Entity tank) {
         List<Node> ch = tank.getViewComponent().getChildren();
         String x = "";
-        for(Node e: ch) {
-            if(e instanceof ImageView iv){
+        for (Node e : ch) {
+            if (e instanceof ImageView iv) {
                 String url = iv.getImage().getUrl();
-                if(url.contains("tank")){
+                if (url.contains("tank")) {
                     x = url.substring(url.lastIndexOf("/") + 1);
                     tank.getViewComponent().removeChild(e);
                     break;

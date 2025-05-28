@@ -42,7 +42,6 @@ public class RobustApplication extends GameApplication  {
     //Key input
     @Override
     protected void initInput() {
-        Input input = getInput();
         //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
         String whatWorld = "isometric"; //orthogonal or isometric
 
