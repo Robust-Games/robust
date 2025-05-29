@@ -7,7 +7,6 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
-import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.MovementService;
 import javafx.beans.binding.Bindings;
@@ -83,10 +82,8 @@ public class MapFactory implements EntityFactory {
     }
     @Spawns("AttackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
-        //rein visuell, braucht eigene methode
-
         return FXGL.entityBuilder(data)
-                .onClick(MapService::shoot).type(ACTIONSELECTION)//rein visuell, braucht eigene methode
+                .onClick(MovementService::moveTank).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_attack_selection.png")
                 .build();
     }

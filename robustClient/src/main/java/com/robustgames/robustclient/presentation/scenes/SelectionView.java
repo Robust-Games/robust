@@ -36,10 +36,8 @@ public class SelectionView extends Pane {
         btnMove = new Button("Move");
         btnMove.getStyleClass().add("robust-btn");
         btnMove.setOnAction(e -> {
-            System.out.println("Movy groovy");
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                //hier rotieren methode
                 resetActionComponents(tank);
                 FXGL.runOnce(() -> tank.addComponent(new MovementComponent()), Duration.seconds(0.01));
             }
@@ -49,7 +47,6 @@ public class SelectionView extends Pane {
         btnShoot = new Button("Shoot");
         btnShoot.getStyleClass().add("robust-btn");
         btnShoot.setOnAction(e -> {
-            System.out.println("Shooty tooty");
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
@@ -60,7 +57,6 @@ public class SelectionView extends Pane {
         btnRotateLeft = new Button("Rotate Left");
         btnRotateLeft.getStyleClass().add("robust-btn");
         btnRotateLeft.setOnAction(e -> {
-            System.out.println("Turn left");
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 tank.getComponent(RotateComponent.class).rotateLeft();
@@ -73,7 +69,6 @@ public class SelectionView extends Pane {
         btnRotateRight = new Button("Rotate Right");
         btnRotateRight.getStyleClass().add("robust-btn");
         btnRotateRight.setOnAction(e -> {
-            System.out.println("Turn right");
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 tank.getComponent(RotateComponent.class).rotateRight();
@@ -106,7 +101,6 @@ public class SelectionView extends Pane {
         System.out.println("  Has Movement: " + tank.hasComponent(MovementComponent.class));
         System.out.println("  Has Rotate: " + tank.hasComponent(RotateComponent.class));
         System.out.println("  Has Shoot: " + tank.hasComponent(ShootComponent.class));
-        // Entities entfernen
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }

@@ -19,9 +19,6 @@ public class MovementService {
             Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter());
             Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
             Point2D gridPos = MapService.isoScreenToGrid(clickedCell.getPosition());
-
-            //System.out.println("gridPos: " + gridPos);
-
             boolean moveable = tileIsMovable(gridPos, moveTargets);
             if(moveable) {
                 Point2D target = clickedCell.getPosition(); //TODO hier checken, ob man selecten darf

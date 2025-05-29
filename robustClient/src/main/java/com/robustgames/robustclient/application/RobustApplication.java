@@ -28,7 +28,6 @@ public class RobustApplication extends GameApplication  {
     private static final int HEIGHT = 720;
     SelectionView selectionView;
 
-    //Window settings
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("ROBUST");
@@ -38,24 +37,20 @@ public class RobustApplication extends GameApplication  {
         settings.setHeight(HEIGHT);
     }
 
-    //Key input
     @Override
     protected void initInput() {
-        Input input = getInput();
-        //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-        onBtnDown(MouseButton.PRIMARY, () -> {
-            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
-            Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
-            System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
-                    + "\nisometric Screen To Grid = " + gridPos
-                    + "\nisometric Grid To Screen = " + MapService.isoGridToScreen(gridPos.getX(), gridPos.getY())
-                    + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
-                    + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
-        });
-        //DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
+        //Click Debug
+//        onBtnDown(MouseButton.PRIMARY, () -> {
+//            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
+//            Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
+//            System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
+//                    + "\nisometric Screen To Grid = " + gridPos
+//                    + "\nisometric Grid To Screen = " + MapService.isoGridToScreen(gridPos.getX(), gridPos.getY())
+//                    + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
+//                    + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
+//        });
     }
 
-    //HUD und UI
     @Override
     protected void initUI() {
         selectionView.setVisible(false);
