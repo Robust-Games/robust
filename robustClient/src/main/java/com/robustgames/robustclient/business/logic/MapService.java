@@ -167,6 +167,14 @@ public class MapService {
         return gridPos.getX() >= 0 && gridPos.getX() < 8 && gridPos.getY() >= 0 && gridPos.getY() < 8;
     }
 
+    /**
+     * Calculates all valid move targets for a tank based on its current position.
+     * The movement is constrained by the tank's orientation, valid tiles within the map,
+     * and any terrain restrictions such as mountains.
+     *
+     * @param tankPos the current position of the tank in grid coordinates
+     * @return a set of grid positions representing valid move targets for the tank
+     */
     public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
 
         Set<Point2D> moveTargets = new HashSet<>();
@@ -177,7 +185,6 @@ public class MapService {
 
         String state = getTankImageFilename(tank);
 
-        // 2) Achsen-Auswahl
         Direction[] axes;
         if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
             axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
@@ -185,7 +192,6 @@ public class MapService {
             axes = new Direction[]{ Direction.UP, Direction.DOWN };
         }
 
-        // 3) Entlang jeder Achse so weit springen, bis Rand oder Berg
         for (Direction dir : axes) {
             Point2D current = tankPos;
             while (true) {
@@ -201,7 +207,15 @@ public class MapService {
     }
 
 
-    private static String getTankImageFilename(Entity tank) { // hilfsmethode (andere Klasse?)
+    /**
+     * Retrieves the filename of the tank image associated with the given entity.
+     * This method searches the view components of the entity for an {@code ImageView}
+     * containing an image whose URL includes the word "tank".
+     *
+     * @param tank the entity representing a tank, whose image filename is to be extracted
+     * @return the filename of the tank image, or an empty string if no such image is found
+     */
+    private static String getTankImageFilename(Entity tank) {
         List<Node> ch = tank.getViewComponent().getChildren();
         for (Node e : ch) {
             if (e instanceof ImageView iv) {
