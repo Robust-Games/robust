@@ -34,7 +34,7 @@ public class MapFactory implements EntityFactory {
         var hp = new HealthIntComponent(1);
         //var viewHP =
         return FXGL.entityBuilder(data).type(MOUNTAIN)
-                .zIndex(2)
+                //.zIndex(2)
                 .viewWithBBox("mountain.png")
                 .build();
     }
@@ -76,11 +76,12 @@ public class MapFactory implements EntityFactory {
 
     @Spawns("moveTiles")
     public Entity spawnMoveTiles(SpawnData data) {
-
-        return FXGL.entityBuilder(data)
+        var moveTile = FXGL.entityBuilder(data)
                 .onClick(MovementService::moveTank).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_move_selection.png")
                 .build();
+        MovementService.changeMountainLayer(moveTile);
+        return moveTile;
     }
     @Spawns("attackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {

@@ -28,10 +28,10 @@ public class MapService {
     private static final int ISO_TILE_ORIGIN_Y = 0; //aktuell 0 aber evtl. 1 in zukunft
 
     /**
-     * Converts a screen-space point from isometric coordinates to grid coordinates.
+     * Converts a screen-space point from screen coordinates to isometric grid coordinates.
      * This transformation is based on the specified tile dimensions and origin offsets.
      *
-     * @param screenPos the position in screen-space isometric coordinates to be transformed
+     * @param screenPos the position in screen-space coordinates to be transformed
      * @return the corresponding position in grid coordinates
      */
     public static Point2D isoScreenToGrid(Point2D screenPos) {
@@ -41,12 +41,24 @@ public class MapService {
         return new Point2D(x, y);
     }
     /**
-     * Converts an isometric grid position represented by a {@link Point2D}
-     * to its corresponding screen coordinates.
+     * Converts a screen-space point from isometric coordinates to grid coordinates.
+     * This transformation is based on the specified tile dimensions and origin offsets.
      *
-     * @param position the position in isometric grid coordinates
-     * @return the corresponding screen coordinates as a {@link Point2D}
+     * @param screenPositionX the x position in screen-space coordinates to be transformed
+     * @param screenPositionY the x position in screen-space coordinates to be transformed
+     * @return the corresponding position in grid coordinates
      */
+    public static Point2D isoScreenToGrid(double screenPositionX, double screenPositionY) {
+        return isoScreenToGrid(new Point2D(screenPositionX, screenPositionY));
+    }
+
+        /**
+         * Converts an isometric grid position represented by a {@link Point2D}
+         * to its corresponding screen coordinates.
+         *
+         * @param position the position in isometric grid coordinates
+         * @return the corresponding screen coordinates as a {@link Point2D}
+         */
     public static Point2D isoGridToScreen(Point2D position) {
         return isoGridToScreen(position.getX(), position.getY());
     }
@@ -263,4 +275,5 @@ public class MapService {
         shell.rotateToVector(direction);
 
     }
+
 }

@@ -1,15 +1,14 @@
 package com.robustgames.robustclient.business.logic;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.robustgames.robustclient.business.entitiy.EntityType;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 
-import java.util.List;
 import java.util.Set;
+
+import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
+import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class MovementService {
 
@@ -21,16 +20,15 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-//            Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter());
-//            Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
-//            Point2D gridPos = MapService.isoScreenToGrid(clickedCell.getPosition());
-//            boolean moveable = tileIsMovable(gridPos, moveTargets);
-//            if(moveable) {
-                Point2D target = clickedCell.getPosition();
-                selectedTank.setPosition(target.getX(), target.getY());
-                selectedTank.removeComponent(SelectableComponent.class); //Für später (dann auch bei shoot)
-                selectedTank.addComponent(new SelectableComponent()); //Für später (dann auch bei shoot)
-//            }
+            //moves tank
+            Point2D target = clickedCell.getPosition();
+            selectedTank.setPosition(target.getX(), target.getY());
+            //updates z coordinate
+            changeMountainLayer(selectedTank);
+            //removes and adds the SelectableComponent to update animation of tank selection
+            //(since the tank selection animation is attached to the tile the tank is standing on)
+            selectedTank.removeComponent(SelectableComponent.class);
+            selectedTank.addComponent(new SelectableComponent());
         }
     }
 
@@ -53,19 +51,36 @@ public class MovementService {
 //    }
 
     /**
-     * Checks if a tile, represented by the clicked cell, is a valid move target.
+     * Updates the Z-index of the inputEntity (and movement tiles) and surrounding mountain entities based on
+     * their positions. The method also adjusts the opacity and mouse interactivity of mountain entities
+     * near the inputEntity.
      *
-     * @param clickedCell the position of the clicked tile on the grid
-     * @param moveTargets the set of valid move target positions
-     * @return true if the clicked cell is present in the set of valid move targets, false otherwise
+     * @param inputEntity the entity whose Z-index and interactions with mountain entities are to be updated
      */
-    static boolean tileIsMovable(Point2D clickedCell, Set<Point2D> moveTargets) {
-        for(var t: moveTargets){
-            if(clickedCell.equals(t)){
-                return true;
+    public static void changeMountainLayer(Entity inputEntity) {
+        Point2D entityPosition = MapService.isoScreenToGrid(inputEntity.getCenter());
+        int zIndexEntity = (int) (entityPosition.getX() + entityPosition.getY());
+        inputEntity.setZIndex(zIndexEntity);
+
+        FXGL.getGameWorld().getEntitiesByType(MOUNTAIN).forEach(mountain -> {
+            Point2D mountainPos = MapService.isoScreenToGrid(mountain.getCenter());
+            int zIndexMountain = (int) (mountainPos.getX() + mountainPos.getY());
+            mountain.setZIndex(zIndexMountain);
+
+            if (entityPosition.add(1,0).equals(mountainPos)
+            || entityPosition.add(0,1).equals(mountainPos)
+            || entityPosition.add(1,1).equals(mountainPos)) {
+                mountain.setOpacity(0.7);
+                mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(true));
             }
-        }
-        return false;
+            else if( inputEntity.isType(TANK)){
+                mountain.setOpacity(1);
+                mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(false));
+            }
+
+
+
+        });
     }
 }
 

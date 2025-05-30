@@ -1,7 +1,9 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.MovementService;
 import javafx.geometry.Point2D;
 import java.util.Set;
 

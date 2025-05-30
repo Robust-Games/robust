@@ -21,6 +21,8 @@ public class RobustApplication extends GameApplication  {
     private static final int HEIGHT = 720;
     SelectionView selectionView;
 
+
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("ROBUST");
@@ -42,6 +44,7 @@ public class RobustApplication extends GameApplication  {
 //                    + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
 //                    + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
 //        });
+
     }
 
     @Override

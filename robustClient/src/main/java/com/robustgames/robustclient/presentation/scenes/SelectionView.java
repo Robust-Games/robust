@@ -37,7 +37,8 @@ public class SelectionView extends Pane {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
-                FXGL.runOnce(() -> tank.addComponent(new MovementComponent()), Duration.seconds(0.01));
+                //FXGL.runOnce(() -> tank.addComponent(new MovementComponent()), Duration.seconds(0.01));
+                tank.addComponent(new MovementComponent());
             }
 
         });
@@ -48,7 +49,9 @@ public class SelectionView extends Pane {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
-                FXGL.runOnce(() -> tank.addComponent(new ShootComponent()), Duration.seconds(0.01));
+                //FXGL.runOnce(() -> tank.addComponent(new ShootComponent()), Duration.seconds(0.01));
+                tank.addComponent(new ShootComponent());
+
             }
         });
 
@@ -58,8 +61,9 @@ public class SelectionView extends Pane {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
-                FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
-                FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));
+                //FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
+                tank.getComponent(RotateComponent.class).rotateLeft();
+                //FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));
             }
 
         });
@@ -69,7 +73,7 @@ public class SelectionView extends Pane {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
-                FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
+                //FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
                 FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateRight(), Duration.seconds(0.01));
                 // Richtung right an Component übergeben
             }
@@ -92,12 +96,13 @@ public class SelectionView extends Pane {
     // Einheitliches Entfernen der Components
     private void resetActionComponents(Entity tank) {
         tank.removeComponent(MovementComponent.class);
-        tank.removeComponent(RotateComponent.class);
+        //tank.removeComponent(RotateComponent.class);
         tank.removeComponent(ShootComponent.class);
-        System.out.println("Components after removal:");
+        //DEBUG
+/*        System.out.println("Components after removal:");
         System.out.println("  Has Movement: " + tank.hasComponent(MovementComponent.class));
         System.out.println("  Has Rotate: " + tank.hasComponent(RotateComponent.class));
-        System.out.println("  Has Shoot: " + tank.hasComponent(ShootComponent.class));
+        System.out.println("  Has Shoot: " + tank.hasComponent(ShootComponent.class));*/
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }

@@ -21,7 +21,6 @@ public class SelectableComponent extends Component {
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
         tileOfTank = getGameWorld().getEntitiesAt(MapService.isoGridToScreen(tankPos)).getFirst();
         tileOfTank.addComponent(new AnimSelectionComponent());
-
     }
 
     @Override
