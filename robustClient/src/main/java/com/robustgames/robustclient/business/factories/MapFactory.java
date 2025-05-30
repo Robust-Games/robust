@@ -31,7 +31,10 @@ public class MapFactory implements EntityFactory {
 
     @Spawns("mountain")
     public Entity spawnMountain(SpawnData data) {
+        var hp = new HealthIntComponent(1);
+        //var viewHP =
         return FXGL.entityBuilder(data).type(MOUNTAIN)
+                .zIndex(2)
                 .viewWithBBox("mountain.png")
                 .build();
     }
@@ -57,11 +60,10 @@ public class MapFactory implements EntityFactory {
         diamond.setOpacity(0.40);
         var cell = FXGL.entityBuilder(data).type(TILE).viewWithBBox(diamond)
                 .onClick(tile -> {
-                    //MovementService.moveTank(tile);
-                    MapService.shoot(tile);
+                    //MapService.shoot(tile);
                     //MovementService.rotateAutomatically(tile);
                 })
-                .with(new HealthIntComponent())
+                .with(new HealthIntComponent(1))
                 .build();
         diamond.fillProperty().bind(
                 Bindings.when(cell.getViewComponent().getParent().hoverProperty())
@@ -80,10 +82,10 @@ public class MapFactory implements EntityFactory {
                 .viewWithBBox("Tile_move_selection.png")
                 .build();
     }
-    @Spawns("AttackTargetTiles")
+    @Spawns("attackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .onClick(MovementService::moveTank).type(ACTIONSELECTION)
+                .onClick(MapService::shoot).type(ACTIONSELECTION)//rein visuell, braucht eigene methode
                 .viewWithBBox("Tile_attack_selection.png")
                 .build();
     }

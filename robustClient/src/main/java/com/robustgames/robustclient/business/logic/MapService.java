@@ -244,13 +244,14 @@ public class MapService {
         if (tank == null) return;
         Point2D tankPosition = tank.getCenter();
         Point2D targetPosition = target.getPosition();
-        System.out.println("Screen " + targetPosition);
-        System.out.println("Grid " + isoScreenToGrid(targetPosition));
-        System.out.println("Grid Screen " + isoGridToScreen(isoScreenToGrid(targetPosition)));
         if (target.getType() == EntityType.TILE) {
             targetPosition.add(0,0);
         }
-        else {}
+        else if(target.getType() == TANK
+                || target.getType() == EntityType.MOUNTAIN
+                || target.getType() == EntityType.CITY) {
+
+        }
 
         Point2D direction = targetPosition.subtract(tankPosition);
 
@@ -260,5 +261,6 @@ public class MapService {
                         .put("target", target)
         );
         shell.rotateToVector(direction);
+
     }
 }

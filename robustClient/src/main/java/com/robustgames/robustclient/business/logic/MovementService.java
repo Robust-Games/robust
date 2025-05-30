@@ -21,15 +21,16 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-            Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter());
-            Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
-            Point2D gridPos = MapService.isoScreenToGrid(clickedCell.getPosition());
-            boolean moveable = tileIsMovable(gridPos, moveTargets);
-            if(moveable) {
-                Point2D target = clickedCell.getPosition(); //TODO hier checken, ob man selecten darf
-                selectedTank.setPosition(target.getX() - 64, target.getY() - 64);
+//            Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter());
+//            Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
+//            Point2D gridPos = MapService.isoScreenToGrid(clickedCell.getPosition());
+//            boolean moveable = tileIsMovable(gridPos, moveTargets);
+//            if(moveable) {
+                Point2D target = clickedCell.getPosition();
+                selectedTank.setPosition(target.getX(), target.getY());
                 selectedTank.removeComponent(SelectableComponent.class); //Für später (dann auch bei shoot)
-            }
+                selectedTank.addComponent(new SelectableComponent()); //Für später (dann auch bei shoot)
+//            }
         }
     }
 

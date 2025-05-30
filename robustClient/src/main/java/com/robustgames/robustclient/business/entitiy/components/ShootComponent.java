@@ -35,13 +35,13 @@ public class ShootComponent extends Component {
                 // Prüfe, ob dort ein Berg ist
                 if (MapService.hasMountainAt(current)) {
                     Point2D pos = MapService.isoGridToScreen(current);
-                    FXGL.getGameWorld().spawn("AttackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+                    FXGL.getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
                     break; // Danach nicht weiter, Schuss endet am Berg
                 }
 
                 // Sonst normales Ziel anzeigen
                 Point2D pos = MapService.isoGridToScreen(current);
-                FXGL.getGameWorld().spawn("AttackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+                FXGL.getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
 
                 // Optional: abbrechen, falls dort noch andere Blocker sind (Panzer/City)
             }

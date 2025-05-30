@@ -2,6 +2,7 @@ package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.AutoRotationComponent;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -20,6 +21,8 @@ public class PlayerFactory implements EntityFactory {
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
+                .type(TANK)
+                .zIndex(1)
                 .viewWithBBox("tank_top_left.png")
                 .with(new RotateComponent())
                 .with(new ShootComponent())
@@ -37,14 +40,18 @@ public class PlayerFactory implements EntityFactory {
     public Entity spawnCityPlayer1(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .type(CITY)
+                .zIndex(1)
                 .viewWithBBox("city1.png")
                 .build();
     }
 
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
+        var hp = new HealthIntComponent(3);
+        //var viewHP =
         return FXGL.entityBuilder(data)
                 .type(TANK)
+                .zIndex(1)
                 .viewWithBBox("tank_down_right.png")
                 .with(new RotateComponent())
                 .onClick(tank ->{
@@ -59,23 +66,22 @@ public class PlayerFactory implements EntityFactory {
 
     @Spawns("city2")
     public Entity spawnCityPlayer2(SpawnData data) {
+        var hp = new HealthIntComponent(3);
+        //var viewHP =
         return FXGL.entityBuilder(data)
                 .type(CITY)
+                .zIndex(1)
                 .viewWithBBox("city1.png")
                 .build();
     }
     @Spawns("shell")
     public Entity spawnShell(SpawnData data) {
-        Entity tank = data.get("tank");
         Entity target = data.get("target");
 
         return FXGL.entityBuilder(data)
                 .type(SHELL)
                 .viewWithBBox("shell.gif")
-                .collidable()
-                .with(new ShellComponent(tank, target))
-                //.with(new AutoRotationComponent())
-                //.zIndex(4)
+                .with(new ShellComponent(target))
                 .build();
     }
 }
