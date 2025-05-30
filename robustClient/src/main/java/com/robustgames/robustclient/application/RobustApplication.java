@@ -54,7 +54,7 @@ public class RobustApplication extends GameApplication  {
 //        });
     }
 
-    @Override6
+    @Override
     protected void initUI() {
         selectionView.setVisible(false);
 

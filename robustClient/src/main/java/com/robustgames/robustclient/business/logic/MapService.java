@@ -3,6 +3,7 @@ package com.robustgames.robustclient.business.logic;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.business.entitiy.EntityType;
+import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
 import java.util.HashSet;
@@ -172,16 +173,24 @@ public class MapService {
      * @return a set of grid positions representing valid move targets for the tank
      */
     public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
-
         Set<Point2D> moveTargets = new HashSet<>();
+        int ap = 0;
 
-        Entity tank = findSelectedTank();
-        if (tank == null)
+        Entity selectedTank = findSelectedTank();
+        try {
+            ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
+        }catch (Exception e){
+            return null;
+        }
+
+        if (ap <= 0){
             return moveTargets;
+        }
 
-        String state = getTankImageFilename(tank);
 
+        String state = getTankImageFilename(selectedTank);
         Direction[] axes;
+
         if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
             axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
         } else {
@@ -190,7 +199,7 @@ public class MapService {
 
         for (Direction dir : axes) {
             Point2D current = tankPos;
-            while (true) {
+            for (int stepCount = 1; stepCount <= ap; stepCount++) {
                 current = step(current, dir);
 
                 if (!isValidTile(current) || hasMountainAt(current))
