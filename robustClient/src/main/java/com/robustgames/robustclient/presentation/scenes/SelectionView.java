@@ -26,8 +26,6 @@ public class SelectionView extends Pane {
     Button btnRotateRight;
 
 
-
-
     public SelectionView() {
         String cssPath = getClass().getResource("/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);
@@ -59,10 +57,9 @@ public class SelectionView extends Pane {
         btnRotateLeft.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                tank.getComponent(RotateComponent.class).rotateLeft();
                 resetActionComponents(tank);
                 FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
-                // Richtung left an Component übergeben
+                FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));
             }
 
         });
@@ -71,9 +68,9 @@ public class SelectionView extends Pane {
         btnRotateRight.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                tank.getComponent(RotateComponent.class).rotateRight();
                 resetActionComponents(tank);
                 FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
+                FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateRight(), Duration.seconds(0.01));
                 // Richtung right an Component übergeben
             }
 
