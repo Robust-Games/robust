@@ -1,29 +1,27 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import javafx.geometry.Point2D;
 
 public class ShellComponent extends Component {
 
-    private Entity target;
+    private final Point2D targetLocation;
 
-    public ShellComponent(Entity target) {
-        this.target = target;
+    public ShellComponent(Point2D targetLocation) {
+        this.targetLocation = targetLocation;
     }
 
     @Override
     public void onUpdate(double tpf) {
-        if (!target.isActive()) {
+        if (entity.getPosition().distance(targetLocation) < 100) {
             entity.removeFromWorld();
             return;
         }
-
-        if (entity.distanceBBox(target) < 64*tpf) {
-            entity.removeFromWorld();
-            return;
-        }
-        entity.translateTowards(target.getCenter(), (500 * tpf));
+        entity.translateTowards(targetLocation, (800 * tpf));
     }
 
-
+    @Override
+    public void onRemoved() {
+        super.onRemoved();
+    }
 }

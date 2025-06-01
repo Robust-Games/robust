@@ -2,10 +2,9 @@ package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
-
-import java.util.Set;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
@@ -29,6 +28,7 @@ public class MovementService {
             //(since the tank selection animation is attached to the tile the tank is standing on)
             selectedTank.removeComponent(SelectableComponent.class);
             selectedTank.addComponent(new SelectableComponent());
+            selectedTank.removeComponent(MovementComponent.class);
         }
     }
 
@@ -70,7 +70,7 @@ public class MovementService {
             if (entityPosition.add(1,0).equals(mountainPos)
             || entityPosition.add(0,1).equals(mountainPos)
             || entityPosition.add(1,1).equals(mountainPos)) {
-                mountain.setOpacity(0.7);
+                mountain.setOpacity(0.5);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(true));
             }
             else if( inputEntity.isType(TANK)){

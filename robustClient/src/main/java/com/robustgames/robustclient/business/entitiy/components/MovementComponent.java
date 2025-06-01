@@ -1,15 +1,18 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
+
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
-import com.robustgames.robustclient.business.logic.MovementService;
 import javafx.geometry.Point2D;
 import java.util.Set;
 
+import static com.almasb.fxgl.dsl.FXGL.byType;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
 
 public class MovementComponent extends Component {
+
 
     @Override
     public void onAdded() {
@@ -24,6 +27,6 @@ public class MovementComponent extends Component {
 
     @Override
     public void onRemoved() {
-        super.onRemoved();
+        getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }

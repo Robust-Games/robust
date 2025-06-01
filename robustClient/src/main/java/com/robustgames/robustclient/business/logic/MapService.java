@@ -1,20 +1,23 @@
 package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimExplosionComponent;
 import javafx.geometry.Point2D;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import com.robustgames.robustclient.business.logic.Direction;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGL.spawn;
-import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
+import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**
  * Tracks the tile logic, currently in Orthographic 2D
@@ -253,26 +256,54 @@ public class MapService {
 
     public static void shoot(Entity target) {
         Entity tank = findSelectedTank();
-        if (tank == null) return;
+        if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
         Point2D tankPosition = tank.getCenter();
-        Point2D targetPosition = target.getPosition();
-        if (target.getType() == EntityType.TILE) {
-            targetPosition.add(0,0);
+        Point2D targetGridPosition = isoScreenToGrid(target.getPosition());
+        Point2D targetTilePosition = MapService.isoGridToScreen(targetGridPosition);
+
+        if (target.getType() == ACTIONSELECTION) {
+            targetGridPosition = isoScreenToGrid(target.getCenter());
+            targetTilePosition = MapService.isoGridToScreen(targetGridPosition);
+            Entity tempTarget = getGameWorld()
+                    .getEntitiesAt(targetTilePosition)
+                    .stream()
+                    .filter(e -> e.getType() == TILE).findFirst().orElse(target);
+            if (tempTarget.getType() == TILE) {
+                target = tempTarget;
+                targetTilePosition.add(0,32);
+            }
         }
         else if(target.getType() == TANK
                 || target.getType() == EntityType.MOUNTAIN
                 || target.getType() == EntityType.CITY) {
-
+            target.getComponent(HealthIntComponent.class).damage(1);
+        }
+        else {
+            getNotificationService().pushNotification("Invalid Target!");
+            return;
         }
 
-        Point2D direction = targetPosition.subtract(tankPosition);
-
-        var shell = spawn("shell",
+        FXGL.spawnFadeIn("shell",
                 new SpawnData(tankPosition)
                         .put("tank", tank)
-                        .put("target", target)
+                        .put("targetLocation", targetTilePosition)
+                , Duration.millis(50)
         );
-        shell.rotateToVector(direction);
+
+        Entity finalTarget = target;
+        getGameTimer().runOnceAfter(() -> {
+            finalTarget.addComponent(new AnimExplosionComponent(-64,-64));
+        }, Duration.millis(finalTarget.distance(tank)));
+
+        tank.removeComponent(ShootComponent.class);
+
+        getGameTimer().runOnceAfter(() -> {
+            finalTarget.removeComponent(AnimExplosionComponent.class);
+        }, Duration.seconds(2.5));
+
+    }
+
+    public static void shotAnimation(Point2D from, Point2D to) {
 
     }
 

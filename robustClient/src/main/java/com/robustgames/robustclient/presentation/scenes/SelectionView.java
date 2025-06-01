@@ -1,12 +1,10 @@
 package com.robustgames.robustclient.presentation.scenes;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.logic.MapService;
-import javafx.util.Duration;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -37,7 +35,6 @@ public class SelectionView extends Pane {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
-                //FXGL.runOnce(() -> tank.addComponent(new MovementComponent()), Duration.seconds(0.01));
                 tank.addComponent(new MovementComponent());
             }
 
@@ -49,7 +46,6 @@ public class SelectionView extends Pane {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
-                //FXGL.runOnce(() -> tank.addComponent(new ShootComponent()), Duration.seconds(0.01));
                 tank.addComponent(new ShootComponent());
 
             }
@@ -60,10 +56,16 @@ public class SelectionView extends Pane {
         btnRotateLeft.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                resetActionComponents(tank);
-                //FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
-                tank.getComponent(RotateComponent.class).rotateLeft();
-                //FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));
+                if (tank.hasComponent(MovementComponent.class)){
+                    tank.getComponent(RotateComponent.class).rotateLeft();
+                    tank.removeComponent(MovementComponent.class);
+                    tank.addComponent(new MovementComponent());
+                }
+                else {
+                    resetActionComponents(tank);
+                    tank.getComponent(RotateComponent.class).rotateLeft();
+
+                }
             }
 
         });
@@ -72,10 +74,17 @@ public class SelectionView extends Pane {
         btnRotateRight.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                resetActionComponents(tank);
-                //FXGL.runOnce(() -> tank.addComponent(new RotateComponent()), Duration.seconds(0.01));
-                FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateRight(), Duration.seconds(0.01));
-                // Richtung right an Component übergeben
+                if (tank.hasComponent(MovementComponent.class)){
+                    tank.getComponent(RotateComponent.class).rotateRight();
+                    tank.removeComponent(MovementComponent.class);
+                    tank.addComponent(new MovementComponent());
+                }
+                else {
+                    {
+                        resetActionComponents(tank);
+                        tank.getComponent(RotateComponent.class).rotateRight();
+                    }
+                }
             }
 
         });
@@ -96,7 +105,6 @@ public class SelectionView extends Pane {
     // Einheitliches Entfernen der Components
     private void resetActionComponents(Entity tank) {
         tank.removeComponent(MovementComponent.class);
-        //tank.removeComponent(RotateComponent.class);
         tank.removeComponent(ShootComponent.class);
         //DEBUG
 /*        System.out.println("Components after removal:");
@@ -106,3 +114,4 @@ public class SelectionView extends Pane {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }
+//FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));

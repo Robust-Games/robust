@@ -1,26 +1,17 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
-
 import javafx.geometry.Point2D;
-
-import java.util.Objects;
-import java.util.Set;
-
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGL.spawn;
-import static com.robustgames.robustclient.business.logic.MapService.getTankNeighbours;
+import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
 
 public class ShootComponent extends Component {
 
     @Override
     public void onAdded() {
-        System.out.println("ShootComponent ONADDED!! (Entity ID: " + entity.toString() + ")");
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
         // Für jede der 4 Hauptachsen schießen
         for (Direction dir : Direction.values()) {
@@ -61,5 +52,9 @@ public class ShootComponent extends Component {
                 return new Point2D(pos.getX() + 1, pos.getY());
         }
         throw new IllegalArgumentException();
+    }
+    @Override
+    public void onRemoved() {
+        getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }

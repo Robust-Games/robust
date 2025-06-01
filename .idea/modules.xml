@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.robustGames.robustServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.robustGames.robustServer.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/robustClient.test.iml" filepath="$PROJECT_DIR$/.idea/modules/robustClient.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/robustServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/robustServer.main.iml" />
     </modules>
   </component>

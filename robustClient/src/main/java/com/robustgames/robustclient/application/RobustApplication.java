@@ -34,16 +34,16 @@ public class RobustApplication extends GameApplication  {
 
     @Override
     protected void initInput() {
-        //Click Debug
-//        onBtnDown(MouseButton.PRIMARY, () -> {
-//            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
-//            Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
-//            System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
-//                    + "\nisometric Screen To Grid = " + gridPos
-//                    + "\nisometric Grid To Screen = " + MapService.isoGridToScreen(gridPos.getX(), gridPos.getY())
-//                    + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
-//                    + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
-//        });
+//ROBUST_DEBUG
+        onBtnDown(MouseButton.PRIMARY, () -> {
+            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
+            Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
+            System.out.println("\nFXGL Mouse coordinates = " + mouseWorldPos
+                    + "\nisometric Screen To Grid = " + gridPos
+                    + "\nisometric Grid To Screen = " + MapService.isoGridToScreen(gridPos.getX(), gridPos.getY())
+                    + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
+                    + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
+        });
 
     }
 
