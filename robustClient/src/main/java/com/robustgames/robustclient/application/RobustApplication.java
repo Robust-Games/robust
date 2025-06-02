@@ -72,9 +72,9 @@ public class RobustApplication extends GameApplication  {
         for (Entity entity : allEntities) {
             Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
             Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
-            if (entity.isType(TILE))
+            if (entity.isType(TILE)) {
                 entity.setPosition(isoGridPos.getX(), isoGridPos.getY());
-            else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
+            }            else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                 entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
         }
     }

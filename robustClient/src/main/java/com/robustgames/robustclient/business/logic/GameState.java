@@ -18,7 +18,7 @@ public class GameState {
 
         }
     }
-    public static ProgressBar hpInit(int maxHP){
+    public static ProgressBar hpBarInit(int maxHP){
         var hpBar = new ProgressBar();
         hpBar.setWidth(90);
         hpBar.setHeight(15);

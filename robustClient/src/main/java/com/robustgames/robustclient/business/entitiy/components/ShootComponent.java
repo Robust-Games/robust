@@ -1,12 +1,18 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
+
+import java.util.List;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 public class ShootComponent extends Component {
 
@@ -23,16 +29,38 @@ public class ShootComponent extends Component {
                 if (!MapService.isValidTile(current))
                     break;
 
-                // Prüfe, ob dort ein Berg ist
-                if (MapService.hasMountainAt(current)) {
-                    Point2D pos = MapService.isoGridToScreen(current);
-                    FXGL.getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
-                    break; // Danach nicht weiter, Schuss endet am Berg
+                Point2D posTile = MapService.isoGridToScreen(current);
+                List<Entity> tileList = getGameWorld().getEntitiesAt(posTile);
+
+                Point2D posEntity = posTile.subtract(64,64);
+                List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
+
+
+                if (!entityList.isEmpty()) {
+                    if (entityList.size() > 1) {
+                        System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
+                    }
+                    Entity target = entityList.getFirst();
+                    MapService.spawnAttackTarget(target);
+                    break;
+                }
+                else if (!tileList.isEmpty()) {
+                    MapService.spawnAttackTarget(tileList.getFirst());
                 }
 
+                // Prüfe, ob dort ein Berg ist
+/*                if (MapService.hasMountainAt(current)) {
+                    System.out.println(current + " ist ein Berg");
+                    pos = MapService.isoGridToScreen(current);
+                    getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+                    break; // Danach nicht weiter, Schuss endet am Berg
+                }*/
+
                 // Sonst normales Ziel anzeigen
-                Point2D pos = MapService.isoGridToScreen(current);
-                FXGL.getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+/*
+                pos = MapService.isoGridToScreen(current);
+                getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
+*/
 
                 // Optional: abbrechen, falls dort noch andere Blocker sind (Panzer/City)
             }
@@ -58,3 +86,13 @@ public class ShootComponent extends Component {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }
+//DEBUGOVERRIDE for tests maybe
+/*                for (int i = 0; i < getGameScene().getViewport().getX(); i++) {
+                    for (int j = 0; j < getGameScene().getViewport().getY(); j++) {
+                        Point2D posEntity2 = new Point2D(i - 64, j - 64);
+                        List<Entity> targetList2 = getGameWorld().getEntitiesAt(posEntity2);
+                        if (targetList2.size() > 1) {
+                            System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
+                        }
+                    }
+                }*/

@@ -51,7 +51,6 @@ public class MapFactory implements EntityFactory {
                 .build();
     }
 
-    //Aufleuchtende Tiles, die können auch dann für die visualisierung von move und shoot verwendet werden
     @Spawns("hoverTile")
     public Entity spawnHoverFloor(SpawnData data) {
         Polygon diamond = new Polygon();
@@ -63,11 +62,7 @@ public class MapFactory implements EntityFactory {
         );
         diamond.setOpacity(0.40);
         var cell = FXGL.entityBuilder(data).type(TILE).viewWithBBox(diamond)
-                .onClick(tile -> {
-                    //MapService.shoot(tile);
-                    //MovementService.rotateAutomatically(tile);
-                })
-                .with(new HealthIntComponent(100000))//TODO Destructable tiles
+                .with(new HealthIntComponent(2))//TODO Destructable tiles
                 .build();
         diamond.fillProperty().bind(
                 Bindings.when(cell.getViewComponent().getParent().hoverProperty())
@@ -87,11 +82,23 @@ public class MapFactory implements EntityFactory {
         MovementService.changeMountainLayer(moveTile);
         return moveTile;
     }
+
     @Spawns("attackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
         return FXGL.entityBuilder(data)
                 .onClick(MapService::shoot).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_attack_selection.png")
+                .build();
+    }
+    @Spawns("attackTarget")
+    public Entity spawnAttackTarget(SpawnData data) {
+        Entity target = data.get("target");
+        String targetName = data.get("targetName");
+        return FXGL.entityBuilder(data)
+                .onClick(e -> MapService.shoot(target))
+                .type(ACTIONSELECTION)
+                .zIndex(100)
+                .viewWithBBox(targetName)
                 .build();
     }
 }

@@ -143,31 +143,6 @@ public class MapService {
         if (tank != null)
             tank.removeComponent(SelectableComponent.class);
     }
-    /**
-     * Gets all valid neighbor positions for a tank on the game map in a Set.
-     * Only returns positions that are within map boundaries and not the tank's current position
-     *
-     * @param tankPos current position of the tank in tile coordinates (0,0) - (7,7)
-     * @return Set of valid neighboring positions
-     */
-
-    public static Set<Point2D> getTankNeighbours(Point2D tankPos){
-        Set<Point2D> neighborCells = new HashSet<>();
-        for (int x = -5; x <= 5; x++) {
-            for (int y = -5; y <= 5; y++) {
-                double xDirection = tankPos.getX() + x;
-                double yDirection = tankPos.getY() + y;
-                if (x == 0 || y == 0 || //tank itself will not be selectable
-                        xDirection < 0 || xDirection > 7 || //map boundaries
-                        yDirection < 0 || yDirection > 7) {
-                    continue;
-                }
-                neighborCells.add(new Point2D(xDirection, tankPos.getY()));
-                neighborCells.add(new Point2D(tankPos.getX(), yDirection));
-            }
-        }
-        return neighborCells;
-    }
 
     public static boolean hasMountainAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(EntityType.MOUNTAIN)
@@ -257,54 +232,65 @@ public class MapService {
     public static void shoot(Entity target) {
         Entity tank = findSelectedTank();
         if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
+
         Point2D tankPosition = tank.getCenter();
         Point2D targetGridPosition = isoScreenToGrid(target.getPosition());
-        Point2D targetTilePosition = MapService.isoGridToScreen(targetGridPosition);
+        Point2D targetScreenPosition = MapService.isoGridToScreen(targetGridPosition);
 
-        if (target.getType() == ACTIONSELECTION) {
-            targetGridPosition = isoScreenToGrid(target.getCenter());
-            targetTilePosition = MapService.isoGridToScreen(targetGridPosition);
-            Entity tempTarget = getGameWorld()
-                    .getEntitiesAt(targetTilePosition)
-                    .stream()
-                    .filter(e -> e.getType() == TILE).findFirst().orElse(target);
-            if (tempTarget.getType() == TILE) {
-                target = tempTarget;
-                targetTilePosition.add(0,32);
-            }
+        if (target.getType() != TILE) {
+            targetScreenPosition = target.getPosition();
         }
-        else if(target.getType() == TANK
-                || target.getType() == EntityType.MOUNTAIN
-                || target.getType() == EntityType.CITY) {
-            target.getComponent(HealthIntComponent.class).damage(1);
-        }
-        else {
-            getNotificationService().pushNotification("Invalid Target!");
-            return;
-        }
+
+        target.getComponent(HealthIntComponent.class).damage(1);
+        //TODO Game Over
+
 
         FXGL.spawnFadeIn("shell",
                 new SpawnData(tankPosition)
                         .put("tank", tank)
-                        .put("targetLocation", targetTilePosition)
+                        .put("targetLocation", targetScreenPosition)
                 , Duration.millis(50)
         );
-
-        Entity finalTarget = target;
-        getGameTimer().runOnceAfter(() -> {
-            finalTarget.addComponent(new AnimExplosionComponent(-64,-64));
-        }, Duration.millis(finalTarget.distance(tank)));
 
         tank.removeComponent(ShootComponent.class);
 
         getGameTimer().runOnceAfter(() -> {
-            finalTarget.removeComponent(AnimExplosionComponent.class);
-        }, Duration.seconds(2.5));
+            target.addComponent(new AnimExplosionComponent(0,0));
+        }, Duration.millis(target.distance(tank)));
+
+        getGameTimer().runOnceAfter(() -> {
+            target.removeComponent(AnimExplosionComponent.class);
+            if (target.getComponent(HealthIntComponent.class).getValue()==0)
+                target.removeFromWorld();
+        }, Duration.millis(target.distance(tank)+1250)); //1250 = Explosion animation duration + 50 ms delay
+
+
 
     }
 
-    public static void shotAnimation(Point2D from, Point2D to) {
 
+    public static void spawnAttackTarget(Entity target) {
+        Point2D targetPosition = target.getPosition();
+        String targetName = "Tile_attack_selection.png";
+
+        if (target.getType() != TILE) {
+            List<Node> viewChildren = target.getViewComponent().getChildren();
+            for (Node child : viewChildren) {
+                if (child instanceof ImageView view) {
+                    String url = view.getImage().getUrl();
+                    String imageName = url.substring(url.lastIndexOf("/") + 1);
+                    targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack.png";
+                }
+            }
+        }
+        else targetPosition = targetPosition.subtract(64,64);
+
+        FXGL.spawnFadeIn("attackTarget",
+                new SpawnData(targetPosition)
+                        .put("target", target)
+                        .put("targetName", targetName)
+                , Duration.millis(50)
+        );
     }
 
 }

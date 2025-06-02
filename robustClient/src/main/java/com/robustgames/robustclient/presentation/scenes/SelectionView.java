@@ -106,11 +106,6 @@ public class SelectionView extends Pane {
     private void resetActionComponents(Entity tank) {
         tank.removeComponent(MovementComponent.class);
         tank.removeComponent(ShootComponent.class);
-        //DEBUG
-/*        System.out.println("Components after removal:");
-        System.out.println("  Has Movement: " + tank.hasComponent(MovementComponent.class));
-        System.out.println("  Has Rotate: " + tank.hasComponent(RotateComponent.class));
-        System.out.println("  Has Shoot: " + tank.hasComponent(ShootComponent.class));*/
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }

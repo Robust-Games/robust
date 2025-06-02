@@ -21,7 +21,7 @@ public class PlayerFactory implements EntityFactory {
 
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
-        var hpBar = GameState.hpInit(HP);
+        var hpBar = GameState.hpBarInit(HP);
         var hpComp = new HealthIntComponent(HP);
         hpBar.currentValueProperty().bind(hpComp.valueProperty());
 
@@ -29,7 +29,6 @@ public class PlayerFactory implements EntityFactory {
                 .type(TANK)
                 .view(hpBar)
                 .with(hpComp)
-                .zIndex(1)
                 .viewWithBBox("tank_top_left.png")
                 .with(new RotateComponent())
                 .onClick(tank ->{
@@ -44,7 +43,7 @@ public class PlayerFactory implements EntityFactory {
 
     @Spawns("city1")
     public Entity spawnCityPlayer1(SpawnData data) {
-        var hpBar = GameState.hpInit(HP);
+        var hpBar = GameState.hpBarInit(HP);
         var hpComp = new HealthIntComponent(HP);
         hpBar.currentValueProperty().bind(hpComp.valueProperty());
 
@@ -52,14 +51,13 @@ public class PlayerFactory implements EntityFactory {
                 .type(CITY)
                 .view(hpBar)
                 .with(hpComp)
-                .zIndex(1)
                 .viewWithBBox("city1.png")
                 .build();
     }
 
     @Spawns("tank2")
     public Entity spawnTankPlayer2(SpawnData data) {
-        var hpBar = GameState.hpInit(HP);
+        var hpBar = GameState.hpBarInit(HP);
         var hpComp = new HealthIntComponent(HP);
         hpBar.currentValueProperty().bind(hpComp.valueProperty());
 
@@ -67,7 +65,6 @@ public class PlayerFactory implements EntityFactory {
                 .type(TANK)
                 .view(hpBar)
                 .with(hpComp)
-                .zIndex(1)
                 .viewWithBBox("tank_down_right.png")
                 .with(new RotateComponent())
                 .onClick(tank ->{
@@ -82,7 +79,7 @@ public class PlayerFactory implements EntityFactory {
 
     @Spawns("city2")
     public Entity spawnCityPlayer2(SpawnData data) {
-        var hpBar = GameState.hpInit(HP);
+        var hpBar = GameState.hpBarInit(HP);
         var hpComp = new HealthIntComponent(HP);
         hpBar.currentValueProperty().bind(hpComp.valueProperty());
 
@@ -90,7 +87,6 @@ public class PlayerFactory implements EntityFactory {
                 .type(CITY)
                 .view(hpBar)
                 .with(hpComp)
-                .zIndex(1)
                 .viewWithBBox("city1.png")
                 .build();
     }
