@@ -19,6 +19,8 @@ public class MovementComponent extends Component {
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
 
         Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
+        if (moveTargets.isEmpty())
+            return;
         for (Point2D target : moveTargets) {
             Point2D pos1 = MapService.isoGridToScreen(target);
             getGameWorld().spawn("moveTiles", pos1.getX()-64, pos1.getY()-64);

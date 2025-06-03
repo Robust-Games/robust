@@ -13,12 +13,13 @@ import javafx.geometry.Point2D;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import com.robustgames.robustclient.business.logic.Direction;
+
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**
@@ -155,7 +156,7 @@ public class MapService {
     }
 
     // Optional: Map-Grenzen prüfen
-    public static boolean isValidTile(Point2D gridPos) {
+    public static boolean isOverTheEdge(Point2D gridPos) {
         return gridPos.getX() >= 0 && gridPos.getX() < 8 && gridPos.getY() >= 0 && gridPos.getY() < 8;
     }
 
@@ -169,19 +170,18 @@ public class MapService {
      */
     public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
         Set<Point2D> moveTargets = new HashSet<>();
-        int ap = 0;
-
         Entity selectedTank = findSelectedTank();
-        try {
-            ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
-        }catch (Exception e){
-            return null;
-        }
 
-        if (ap <= 0){
+        if (selectedTank == null) {
+            getNotificationService().pushNotification("Not enough Action Points!");
             return moveTargets;
         }
+        int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
 
+        if (ap <= 0){
+            getNotificationService().pushNotification("Not enough Action Points!");
+            return moveTargets;
+        }
 
         String state = getTankImageFilename(selectedTank);
         // 2) Choose axes
@@ -196,10 +196,11 @@ public class MapService {
         // 3) Jump along each axis until it hits a mountain or the edge
         for (Direction dir : axes) {
             Point2D current = tankPos;
-            for (int stepCount = 1; stepCount <= ap; stepCount++) {
+            int tempAP = ap;
+            for (int stepCount = 1; stepCount <= tempAP; stepCount++, tempAP--) {
                 current = step(current, dir);
 
-                if (!isValidTile(current) || hasMountainAt(current))
+                if (!isOverTheEdge(current) || hasMountainAt(current))
                     break;
 
                 moveTargets.add(current);

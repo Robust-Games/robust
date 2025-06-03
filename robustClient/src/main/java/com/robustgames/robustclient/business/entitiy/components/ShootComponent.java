@@ -1,13 +1,10 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class ShootComponent extends Component {
                 current = step(current, dir); // Einen Schritt in die Richtung gehen
 
                 // Prüfe Map-Grenzen
-                if (!MapService.isValidTile(current))
+                if (!MapService.isOverTheEdge(current))
                     break;
 
                 Point2D posTile = MapService.isoGridToScreen(current);

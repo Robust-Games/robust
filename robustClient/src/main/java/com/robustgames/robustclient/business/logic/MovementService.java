@@ -11,6 +11,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 
+import java.util.Set;
+
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
@@ -26,41 +28,28 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-/*
-            //moves tank
+            Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter()); // Grid Panzer
+            Point2D clickedPos = MapService.isoScreenToGrid(clickedCell.getPosition()); // Grid clicked
+
+            int distance = gridDistance(tankPos, clickedPos);
+            System.err.println("Distance: " + distance);
+            System.err.println("fxgl: " + selectedTank.distance(clickedCell)/64);
+
+            //boolean enoughAP = selectedTank.getComponent(APComponent.class).use(distance);
+
             Point2D target = clickedCell.getPosition();
             selectedTank.setPosition(target.getX(), target.getY());
-            //updates z coordinate
             changeMountainLayer(selectedTank);
+
             //removes and adds the SelectableComponent to update animation of tank selection
             //(since the tank selection animation is attached to the tile the tank is standing on)
             selectedTank.removeComponent(SelectableComponent.class);
             selectedTank.addComponent(new SelectableComponent());
             selectedTank.removeComponent(MovementComponent.class);
- */
 
-            Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter()); // Grid Panzer
-            Point2D clickedPos = MapService.isoScreenToGrid(clickedCell.getPosition()); // Grid clicked
-
-            Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
-            int distance = gridDistance(tankPos, clickedPos);
-
-            boolean moveable = tileIsMovable(clickedPos, moveTargets);
-            boolean enoughAP = selectedTank.getComponent(APComponent.class).use(distance);
-
-            if(!enoughAP){
-                getNotificationService().pushNotification("Nicht genug Action Points!");
-            }
-            else if(!moveable){
-                getNotificationService().pushNotification("Bewgung nur auf die Blau markierten Felder");}
-
-            if(moveable && enoughAP) {
-                Point2D target = clickedCell.getPosition();
-                selectedTank.setPosition(target.getX() - 64, target.getY() - 64);
-                selectedTank.removeComponent(SelectableComponent.class);
             }
         }
-    }
+
 
     //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
@@ -80,21 +69,6 @@ public class MovementService {
 //        }
 //    }
 
-    /**
-     * Checks if a tile, represented by the clicked cell, is a valid move target.
-     *
-     * @param clickedCell the position of the clicked tile on the grid
-     * @param moveTargets the set of valid move target positions
-     * @return true if the clicked cell is present in the set of valid move targets, false otherwise
-     */
-    static boolean tileIsMovable(Point2D clickedCell, Set<Point2D> moveTargets) {
-        for(var t: moveTargets){
-            if(clickedCell.equals(t)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Calculates the Manhattan distance between two points on a grid.
