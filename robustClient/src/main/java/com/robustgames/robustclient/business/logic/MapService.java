@@ -154,6 +154,20 @@ public class MapService {
                     return pos.equals(gridPos);
                 });
     }
+    public static boolean hasCityAt(Point2D gridPos) {
+        return FXGL.getGameWorld().getEntitiesByType(CITY)
+                .stream().anyMatch(e -> {
+                    Point2D pos = isoScreenToGrid(e.getCenter());
+                    return pos.equals(gridPos);
+                });
+    }
+    public static boolean hasTankAt(Point2D gridPos) {
+        return FXGL.getGameWorld().getEntitiesByType(TANK)
+                .stream().anyMatch(e -> {
+                    Point2D pos = isoScreenToGrid(e.getCenter());
+                    return pos.equals(gridPos);
+                });
+    }
 
     // Optional: Map-Grenzen prüfen
     public static boolean isOverTheEdge(Point2D gridPos) {
@@ -196,14 +210,13 @@ public class MapService {
         // 3) Jump along each axis until it hits a mountain or the edge
         for (Direction dir : axes) {
             Point2D current = tankPos;
-            int tempAP = ap;
-            for (int stepCount = 1; stepCount <= tempAP; stepCount++, tempAP--) {
+            for (int stepCount = 1; stepCount <= ap; stepCount++) {
                 current = step(current, dir);
 
                 if (!isOverTheEdge(current) || hasMountainAt(current))
                     break;
-
-                moveTargets.add(current);
+                if (!hasTankAt(current) && !hasCityAt(current))
+                    moveTargets.add(current);
             }
         }
         return moveTargets;

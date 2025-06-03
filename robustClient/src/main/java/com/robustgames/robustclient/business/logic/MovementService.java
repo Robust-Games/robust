@@ -28,18 +28,13 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-            Point2D tankPos = MapService.isoScreenToGrid(selectedTank.getCenter()); // Grid Panzer
-            Point2D clickedPos = MapService.isoScreenToGrid(clickedCell.getPosition()); // Grid clicked
-
-            int distance = gridDistance(tankPos, clickedPos);
-            System.err.println("Distance: " + distance);
-            System.err.println("fxgl: " + selectedTank.distance(clickedCell)/64);
-
-            //boolean enoughAP = selectedTank.getComponent(APComponent.class).use(distance);
+            int distance = (int)selectedTank.distance(clickedCell)/64;
 
             Point2D target = clickedCell.getPosition();
             selectedTank.setPosition(target.getX(), target.getY());
             changeMountainLayer(selectedTank);
+
+            selectedTank.getComponent(APComponent.class).use(distance);
 
             //removes and adds the SelectableComponent to update animation of tank selection
             //(since the tank selection animation is attached to the tile the tank is standing on)

@@ -14,12 +14,11 @@ public class APComponent extends Component {
         return currentAP >= cost;
     }
 
-    public boolean use(int cost) {
+    public void use(int cost) {
         if (!canUse(cost)){
-            return false;
+            return;
         }
         currentAP -= cost;
-        return true;
     }
 
     public void reset() { // für Server
