@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
@@ -31,6 +32,7 @@ public class PlayerFactory implements EntityFactory {
                 .with(hpComp)
                 .viewWithBBox("tank_top_left.png")
                 .with(new RotateComponent())
+                .with(new APComponent(5))
                 .onClick(tank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
                     MapService.deSelectTank();
@@ -67,6 +69,7 @@ public class PlayerFactory implements EntityFactory {
                 .with(hpComp)
                 .viewWithBBox("tank_down_right.png")
                 .with(new RotateComponent())
+                .with(new APComponent(2000))
                 .onClick(tank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
                     MapService.deSelectTank();
