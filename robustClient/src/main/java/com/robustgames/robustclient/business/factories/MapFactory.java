@@ -7,9 +7,11 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
+import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.MovementService;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -69,7 +71,6 @@ public class MapFactory implements EntityFactory {
                         .then(Color.DARKGREEN)
                         .otherwise(Color.TRANSPARENT)
         );
-
         return cell;
     }
 
@@ -85,20 +86,25 @@ public class MapFactory implements EntityFactory {
 
     @Spawns("attackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
-        return FXGL.entityBuilder(data)
-                .onClick(MapService::shoot).type(ACTIONSELECTION)
-                .viewWithBBox("Tile_attack_selection.png")
-                .build();
-    }
-    @Spawns("attackTarget")
-    public Entity spawnAttackTarget(SpawnData data) {
         Entity target = data.get("target");
         String targetName = data.get("targetName");
+
         return FXGL.entityBuilder(data)
                 .onClick(e -> MapService.shoot(target))
                 .type(ACTIONSELECTION)
-                .zIndex(100)
+                .zIndex(target.getZIndex()+1)
                 .viewWithBBox(targetName)
+                .build();
+    }
+
+    @Spawns("shell")
+    public Entity spawnShell(SpawnData data) {
+        Point2D targetLocation = data.get("targetLocation");
+
+        return FXGL.entityBuilder(data)
+                .type(SHELL)
+                .viewWithBBox("shell.gif")
+                .with(new ShellComponent(targetLocation))
                 .build();
     }
 }

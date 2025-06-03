@@ -175,6 +175,7 @@ public class MapService {
 
         String state = getTankImageFilename(tank);
 
+        // 2) Choose axes
         Direction[] axes;
         if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
             axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
@@ -182,6 +183,7 @@ public class MapService {
             axes = new Direction[]{ Direction.UP, Direction.DOWN };
         }
 
+        // 3) Jump along each axis until it hits a mountain or the edge
         for (Direction dir : axes) {
             Point2D current = tankPos;
             while (true) {
@@ -233,39 +235,30 @@ public class MapService {
         Entity tank = findSelectedTank();
         if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
 
-        Point2D tankPosition = tank.getCenter();
-        Point2D targetGridPosition = isoScreenToGrid(target.getPosition());
-        Point2D targetScreenPosition = MapService.isoGridToScreen(targetGridPosition);
-
-        if (target.getType() != TILE) {
-            targetScreenPosition = target.getPosition();
-        }
-
         target.getComponent(HealthIntComponent.class).damage(1);
         //TODO Game Over
 
-
-        FXGL.spawnFadeIn("shell",
-                new SpawnData(tankPosition)
-                        .put("tank", tank)
-                        .put("targetLocation", targetScreenPosition)
-                , Duration.millis(50)
-        );
-
         tank.removeComponent(ShootComponent.class);
 
+        if (target.getType() != TILE) {
+            spawnShell(tank, target.getCenter());
+        }
+        else {
+            spawnShell(tank, target.getPosition());
+        }
+
         getGameTimer().runOnceAfter(() -> {
-            target.addComponent(new AnimExplosionComponent(0,0));
+            if (target.getType() != TILE)
+                target.addComponent(new AnimExplosionComponent(0,0));
+            else
+                target.addComponent(new AnimExplosionComponent(-64,-64));
         }, Duration.millis(target.distance(tank)));
 
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
             if (target.getComponent(HealthIntComponent.class).getValue()==0)
                 target.removeFromWorld();
-        }, Duration.millis(target.distance(tank)+1250)); //1250 = Explosion animation duration + 50 ms delay
-
-
-
+        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
     }
 
 
@@ -285,12 +278,22 @@ public class MapService {
         }
         else targetPosition = targetPosition.subtract(64,64);
 
-        FXGL.spawnFadeIn("attackTarget",
+        FXGL.spawnFadeIn("attackTargetTiles",
                 new SpawnData(targetPosition)
                         .put("target", target)
                         .put("targetName", targetName)
-                , Duration.millis(50)
+                , Duration.millis(200)
         );
     }
+    public static void spawnShell(Entity tank, Point2D targetScreenPosition) {
+        FXGL.spawnFadeIn("shell",
+                new SpawnData(tank.getCenter())
+                        .put("tank", tank)
+                        .put("targetLocation", targetScreenPosition)
+                , Duration.millis(10)
+        );
 
-}
+    }
+
+
+    }

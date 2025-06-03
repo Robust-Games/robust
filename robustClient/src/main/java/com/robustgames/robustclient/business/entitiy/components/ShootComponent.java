@@ -35,7 +35,6 @@ public class ShootComponent extends Component {
                 Point2D posEntity = posTile.subtract(64,64);
                 List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
 
-
                 if (!entityList.isEmpty()) {
                     if (entityList.size() > 1) {
                         System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
@@ -47,22 +46,6 @@ public class ShootComponent extends Component {
                 else if (!tileList.isEmpty()) {
                     MapService.spawnAttackTarget(tileList.getFirst());
                 }
-
-                // Prüfe, ob dort ein Berg ist
-/*                if (MapService.hasMountainAt(current)) {
-                    System.out.println(current + " ist ein Berg");
-                    pos = MapService.isoGridToScreen(current);
-                    getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
-                    break; // Danach nicht weiter, Schuss endet am Berg
-                }*/
-
-                // Sonst normales Ziel anzeigen
-/*
-                pos = MapService.isoGridToScreen(current);
-                getGameWorld().spawn("attackTargetTiles", pos.getX() - 64, pos.getY() - 64);
-*/
-
-                // Optional: abbrechen, falls dort noch andere Blocker sind (Panzer/City)
             }
         }
     }
@@ -86,7 +69,7 @@ public class ShootComponent extends Component {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }
-//DEBUGOVERRIDE for tests maybe
+//ROBUST_DEBUG for tests maybe
 /*                for (int i = 0; i < getGameScene().getViewport().getX(); i++) {
                     for (int j = 0; j < getGameScene().getViewport().getY(); j++) {
                         Point2D posEntity2 = new Point2D(i - 64, j - 64);

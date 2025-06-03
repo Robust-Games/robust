@@ -34,7 +34,7 @@ public class RobustApplication extends GameApplication  {
 
     @Override
     protected void initInput() {
-//ROBUST_DEBUG
+        //ROBUST_DEBUG
         onBtnDown(MouseButton.PRIMARY, () -> {
             Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
             Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
@@ -44,7 +44,6 @@ public class RobustApplication extends GameApplication  {
                     + "\northogonal Screen To Grid = " + MapService.orthScreenToGrid(mouseWorldPos)
                     + "\northogonal Grid To Screen = " + MapService.orthGridToScreen(MapService.orthScreenToGrid(mouseWorldPos).getX(), MapService.orthScreenToGrid(mouseWorldPos).getY()));
         });
-
     }
 
     @Override

@@ -90,15 +90,4 @@ public class PlayerFactory implements EntityFactory {
                 .viewWithBBox("city1.png")
                 .build();
     }
-    @Spawns("shell")
-    public Entity spawnShell(SpawnData data) {
-        Point2D targetLocation = data.get("targetLocation");
-
-        return FXGL.entityBuilder(data)
-                .type(SHELL)
-                .viewWithBBox("shell.gif")
-                .with(new ShellComponent(targetLocation))
-                .build();
-    }
-
 }
