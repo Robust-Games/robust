@@ -258,7 +258,7 @@ public class MapService {
     public static void shoot(Entity target) {
         Entity tank = findSelectedTank();
         if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
-
+        tank.getComponent(APComponent.class).damageFully();
         target.getComponent(HealthIntComponent.class).damage(1);
         //TODO Game Over
 

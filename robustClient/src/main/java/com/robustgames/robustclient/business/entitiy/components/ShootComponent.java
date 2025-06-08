@@ -15,36 +15,38 @@ public class ShootComponent extends Component {
 
     @Override
     public void onAdded() {
-        Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
-        // Für jede der 4 Hauptachsen schießen
-        for (Direction dir : Direction.values()) {
-            Point2D current = tankPos;
-            while (true) {
-                current = step(current, dir); // Einen Schritt in die Richtung gehen
+        if (entity.getComponent(APComponent.class).canUse(3)) {
+            Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
+            // Für jede der 4 Hauptachsen schießen
+            for (Direction dir : Direction.values()) {
+                Point2D current = tankPos;
+                while (true) {
+                    current = step(current, dir); // Einen Schritt in die Richtung gehen
 
-                // Prüfe Map-Grenzen
-                if (!MapService.isOverTheEdge(current))
-                    break;
+                    // Prüfe Map-Grenzen
+                    if (!MapService.isOverTheEdge(current))
+                        break;
 
-                Point2D posTile = MapService.isoGridToScreen(current);
-                List<Entity> tileList = getGameWorld().getEntitiesAt(posTile);
+                    Point2D posTile = MapService.isoGridToScreen(current);
+                    List<Entity> tileList = getGameWorld().getEntitiesAt(posTile);
 
-                Point2D posEntity = posTile.subtract(64,64);
-                List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
+                    Point2D posEntity = posTile.subtract(64, 64);
+                    List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
 
-                if (!entityList.isEmpty()) {
-                    if (entityList.size() > 1) {
-                        System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
+                    if (!entityList.isEmpty()) {
+                        if (entityList.size() > 1) {
+                            System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
+                        }
+                        Entity target = entityList.getFirst();
+                        MapService.spawnAttackTarget(target);
+                        break;
+                    } else if (!tileList.isEmpty()) {
+                        MapService.spawnAttackTarget(tileList.getFirst());
                     }
-                    Entity target = entityList.getFirst();
-                    MapService.spawnAttackTarget(target);
-                    break;
-                }
-                else if (!tileList.isEmpty()) {
-                    MapService.spawnAttackTarget(tileList.getFirst());
                 }
             }
         }
+        else getNotificationService().pushNotification("Not enough Action Points to shoot!");
     }
 
     // Hilfsmethode: Einen Schritt in die Richtung gehen

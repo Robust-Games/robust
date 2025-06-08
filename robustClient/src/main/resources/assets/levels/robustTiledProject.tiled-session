@@ -41,8 +41,8 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
-                11,
-                4
+                4,
+                11
             ],
             "scale": 0.75,
             "selectedLayer": 5,
