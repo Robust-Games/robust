@@ -6,29 +6,25 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.input.Input;
-import com.robustgames.robustclient.business.collision.ShellCityHandler;
-import com.robustgames.robustclient.business.collision.ShellTankHandler;
-import com.robustgames.robustclient.business.collision.ShellTileHandler;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
-import com.robustgames.robustclient.presentation.scenes.SelectionView;
+import com.robustgames.robustclient.presentation.scenes.TankButtonView;
+import com.robustgames.robustclient.presentation.scenes.TankDataView;
+import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.KeyCode; // Für Tastenangabe
-
 import java.util.List;
-
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
-import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
+
 
 public class RobustApplication extends GameApplication  {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
-    SelectionView selectionView;
+    TankButtonView tankButtonView;
+    TankDataView tankDataView;
+    EndTurnView endTurnView;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -41,8 +37,13 @@ public class RobustApplication extends GameApplication  {
 
     @Override
     protected void initInput() {
+        onBtnDown(MouseButton.SECONDARY, () -> {
+            MapService.deSelectTank();
+            tankDataView.setVisible(false);
+            tankButtonView.setVisible(false);
+        });
 
-        //Click Debug
+        //ROBUST_DEBUG
 //        onBtnDown(MouseButton.PRIMARY, () -> {
 //            Point2D mouseWorldPos = FXGL.getInput().getMousePositionWorld();
 //            Point2D gridPos = MapService.isoScreenToGrid(mouseWorldPos);
@@ -56,39 +57,43 @@ public class RobustApplication extends GameApplication  {
 
     @Override
     protected void initUI() {
-        selectionView.setVisible(false);
-
-        addUINode(selectionView);
+        endTurnView.setVisible(true);
+        tankButtonView.setVisible(false);
+        tankDataView.setVisible(false);
+        addUINode(endTurnView);
+        addUINode(tankButtonView);
+        addUINode(tankDataView);
     }
     public void onTankClicked(Entity tank) {
-        selectionView.setVisible(true);
-    }
-    @Override
-    protected void initPhysics() {
-        var shellTank = new ShellTankHandler();
-        getPhysicsWorld().addCollisionHandler(shellTank);
-        //getPhysicsWorld().addCollisionHandler(shellTank.copyFor(SHELL, OTHERENTITYTYPE)); TODO Other Entity Types possible
-        var shellCity = new ShellCityHandler();
-        getPhysicsWorld().addCollisionHandler(shellCity);
-        getPhysicsWorld().addCollisionHandler(new ShellTileHandler());
+        //hp bar visible
+        tankButtonView.setVisible(true);
+        tankDataView.setVisible(true);
+        tankDataView.setSelectedTank(tank);
+
     }
 
     @Override
     protected void initGame() {
-        selectionView = new SelectionView();
+        getGameScene().getViewport().setY(-100);
+       // getGameScene().getViewport().setZoom(100);
+        tankButtonView = new TankButtonView();
+        tankDataView = new TankDataView();
+        endTurnView = new EndTurnView();
+
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
-        FXGL.spawn("Background", new SpawnData(0, 0).put("width", WIDTH).put("height", HEIGHT));
+        FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
         FXGL.setLevelFromMap("mapTest.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
 
         GameWorld world = getGameWorld();
-        List<Entity> allEntities = world.getEntities().subList(3, world.getEntities().size());
+        List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
         for (Entity entity : allEntities) {
             Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
             Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
-            if (entity.isType(TILE))
+            if (entity.isType(TILE)) {
                 entity.setPosition(isoGridPos.getX(), isoGridPos.getY());
-            else
+            }
+            else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                 entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
         }
     }
