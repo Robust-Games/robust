@@ -2,33 +2,34 @@ package com.robustgames.robustclient.application;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.collision.ShellCityHandler;
 import com.robustgames.robustclient.business.collision.ShellTankHandler;
 import com.robustgames.robustclient.business.collision.ShellTileHandler;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.presentation.scenes.SelectionView;
 import javafx.geometry.Point2D;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.KeyCode; // Für Tastenangabe
 
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
 
-public class RobustApplication extends GameApplication  {
+public class RobustApplication extends GameApplication {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
     SelectionView selectionView;
+
+    private Client<Bundle> client;
+    private Connection<Bundle> connection;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -60,9 +61,11 @@ public class RobustApplication extends GameApplication  {
 
         addUINode(selectionView);
     }
+
     public void onTankClicked(Entity tank) {
         selectionView.setVisible(true);
     }
+
     @Override
     protected void initPhysics() {
         var shellTank = new ShellTankHandler();
@@ -75,7 +78,6 @@ public class RobustApplication extends GameApplication  {
 
     @Override
     protected void initGame() {
-        selectionView = new SelectionView();
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.spawn("Background", new SpawnData(0, 0).put("width", WIDTH).put("height", HEIGHT));
@@ -89,8 +91,19 @@ public class RobustApplication extends GameApplication  {
             if (entity.isType(TILE))
                 entity.setPosition(isoGridPos.getX(), isoGridPos.getY());
             else
-                entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
+                entity.setPosition(isoGridPos.getX() - 64, isoGridPos.getY() - 64);
         }
+
+        client = getNetService().newTCPClient("localhost", 55555);
+        client.setOnConnected(conn -> {
+            connection = conn; // Merke die Connection für spätere Sends
+            selectionView = new SelectionView(connection);
+            addUINode(selectionView);
+        });
+
+        client.connectAsync();
+
+        selectionView = new SelectionView(connection);
     }
 
     public static void main(String[] args) {

@@ -1,7 +1,9 @@
 package com.robustgames.robustclient.presentation.scenes;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
@@ -25,11 +27,14 @@ public class SelectionView extends Pane {
     Button btnRotateLeft;
     Button btnRotateRight;
 
+    private final Connection<Bundle> connection;
 
-    public SelectionView() {
+
+    public SelectionView(Connection<Bundle> connection) {
         String cssPath = getClass().getResource("/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);
 
+        this.connection = connection;
 
         btnMove = new Button("Move");
         btnMove.getStyleClass().add("robust-btn");
@@ -39,6 +44,10 @@ public class SelectionView extends Pane {
                 resetActionComponents(tank);
                 FXGL.runOnce(() -> tank.addComponent(new MovementComponent()), Duration.seconds(0.01));
             }
+
+            Bundle bundle = new Bundle("UserAction");
+            bundle.put("move", "MOVE CLICKED!");
+            connection.send(bundle);
 
         });
 
