@@ -79,10 +79,10 @@
         },
         "mapTest.tmx": {
             "scale": 1,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 640,
-                "y": 256
+                "x": 677,
+                "y": 131
             }
         },
         "mapTest.tmx#EnvironmentEdited": {

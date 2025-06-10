@@ -9,7 +9,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
 import com.robustgames.robustclient.business.logic.MapService;
-import com.robustgames.robustclient.business.logic.MovementService;
+import com.robustgames.robustclient.business.logic.MovementAction;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -77,10 +77,10 @@ public class MapFactory implements EntityFactory {
     @Spawns("moveTiles")
     public Entity spawnMoveTiles(SpawnData data) {
         var moveTile = FXGL.entityBuilder(data)
-                .onClick(MovementService::moveTank).type(ACTIONSELECTION)
+                .onClick(MovementAction::moveTank).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_move_selection.png")
                 .build();
-        MovementService.changeMountainLayer(moveTile);
+        MovementAction.changeMountainLayer(moveTile);
         return moveTile;
     }
 

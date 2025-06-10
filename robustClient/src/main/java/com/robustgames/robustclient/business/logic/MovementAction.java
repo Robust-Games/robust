@@ -2,23 +2,18 @@ package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.action.Action;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 
-import java.util.Set;
+import java.util.Queue;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
-
-public class MovementService {
+public class MovementAction extends Action {
 
     /**
      * Moves the selected tank to the position of the clicked cell if the target is valid.
@@ -113,6 +108,11 @@ public class MovementService {
 
 
         });
+    }
+
+    @Override
+    protected void onUpdate(double tpf) {
+
     }
 }
 
