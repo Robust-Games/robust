@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="128" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="46">
+<map version="1.10" tiledversion="1.11.2" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="128" tileheight="64" infinite="0" nextlayerid="16" nextobjectid="176">
  <editorsettings>
   <export target="../json/map1.json" format="json"/>
  </editorsettings>
@@ -13,62 +13,114 @@
  </tileset>
  <layer id="1" name="Base Layer" width="10" height="10" offsetx="0" offsety="64">
   <data encoding="csv">
+8,8,8,8,8,8,8,8,0,0,
+8,8,8,8,8,8,8,8,0,0,
+186,186,186,186,8,8,8,8,0,0,
+8,8,8,8,8,8,8,8,0,0,
+8,8,8,8,8,8,8,8,0,0,
+8,8,8,8,186,186,186,186,0,0,
+8,8,8,8,8,8,8,8,0,0,
+8,8,8,8,8,8,8,8,0,0,
 0,0,0,0,0,0,0,0,0,0,
-0,8,8,8,8,8,8,8,8,0,
-0,8,8,8,8,8,8,8,8,0,
-0,186,186,186,186,8,8,8,8,0,
-0,8,8,8,8,8,8,8,8,0,
-0,8,8,8,8,8,8,8,8,0,
-0,8,8,8,8,186,186,186,186,0,
-0,8,8,8,8,8,8,8,8,0,
-0,8,8,8,8,8,8,8,8,0,
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Player 1">
-  <object id="34" name="Player 1" type="city1" x="512" y="512" width="64" height="64"/>
-  <object id="35" name="Player 1" type="tank1" x="384" y="512" width="64" height="64"/>
+ <objectgroup id="14" name="tiles" visible="0">
+  <object id="110" type="hoverTile" x="448" y="448" width="64" height="64"/>
+  <object id="111" type="hoverTile" x="384" y="448" width="64" height="64"/>
+  <object id="112" type="hoverTile" x="320" y="448" width="64" height="64"/>
+  <object id="113" type="hoverTile" x="256" y="448" width="64" height="64"/>
+  <object id="114" type="hoverTile" x="192" y="448" width="64" height="64"/>
+  <object id="115" type="hoverTile" x="128" y="448" width="64" height="64"/>
+  <object id="116" type="hoverTile" x="64" y="448" width="64" height="64"/>
+  <object id="117" type="hoverTile" x="0" y="448" width="64" height="64"/>
+  <object id="118" type="hoverTile" x="448" y="384" width="64" height="64"/>
+  <object id="119" type="hoverTile" x="384" y="384" width="64" height="64"/>
+  <object id="120" type="hoverTile" x="320" y="384" width="64" height="64"/>
+  <object id="121" type="hoverTile" x="256" y="384" width="64" height="64"/>
+  <object id="122" type="hoverTile" x="192" y="384" width="64" height="64"/>
+  <object id="123" type="hoverTile" x="128" y="384" width="64" height="64"/>
+  <object id="124" type="hoverTile" x="64" y="384" width="64" height="64"/>
+  <object id="125" type="hoverTile" x="0" y="384" width="64" height="64"/>
+  <object id="126" type="hoverTile" x="448" y="320" width="64" height="64"/>
+  <object id="127" type="hoverTile" x="384" y="320" width="64" height="64"/>
+  <object id="128" type="hoverTile" x="320" y="320" width="64" height="64"/>
+  <object id="129" type="hoverTile" x="256" y="320" width="64" height="64"/>
+  <object id="130" type="hoverTile" x="192" y="320" width="64" height="64"/>
+  <object id="131" type="hoverTile" x="128" y="320" width="64" height="64"/>
+  <object id="132" type="hoverTile" x="64" y="320" width="64" height="64"/>
+  <object id="133" type="hoverTile" x="0" y="320" width="64" height="64"/>
+  <object id="134" type="hoverTile" x="448" y="256" width="64" height="64"/>
+  <object id="135" type="hoverTile" x="384" y="256" width="64" height="64"/>
+  <object id="136" type="hoverTile" x="320" y="256" width="64" height="64"/>
+  <object id="137" type="hoverTile" x="256" y="256" width="64" height="64"/>
+  <object id="138" type="hoverTile" x="192" y="256" width="64" height="64"/>
+  <object id="139" type="hoverTile" x="128" y="256" width="64" height="64"/>
+  <object id="140" type="hoverTile" x="64" y="256" width="64" height="64"/>
+  <object id="141" type="hoverTile" x="0" y="256" width="64" height="64"/>
+  <object id="142" type="hoverTile" x="448" y="192" width="64" height="64"/>
+  <object id="143" type="hoverTile" x="384" y="192" width="64" height="64"/>
+  <object id="144" type="hoverTile" x="320" y="192" width="64" height="64"/>
+  <object id="145" type="hoverTile" x="256" y="192" width="64" height="64"/>
+  <object id="146" type="hoverTile" x="192" y="192" width="64" height="64"/>
+  <object id="147" type="hoverTile" x="128" y="192" width="64" height="64"/>
+  <object id="148" type="hoverTile" x="64" y="192" width="64" height="64"/>
+  <object id="149" type="hoverTile" x="0" y="192" width="64" height="64"/>
+  <object id="150" type="hoverTile" x="448" y="128" width="64" height="64"/>
+  <object id="151" type="hoverTile" x="384" y="128" width="64" height="64"/>
+  <object id="152" type="hoverTile" x="320" y="128" width="64" height="64"/>
+  <object id="153" type="hoverTile" x="256" y="128" width="64" height="64"/>
+  <object id="154" type="hoverTile" x="192" y="128" width="64" height="64"/>
+  <object id="155" type="hoverTile" x="128" y="128" width="64" height="64"/>
+  <object id="156" type="hoverTile" x="64" y="128" width="64" height="64"/>
+  <object id="157" type="hoverTile" x="0" y="128" width="64" height="64"/>
+  <object id="158" type="hoverTile" x="448" y="64" width="64" height="64"/>
+  <object id="159" type="hoverTile" x="384" y="64" width="64" height="64"/>
+  <object id="160" type="hoverTile" x="320" y="64" width="64" height="64"/>
+  <object id="161" type="hoverTile" x="256" y="64" width="64" height="64"/>
+  <object id="162" type="hoverTile" x="192" y="64" width="64" height="64"/>
+  <object id="163" type="hoverTile" x="128" y="64" width="64" height="64"/>
+  <object id="164" type="hoverTile" x="64" y="64" width="64" height="64"/>
+  <object id="165" type="hoverTile" x="0" y="64" width="64" height="64"/>
+  <object id="166" type="hoverTile" x="448" y="0" width="64" height="64"/>
+  <object id="167" type="hoverTile" x="384" y="0" width="64" height="64"/>
+  <object id="168" type="hoverTile" x="320" y="0" width="64" height="64"/>
+  <object id="169" type="hoverTile" x="256" y="0" width="64" height="64"/>
+  <object id="170" type="hoverTile" x="192" y="0" width="64" height="64"/>
+  <object id="171" type="hoverTile" x="128" y="0" width="64" height="64"/>
+  <object id="172" type="hoverTile" x="64" y="0" width="64" height="64"/>
+  <object id="173" type="hoverTile" x="0" y="0" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="11" name="Player 2">
-  <object id="36" name="Player 2" type="city2" x="64" y="64" width="64" height="64"/>
-  <object id="37" name="Player 2" type="tank2" x="192" y="64" width="64" height="64"/>
+ <objectgroup id="4" name="Player 1" visible="0">
+  <object id="34" name="Player 1" type="city1" x="448" y="448" width="64" height="64"/>
+  <object id="35" name="Player 1" type="tank1" x="320" y="448" width="64" height="64"/>
  </objectgroup>
- <layer id="7" name="Grid" width="10" height="10" offsetx="0" offsety="64">
+ <objectgroup id="11" name="Player 2" visible="0">
+  <object id="36" name="Player 2" type="city2" x="0" y="0" width="64" height="64"/>
+  <object id="37" name="Player 2" type="tank2" x="128" y="0" width="64" height="64"/>
+ </objectgroup>
+ <layer id="7" name="Grid" width="10" height="10">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,
-0,2,1,1,1,1,1,0,0,0,
-0,12,3,3,3,3,3,3,0,0,
-11,3,3,3,0,3,3,3,0,0,
-0,11,3,3,3,3,3,3,0,0,
-0,11,3,3,0,0,0,0,0,0,
-0,11,3,3,3,3,3,3,0,0,
-0,11,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
+3,3,3,3,3,3,3,3,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup id="13" name="mountains">
-  <object id="38" type="mountain" x="320" y="384" width="64" height="64"/>
-  <object id="39" type="mountain" x="384" y="384" width="64" height="64"/>
-  <object id="40" type="mountain" x="448" y="384" width="64" height="64"/>
-  <object id="41" type="mountain" x="512" y="384" width="64" height="64"/>
-  <object id="42" type="mountain" x="256" y="192" width="64" height="64"/>
-  <object id="43" type="mountain" x="192" y="192" width="64" height="64"/>
-  <object id="44" type="mountain" x="128" y="192" width="64" height="64"/>
-  <object id="45" type="mountain" x="64" y="192" width="64" height="64"/>
+  <object id="38" type="mountain" x="256" y="320" width="64" height="64"/>
+  <object id="39" type="mountain" x="320" y="320" width="64" height="64"/>
+  <object id="40" type="mountain" x="384" y="320" width="64" height="64"/>
+  <object id="41" type="mountain" x="448" y="320" width="64" height="64"/>
+  <object id="45" type="mountain" x="0" y="128" width="64" height="64"/>
+  <object id="44" type="mountain" x="64" y="128" width="64" height="64"/>
+  <object id="43" type="mountain" x="128" y="128" width="64" height="64"/>
+  <object id="42" type="mountain" x="192" y="128" width="64" height="64"/>
  </objectgroup>
- <layer id="5" name="Mountains" width="10" height="10" visible="0" offsetx="0" offsety="64">
-  <data encoding="csv">
-0,13,13,13,13,13,13,13,0,0,
-11,3,3,3,3,3,3,3,0,0,
-190,189,187,181,3,0,0,0,0,0,
-0,0,0,0,3,0,0,0,0,0,
-11,3,0,0,0,0,0,0,0,0,
-11,3,0,0,190,188,183,181,0,0,
-11,3,0,0,0,0,0,0,0,0,
-11,3,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0
-</data>
- </layer>
 </map>

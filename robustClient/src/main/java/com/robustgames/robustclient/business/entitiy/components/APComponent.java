@@ -1,32 +1,34 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
+import com.almasb.fxgl.dsl.components.RechargeableIntComponent;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.components.IntegerComponent;
 
-public class APComponent extends Component {
+public class APComponent extends RechargeableIntComponent {
     private final int maxAP = 5;
-    protected int currentAP;
+    //protected int currentAP;
 
-    public APComponent (int currentAP){
-        this.currentAP = currentAP;
+    public APComponent (int maxAP){
+        super(maxAP, 5);
     }
 
     public boolean canUse(int cost) {
-        return currentAP >= cost;
+        return getValue() >= cost;
     }
 
-    public boolean use(int cost) {
+    public void use(int cost) {
         if (!canUse(cost)){
-            return false;
+            return;
         }
-        currentAP -= cost;
-        return true;
+        this.damage(cost);
     }
 
     public void reset() { // für Server
-        currentAP = maxAP;
+        restoreFully();
     }
 
     public int getCurrentAP() {
-        return currentAP;
+        return getValue();
     }
+
 }

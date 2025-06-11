@@ -1,0 +1,84 @@
+@font-face {
+    -fx-font-family: 'Arcade Normal';
+    src: url('../../fonts/ARCADE_N.TTF') format('truetype');
+}
+.root {
+    -fx-font-family: 'Arcade Normal'
+}
+/*.scoreBox {*/
+/*    -fx-background-color: #ba55c2;*/
+/*    -fx-background-radius: 10;*/
+/*    -fx-border-color: white;*/
+/*    -fx-margin: 10px;*/
+/*    -fx-border-radius: 10;*/
+/*    -fx-border-width: 3px;*/
+/*    -fx-font-size: 40px;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+.apText{
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
+    -fx-font-size: 24px;
+    -fx-font-family: 'Arcade Normal';
+}
+.robust-btn-text{
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 3, 3);
+    -fx-font-size: 18px;
+    -fx-font-family: 'Arcade Normal';
+}
+
+.robust-btn:hover {
+    -fx-background-image: url(../../textures/button1_hover.png);
+    -fx-background-color: #cadbe6;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 4, 4);
+}
+
+.robust-btn:pressed {
+    -fx-background-image: url(../../textures/button1_pressed.png);
+    -fx-background-color: #465057;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 0, 0);
+}
+.robust-btn {
+    -fx-background-image: url(../../textures/button1.png);
+    -fx-min-width: 250px;
+    -fx-text-fill: white;
+    -fx-background-repeat: no-repeat;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: inherit;
+    -fx-border-color: #212529;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
+}
+.robust-end-btn{
+    -fx-background-image: url(../../textures/button2.png);
+    -fx-background-position: center;
+    -fx-text-fill: white;
+    -fx-background-repeat: no-repeat;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: inherit;
+    -fx-border-color: #212529;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
+}
+.robust-end-btn:hover {
+    -fx-background-image: url(../../textures/button2_hover.png);
+    -fx-background-color: #cadbe6;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 4, 4);
+}
+.robust-end-btn:pressed {
+    -fx-background-image: url(../../textures/button2_pressed.png);
+    -fx-background-color: #465057;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 0, 0);
+}
+.robust-end-btn-text{
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 3, 3);
+    -fx-font-size: 24px;
+    -fx-font-family: 'Arcade Normal';
+}
