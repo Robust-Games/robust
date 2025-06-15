@@ -12,7 +12,6 @@ import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
-import com.robustgames.robustclient.presentation.scenes.SelectionView;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
@@ -20,6 +19,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 
 import java.util.List;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
@@ -32,7 +32,6 @@ public class RobustApplication extends GameApplication {
     TankDataView tankDataView;
     EndTurnView endTurnView;
 
-    private Client<Bundle> client;
     private Connection<Bundle> connection;
 
     @Override
@@ -85,8 +84,19 @@ public class RobustApplication extends GameApplication {
     @Override
     protected void initGame() {
         getGameScene().getViewport().setY(-100);
-       // getGameScene().getViewport().setZoom(100);
-        tankButtonView = new TankButtonView();
+        // getGameScene().getViewport().setZoom(100);
+
+        tankButtonView = new TankButtonView(); // Sofort bauen!
+        tankDataView = new TankDataView();
+        endTurnView = new EndTurnView();
+
+        Client<Bundle> client = getNetService().newTCPClient("localhost", 55555);
+        client.setOnConnected(conn -> {
+            connection = conn; // Merke die Connection für spätere Sends
+            tankButtonView.setConnection(connection);
+        });
+        client.connectAsync();
+
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
 
@@ -102,21 +112,9 @@ public class RobustApplication extends GameApplication {
             Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
             if (entity.isType(TILE)) {
                 entity.setPosition(isoGridPos.getX(), isoGridPos.getY());
-            }
-            else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
-                entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
+            } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
+                entity.setPosition(isoGridPos.getX() - 64, isoGridPos.getY() - 64);
         }
-
-        client = getNetService().newTCPClient("localhost", 55555);
-        client.setOnConnected(conn -> {
-            connection = conn; // Merke die Connection für spätere Sends
-            selectionView = new SelectionView(connection);
-            addUINode(selectionView);
-        });
-
-        client.connectAsync();
-
-        selectionView = new SelectionView(connection);
     }
 
     public static void main(String[] args) {

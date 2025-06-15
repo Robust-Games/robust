@@ -1,17 +1,16 @@
 package com.robustgames.robustclient.presentation.scenes;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.entity.Entity;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
+import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.logic.MapService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -28,6 +27,7 @@ public class TankButtonView extends Pane {
     Label btnRotateLeftText;
     Label btnRotateRightText;
 
+    private Connection<Bundle> connection = null;
 
     public TankButtonView() {
         String cssPath = getClass().getResource("/assets/ui/css/style.css").toExternalForm();
@@ -51,6 +51,14 @@ public class TankButtonView extends Pane {
                 tank.addComponent(new MovementComponent());
             }
 
+            if (connection != null) {
+                Bundle bundle = new Bundle("UserAction");
+                bundle.put("move", "MOVE CLICKED!");
+                connection.send(bundle);
+            } else {
+                System.out.println("No connection yet!");
+            }
+
         });
 
         btnShoot = new Button();
@@ -71,12 +79,11 @@ public class TankButtonView extends Pane {
         btnRotateLeft.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                if (tank.hasComponent(MovementComponent.class)){
+                if (tank.hasComponent(MovementComponent.class)) {
                     tank.getComponent(RotateComponent.class).rotateLeft();
                     tank.removeComponent(MovementComponent.class);
                     tank.addComponent(new MovementComponent());
-                }
-                else {
+                } else {
                     resetActionComponents(tank);
                     tank.getComponent(RotateComponent.class).rotateLeft();
 
@@ -90,12 +97,11 @@ public class TankButtonView extends Pane {
         btnRotateRight.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                if (tank.hasComponent(MovementComponent.class)){
+                if (tank.hasComponent(MovementComponent.class)) {
                     tank.getComponent(RotateComponent.class).rotateRight();
                     tank.removeComponent(MovementComponent.class);
                     tank.addComponent(new MovementComponent());
-                }
-                else {
+                } else {
                     {
                         resetActionComponents(tank);
                         tank.getComponent(RotateComponent.class).rotateRight();
@@ -121,5 +127,9 @@ public class TankButtonView extends Pane {
         tank.removeComponent(MovementComponent.class);
         tank.removeComponent(ShootComponent.class);
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
+    }
+
+    public void setConnection(Connection<Bundle> conn) {
+        this.connection = conn;
     }
 }
