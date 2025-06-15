@@ -9,8 +9,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class RobustServerApplication extends GameApplication {
 
-    private Server<Bundle> server;
-
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Robust Server");
@@ -21,7 +19,7 @@ public class RobustServerApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        server = getNetService().newTCPServer(55555);
+        Server<Bundle> server = getNetService().newTCPServer(55555);
 
         // Handler wird pro Client-Connection gesetzt!
         server.setOnConnected(connection -> {
@@ -30,7 +28,7 @@ public class RobustServerApplication extends GameApplication {
             });
         });
 
-        System.out.println("FXGL-NetServer läuft auf Port 55555!");
+        System.out.println("FXGL-NetServer listening on port 55555!");
         server.startAsync();
     }
 

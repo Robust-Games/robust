@@ -129,6 +129,7 @@ public class TankButtonView extends Pane {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 
+    // Zum Nachliefern der Connection
     public void setConnection(Connection<Bundle> conn) {
         this.connection = conn;
     }

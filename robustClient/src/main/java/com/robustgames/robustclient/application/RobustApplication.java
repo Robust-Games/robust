@@ -78,7 +78,6 @@ public class RobustApplication extends GameApplication {
         tankButtonView.setVisible(true);
         tankDataView.setVisible(true);
         tankDataView.setSelectedTank(tank);
-
     }
 
     @Override
@@ -93,6 +92,7 @@ public class RobustApplication extends GameApplication {
         Client<Bundle> client = getNetService().newTCPClient("localhost", 55555);
         client.setOnConnected(conn -> {
             connection = conn; // Merke die Connection für spätere Sends
+            // Nachlieferung!
             tankButtonView.setConnection(connection);
         });
         client.connectAsync();
