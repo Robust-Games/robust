@@ -4,12 +4,14 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
+import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
 
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
+import static com.robustgames.robustclient.business.logic.MapService.step;
 
 public class ShootComponent extends Component {
 
@@ -38,30 +40,15 @@ public class ShootComponent extends Component {
                             System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
                         }
                         Entity target = entityList.getFirst();
-                        MapService.spawnAttackTarget(target);
+                        ShootService.spawnAttackTarget(target, entity);
                         break;
                     } else if (!tileList.isEmpty()) {
-                        MapService.spawnAttackTarget(tileList.getFirst());
+                        ShootService.spawnAttackTarget(tileList.getFirst(), entity);
                     }
                 }
             }
         }
         else getNotificationService().pushNotification("Not enough Action Points to shoot!");
-    }
-
-    // Hilfsmethode: Einen Schritt in die Richtung gehen
-    private Point2D step(Point2D pos, Direction dir) {
-        switch (dir) {
-            case UP:
-                return new Point2D(pos.getX(), pos.getY() - 1);
-            case DOWN:
-                return new Point2D(pos.getX(), pos.getY() + 1);
-            case LEFT:
-                return new Point2D(pos.getX() - 1, pos.getY());
-            case RIGHT:
-                return new Point2D(pos.getX() + 1, pos.getY());
-        }
-        throw new IllegalArgumentException();
     }
     @Override
     public void onRemoved() {

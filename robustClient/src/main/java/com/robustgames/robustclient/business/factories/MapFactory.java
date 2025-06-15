@@ -8,8 +8,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
-import com.robustgames.robustclient.business.logic.MapService;
-import com.robustgames.robustclient.business.logic.MovementAction;
+import com.robustgames.robustclient.business.logic.tankService.MovementService;
+import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -77,20 +77,22 @@ public class MapFactory implements EntityFactory {
     @Spawns("moveTiles")
     public Entity spawnMoveTiles(SpawnData data) {
         var moveTile = FXGL.entityBuilder(data)
-                .onClick(MovementAction::moveTank).type(ACTIONSELECTION)
+                .onClick(entity -> MovementService.moveTank(entity)).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_move_selection.png")
                 .build();
-        MovementAction.changeMountainLayer(moveTile);
+        MovementService.changeMountainLayer(moveTile);
         return moveTile;
     }
 
     @Spawns("attackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
         Entity target = data.get("target");
+        Entity attackingTank = data.get("attackingTank");
         String targetName = data.get("targetName");
 
+
         return FXGL.entityBuilder(data)
-                .onClick(e -> MapService.shoot(target))
+                .onClick(e -> ShootService.shoot(target, attackingTank))
                 .type(ACTIONSELECTION)
                 .zIndex(target.getZIndex()+1)
                 .viewWithBBox(targetName)

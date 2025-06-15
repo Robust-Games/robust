@@ -9,12 +9,16 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.TurnService;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import java.util.List;
+import java.util.Properties;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
@@ -96,6 +100,7 @@ public class RobustApplication extends GameApplication  {
             else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                 entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
         }
+        TurnService.startTurn(Player.PLAYER1);
     }
 
     public static void main(String[] args) {

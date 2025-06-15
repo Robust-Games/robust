@@ -2,9 +2,7 @@
     -fx-font-family: 'Arcade Normal';
     src: url('../../fonts/ARCADE_N.TTF') format('truetype');
 }
-.root {
-    -fx-font-family: 'Arcade Normal'
-}
+
 /*.scoreBox {*/
 /*    -fx-background-color: #ba55c2;*/
 /*    -fx-background-radius: 10;*/

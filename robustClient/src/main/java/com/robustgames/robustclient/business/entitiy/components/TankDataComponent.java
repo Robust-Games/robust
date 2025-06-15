@@ -1,0 +1,73 @@
+package com.robustgames.robustclient.business.entitiy.components;
+
+import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.texture.Texture;
+import com.robustgames.robustclient.business.logic.Player;
+import javafx.geometry.Point2D;
+
+public class TankDataComponent extends Component {
+    private Point2D initialPos;
+    private Texture initialTankTexture;
+    private Texture lastTankTexture;
+    private Texture newTankTexture;
+    private final Player owner;
+
+    public TankDataComponent(Player player, Texture view) {
+        owner = player;
+        initialTankTexture = view;
+        lastTankTexture = view;
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+    public void ResetBeforeTurn(){
+        entity.setPosition(initialPos);
+        if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
+            entity.getViewComponent().removeChild(newTankTexture);
+        }
+        if (entity.getViewComponent().getChildren().contains(lastTankTexture)) {
+            entity.getViewComponent().removeChild(lastTankTexture);
+        }
+        if (entity.getViewComponent().getChildren().contains(initialTankTexture)) {
+            entity.getViewComponent().removeChild(initialTankTexture);
+            entity.getViewComponent().addChild(initialTankTexture);
+        }
+        }
+
+    public Point2D getInitialPos() {
+        return initialPos;
+    }
+
+    public void setInitialPos() {
+        initialPos = entity.getPosition();
+    }
+
+    public Texture getInitialTankTexture() {
+        return initialTankTexture;
+    }
+
+    public void setInitialTankTexture(Texture initialTankTexture) {
+        this.initialTankTexture = initialTankTexture;
+    }
+
+    public Texture getNewTankTexture() {
+        return newTankTexture;
+    }
+
+    public void setNewTankTexture(Texture newTankTexture) {
+        this.newTankTexture = newTankTexture;
+    }
+
+    public Texture getLastTankTexture() {
+        return lastTankTexture;
+    }
+
+    public void setLastTankTexture(Texture lastTankTexture) {
+        this.lastTankTexture = lastTankTexture;
+    }
+
+
+
+
+}

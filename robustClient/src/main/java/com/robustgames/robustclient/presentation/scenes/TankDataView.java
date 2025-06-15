@@ -5,10 +5,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.logic.MapService;
 import javafx.beans.binding.Bindings;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;

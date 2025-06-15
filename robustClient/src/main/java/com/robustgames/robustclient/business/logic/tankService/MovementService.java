@@ -1,19 +1,19 @@
-package com.robustgames.robustclient.business.logic;
+package com.robustgames.robustclient.business.logic.tankService;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.action.Action;
+import com.almasb.fxgl.entity.action.ActionComponent;
+import com.robustgames.robustclient.business.actions.MovementAction;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.logic.MapService;
 import javafx.geometry.Point2D;
-
-import java.util.Queue;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
-public class MovementAction extends Action {
+public class MovementService {
 
     /**
      * Moves the selected tank to the position of the clicked cell if the target is valid.
@@ -24,11 +24,10 @@ public class MovementAction extends Action {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
             int distance = (int)selectedTank.distance(clickedCell)/64;
-
             Point2D target = clickedCell.getPosition();
+
             selectedTank.setPosition(target.getX(), target.getY());
             changeMountainLayer(selectedTank);
-
             selectedTank.getComponent(APComponent.class).use(distance);
 
             //removes and adds the SelectableComponent to update animation of tank selection
@@ -37,9 +36,14 @@ public class MovementAction extends Action {
             selectedTank.addComponent(new SelectableComponent());
             selectedTank.removeComponent(MovementComponent.class);
 
-            }
-        }
+            ActionComponent ac = selectedTank.getComponent(ActionComponent.class);
+            ac.addAction(new MovementAction(clickedCell));
 
+            // Pause until turn execution
+            ac.pause();
+
+        }
+    }
 
     //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
@@ -108,11 +112,6 @@ public class MovementAction extends Action {
 
 
         });
-    }
-
-    @Override
-    protected void onUpdate(double tpf) {
-
     }
 }
 

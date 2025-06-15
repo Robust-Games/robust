@@ -1,14 +1,12 @@
 package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
-import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
-import com.robustgames.robustclient.business.entitiy.components.animations.AnimExplosionComponent;
+import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import javafx.geometry.Point2D;
 import java.util.HashSet;
 import java.util.List;
@@ -16,9 +14,7 @@ import java.util.Set;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
@@ -107,7 +103,14 @@ public class MapService {
         double worldY = gridY * TILE_HEIGHT;
         return new Point2D(worldX, worldY);
     }
-
+    public static Entity findTankofPlayer (Player player){
+        for (Entity tank : FXGL.getGameWorld().getEntitiesByComponent(TankDataComponent.class)) {
+            if (tank.getComponent(TankDataComponent.class).getOwner().equals(player)) {
+                return tank;
+            }
+        }
+        return null;
+    }
     /**
      * This method searches through all entities in the game world for the one that has the {@code SelectableComponent}.
      * The game only allows one tank to be selected at all times.
@@ -222,7 +225,6 @@ public class MapService {
         return moveTargets;
     }
 
-
     /**
      * Retrieves the filename of the tank image associated with the given entity.
      * This method searches the view components of the entity for an {@code ImageView}
@@ -245,7 +247,7 @@ public class MapService {
     }
 
     // Schritt-Funktion
-    private static Point2D step(Point2D pos, Direction dir) {
+    public static Point2D step(Point2D pos, Direction dir) {
         switch (dir) {
             case UP:    return new Point2D(pos.getX(), pos.getY() - 1);
             case DOWN:  return new Point2D(pos.getX(), pos.getY() + 1);
@@ -254,69 +256,43 @@ public class MapService {
             default: throw new IllegalArgumentException();
         }
     }
-
-    public static void shoot(Entity target) {
-        Entity tank = findSelectedTank();
-        if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
-        tank.getComponent(APComponent.class).damageFully();
-        target.getComponent(HealthIntComponent.class).damage(1);
-        //TODO Game Over
-
-        tank.removeComponent(ShootComponent.class);
-
-        if (target.getType() != TILE) {
-            spawnShell(tank, target.getCenter());
-        }
-        else {
-            spawnShell(tank, target.getPosition());
-        }
-
-        getGameTimer().runOnceAfter(() -> {
-            if (target.getType() != TILE)
-                target.addComponent(new AnimExplosionComponent(0,0));
-            else
-                target.addComponent(new AnimExplosionComponent(-64,-64));
-        }, Duration.millis(target.distance(tank)));
-
-        getGameTimer().runOnceAfter(() -> {
-            target.removeComponent(AnimExplosionComponent.class);
-            if (target.getComponent(HealthIntComponent.class).getValue()==0)
-                target.removeFromWorld();
-        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
-    }
-
-
-    public static void spawnAttackTarget(Entity target) {
-        Point2D targetPosition = target.getPosition();
-        String targetName = "Tile_attack_selection.png";
-
-        if (target.getType() != TILE) {
-            List<Node> viewChildren = target.getViewComponent().getChildren();
-            for (Node child : viewChildren) {
-                if (child instanceof ImageView view) {
-                    String url = view.getImage().getUrl();
-                    String imageName = url.substring(url.lastIndexOf("/") + 1);
-                    targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack.png";
+    /**
+     * Removes the first child with an image URL containing the word "tank"
+     * from the given entity's view component and returns the file name of the removed image.
+     *
+     * @param tank the entity from which the tank image is to be removed
+     * @return the file name of the removed tank's image, or an empty string if no such image was found
+     */
+    public static String findAndDeleteTankView(Entity tank) {
+        List<Node> ch = tank.getViewComponent().getChildren();
+        String x = "";
+        for (Node e : ch) {
+            if (e instanceof ImageView iv) {
+                String url = iv.getImage().getUrl();
+                if (url.contains("tank")) {
+                    x = url.substring(url.lastIndexOf("/") + 1);
+                    tank.getViewComponent().removeChild(e);
+                    break;
                 }
             }
         }
-        else targetPosition = targetPosition.subtract(64,64);
-
-        FXGL.spawnFadeIn("attackTargetTiles",
-                new SpawnData(targetPosition)
-                        .put("target", target)
-                        .put("targetName", targetName)
-                , Duration.millis(200)
-        );
+        return x;
     }
-    public static void spawnShell(Entity tank, Point2D targetScreenPosition) {
-        FXGL.spawnFadeIn("shell",
-                new SpawnData(tank.getCenter())
-                        .put("tank", tank)
-                        .put("targetLocation", targetScreenPosition)
-                , Duration.millis(10)
-        );
 
+    public static Texture findTankView(Entity tank){
+        List<Node> ch = tank.getViewComponent().getChildren();
+        String x = "";
+        for (Node e : ch) {
+            if (e instanceof ImageView iv) {
+                String url = iv.getImage().getUrl();
+                if (url.contains("tank")) {
+                    return (Texture) e;
+                    //x = url.substring(url.lastIndexOf("/") + 1);
+                    //break;
+                }
+            }
+        }
+        return null;
     }
 
 
