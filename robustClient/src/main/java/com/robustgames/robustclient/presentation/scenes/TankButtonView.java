@@ -123,4 +123,3 @@ public class TankButtonView extends Pane {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }
-//FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));
