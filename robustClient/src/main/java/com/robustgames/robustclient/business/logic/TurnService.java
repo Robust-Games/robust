@@ -43,7 +43,7 @@ public class TurnService {
                     ac.resume(); // Start executing queued actions
                 }
             });
-            //onActionCompletion();
+            onActionCompletion();
         }
     }
 

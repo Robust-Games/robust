@@ -23,9 +23,8 @@ public class ShootComponent extends Component {
             for (Direction dir : Direction.values()) {
                 Point2D current = tankPos;
                 while (true) {
-                    current = step(current, dir); // Einen Schritt in die Richtung gehen
+                    current = step(current, dir); //takes a step in the chosen direction
 
-                    // Prüfe Map-Grenzen
                     if (!MapService.isOverTheEdge(current))
                         break;
 
