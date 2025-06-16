@@ -19,7 +19,7 @@ public class ShootComponent extends Component {
     public void onAdded() {
         if (entity.getComponent(APComponent.class).canUse(3)) {
             Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
-            // Für jede der 4 Hauptachsen schießen
+            // Aim in all four directions
             for (Direction dir : Direction.values()) {
                 Point2D current = tankPos;
                 while (true) {

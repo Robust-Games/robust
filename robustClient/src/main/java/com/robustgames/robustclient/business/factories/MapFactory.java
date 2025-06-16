@@ -92,7 +92,7 @@ public class MapFactory implements EntityFactory {
 
 
         return FXGL.entityBuilder(data)
-                .onClick(e -> ShootService.shoot(target, attackingTank))
+                .onClick(e -> ShootService.planShoot(target, attackingTank))
                 .type(ACTIONSELECTION)
                 .zIndex(target.getZIndex()+1)
                 .viewWithBBox(targetName)

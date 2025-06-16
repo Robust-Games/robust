@@ -18,16 +18,13 @@ public class ShootAction extends Action {
 
     @Override
     protected void onStarted() {
-        entity.getComponent(APComponent.class).damageFully();
+        ShootService.executeShoot(target, entity, false);
+        getGameTimer().runOnceAfter(this::setComplete, Duration.seconds(1.2));
     }
 
     @Override
     protected void onUpdate(double tpf) {
-            target.getComponent(HealthIntComponent.class).damage(1);
-            ShootService.spawnShell(entity, target.getCenter());
 
-        // Wait for explosion animation to complete
-        getGameTimer().runOnceAfter(this::setComplete, Duration.seconds(1.2));
     }
     @Override
     protected void onQueued() {

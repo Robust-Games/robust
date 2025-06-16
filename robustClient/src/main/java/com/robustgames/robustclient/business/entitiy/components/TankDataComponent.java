@@ -43,7 +43,7 @@ public class TankDataComponent extends Component {
     public Player getOwner() {
         return owner;
     }
-    public void ResetBeforeTurn(){
+    public void resetBeforeTurn(){
         entity.setPosition(initialPos);
         if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
             entity.getViewComponent().removeChild(newTankTexture);

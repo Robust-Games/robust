@@ -4,6 +4,8 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.action.ActionComponent;
+import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
@@ -20,14 +22,50 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
 
 public class ShootService {
 
+    public static void planShoot(Entity target, Entity tank) {
+        if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
+
+        // Use action points when planning the shot
+        tank.getComponent(APComponent.class).damageFully();
+
+        ActionComponent ac = tank.getComponent(ActionComponent.class);
+        ac.addAction(new ShootAction(target));
+        ac.pause();
+
+        // Remove the shoot component to prevent multiple shots
+        tank.removeComponent(ShootComponent.class);
+    }
+
+    /**
+     * (DEV ONLY) This method is used for immediate shooting
+     */
     public static void shoot(Entity target, Entity tank) {
         if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
-        tank.getComponent(APComponent.class).damageFully();
+        executeShoot(target, tank, true);
+        tank.removeComponent(ShootComponent.class);
+    }
+
+    /**
+     * This method executes the actual shooting action without checking for ShootComponent
+     * or removing it. It's meant to be called from ShootAction during turn execution.
+     * 
+     * @param target The target entity to shoot at
+     * @param tank The tank entity doing the shooting
+     * @param useActionPoints Whether to use action points (false when called from ShootAction)
+     */
+    public static void executeShoot(Entity target, Entity tank, boolean useActionPoints) {
+        if (tank == null) return;
+
+        // Use action points if requested
+        if (useActionPoints) {
+            tank.getComponent(APComponent.class).damageFully();
+        }
+
+        // Damage the target
         target.getComponent(HealthIntComponent.class).damage(1);
         //TODO Game Over
 
-        tank.removeComponent(ShootComponent.class);
-
+        // Spawn shell
         if (target.getType() != TILE) {
             spawnShell(tank, target.getCenter());
         }
@@ -35,6 +73,7 @@ public class ShootService {
             spawnShell(tank, target.getPosition());
         }
 
+        // Add explosion animation after bullet travels there
         getGameTimer().runOnceAfter(() -> {
             if (target.getType() != TILE)
                 target.addComponent(new AnimExplosionComponent(0,0));
@@ -42,6 +81,7 @@ public class ShootService {
                 target.addComponent(new AnimExplosionComponent(-64,-64));
         }, Duration.millis(target.distance(tank)));
 
+        // Remove explosion and the target (if it dies) after animation completes
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
             if (target.getComponent(HealthIntComponent.class).getValue()==0)
