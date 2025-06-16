@@ -31,7 +31,7 @@ public class EndTurnView extends Pane {
         //btnEndTurn.setBackground(new BackgroundImage(FXGL.getAssetLoader().loadTexture("frame1.png").getImage()));
         btnEndTurn.setOnAction(event -> {
             Player currentPlayer = TurnService.currentPlayer;
-            Entity playerTank = MapService.findTankofPlayer(currentPlayer);
+            Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
             playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
 
             TurnService.nextPlayer();

@@ -17,7 +17,7 @@ public class TurnService {
 
     public static void startTurn(Player player) {
         currentPlayer = player;
-        Entity playerTank = MapService.findTankofPlayer(player);
+        Entity playerTank = MapService.findTankOfPlayer(player);
         if (playerTank != null) {
             playerTank.getComponent(TankDataComponent.class).setInitialPos();
         }
@@ -27,13 +27,13 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
+            getNotificationService().pushNotification(currentPlayer + "'S TURN" );
         }
         else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
             executeActions();
         }
-        getNotificationService().pushNotification(currentPlayer + "'S TURN" );
         startTurn(currentPlayer);
 
     }
@@ -70,6 +70,7 @@ public class TurnService {
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
                 entity.getComponent(APComponent.class).reset();
         });
+        getNotificationService().pushNotification(currentPlayer + "'S TURN" );
     }
 }
 

@@ -10,6 +10,7 @@ import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimExplosionComponent;
+import com.robustgames.robustclient.business.logic.GameState;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -18,7 +19,7 @@ import javafx.util.Duration;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
-import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 public class ShootService {
 
@@ -32,37 +33,20 @@ public class ShootService {
         ac.addAction(new ShootAction(target));
         ac.pause();
 
-        // Remove the shoot component to prevent multiple shots
         tank.removeComponent(ShootComponent.class);
 
         spawnAttackTarget(target, tank);
-
     }
 
     /**
-     * (DEV ONLY) This method is used for immediate shooting
-     */
-    public static void shoot(Entity target, Entity tank) {
-        if (tank == null || !tank.hasComponent(ShootComponent.class)) return;
-        executeShoot(target, tank, true);
-        tank.removeComponent(ShootComponent.class);
-    }
-
-    /**
-     * This method executes the actual shooting action without checking for ShootComponent
-     * or removing it. It's meant to be called from ShootAction during turn execution.
+     * This method executes the shot at the target.
+     * It's meant to be called from ShootAction during turn execution.
      * 
      * @param target The target entity to shoot at
      * @param tank The tank entity doing the shooting
-     * @param useActionPoints Whether to use action points (false when called from ShootAction)
      */
-    public static void executeShoot(Entity target, Entity tank, boolean useActionPoints) {
+    public static void executeShoot(Entity target, Entity tank) {
         if (tank == null) return;
-
-        // Use action points if requested
-        if (useActionPoints) {
-            tank.getComponent(APComponent.class).damageFully();
-        }
 
         // Damage the target
         target.getComponent(HealthIntComponent.class).damage(1);
@@ -87,9 +71,15 @@ public class ShootService {
         // Remove explosion and the target (if it dies) after animation completes
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
-            if (target.getComponent(HealthIntComponent.class).getValue()==0)
-                target.removeFromWorld();
-        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
+            if (target.getComponent(HealthIntComponent.class).getValue()==0) {
+                if (target.isType(TANK)||target.isType(CITY)){
+                    target.removeFromWorld();
+                    GameState.gameOver();
+                }
+                else {
+                    target.removeFromWorld();
+                }
+            }        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
     }
 
     public static void spawnAttackTarget(Entity target, Entity attackingTank) {
@@ -108,14 +98,13 @@ public class ShootService {
         }
         else targetPosition = targetPosition.subtract(64,64);
 
-        FXGL.spawnFadeIn("attackTargetTiles",
+        FXGL.spawn("attackTargetTiles",
                 new SpawnData(targetPosition)
                         .put("attackingTank", attackingTank)
                         .put("target", target)
-                        .put("targetName", targetName)
-                , Duration.millis(200)
-        );
+                        .put("targetName", targetName));
     }
+
     public static void spawnShell(Entity tank, Point2D targetScreenPosition) {
         FXGL.spawnFadeIn("shell",
                 new SpawnData(tank.getCenter())

@@ -7,6 +7,9 @@ import com.robustgames.robustclient.business.entitiy.components.MovementComponen
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
+import javafx.util.Duration;
+
+import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 
 public class RotateAction extends Action {
     private final Texture newTankTexture;
@@ -16,9 +19,12 @@ public class RotateAction extends Action {
     }
     @Override
     protected void onUpdate(double tpf) {
-        entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
-        setComplete();
+        getGameTimer().runOnceAfter(() -> {
+                    entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
+                    setComplete();
+        }, Duration.millis(200));
     }
+
 
     @Override
     protected void onCompleted() {

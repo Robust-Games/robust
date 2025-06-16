@@ -63,7 +63,7 @@ public class JavaComponentsTest {
                 .with(new APComponent(5))
                 .onClick(tank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    MapService.deSelectTank();
+                    FXGL.<RobustApplication>getAppCast().deSelectTank();
                     tank.addComponent(new SelectableComponent());
                     FXGL.<RobustApplication>getAppCast().onTankClicked(tank);
 

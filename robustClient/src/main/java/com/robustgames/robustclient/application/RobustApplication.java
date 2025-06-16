@@ -6,6 +6,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
+import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
@@ -42,7 +43,7 @@ public class RobustApplication extends GameApplication  {
     @Override
     protected void initInput() {
         onBtnDown(MouseButton.SECONDARY, () -> {
-            MapService.deSelectTank();
+            deSelectTank();
             tankDataView.setVisible(false);
             tankButtonView.setVisible(false);
         });
@@ -69,12 +70,27 @@ public class RobustApplication extends GameApplication  {
         addUINode(tankDataView);
 
     }
+    /**
+     * Selects a tank by adding the {@code SelectableComponent} and making its UI elements visible
+     */
     public void onTankClicked(Entity tank) {
         //hp bar visible
         tankButtonView.setVisible(true);
         tankDataView.setVisible(true);
         tankDataView.setSelectedTank(tank);
-
+    }
+    /**
+     * Deselects the currently selected tank by removing its {@code SelectableComponent}.
+     * This method identifies the selected tank by checking for an entity with a {@code SelectableComponent}
+     * which only tanks get assigned.
+     */
+    public void deSelectTank(){
+        Entity tank = MapService.findSelectedTank();
+        if (tank != null) {
+            tank.removeComponent(SelectableComponent.class);
+            tankButtonView.setVisible(false);
+            tankDataView.setVisible(false);
+        }
     }
 
     @Override

@@ -103,7 +103,7 @@ public class MapService {
         double worldY = gridY * TILE_HEIGHT;
         return new Point2D(worldX, worldY);
     }
-    public static Entity findTankofPlayer (Player player){
+    public static Entity findTankOfPlayer(Player player){
         for (Entity tank : FXGL.getGameWorld().getEntitiesByComponent(TankDataComponent.class)) {
             if (tank.getComponent(TankDataComponent.class).getOwner().equals(player)) {
                 return tank;
@@ -111,43 +111,13 @@ public class MapService {
         }
         return null;
     }
-    /**
-     * This method searches through all entities in the game world for the one that has the {@code SelectableComponent}.
-     * The game only allows one tank to be selected at all times.
-     * @return the selected tank entity, or {@code null} if no such entity is marked as selected.
-     */
+
     public static Entity findSelectedTank(){
         for (Entity e : FXGL.getGameWorld().getEntities()) {
             if (e.hasComponent(SelectableComponent.class))
                 return e;
         }
         return null;
-    }
-    /**
-     * Marks the given tank entity as selected by adding a {@code SelectableComponent}.*
-     * @param tank the tank entity to be marked as selected
-     */
-    public static void selectTank(Entity tank){
-        tank.addComponent(new SelectableComponent());
-    }
-
-    /**
-     * Deselects the specified tank entity by removing its {@code SelectableComponent}.
-     * @param tank the tank entity to be deselected
-     */
-    public static void deSelectTank(Entity tank){
-        tank.removeComponent(SelectableComponent.class);
-    }
-
-    /**
-     * Deselects the currently selected tank by removing its {@code SelectableComponent}.
-     * This method identifies the selected tank by checking for an entity with a {@code SelectableComponent}
-     * which only tanks get assigned.
-     */
-    public static void deSelectTank(){
-        Entity tank = findSelectedTank();
-        if (tank != null)
-            tank.removeComponent(SelectableComponent.class);
     }
 
     public static boolean hasMountainAt(Point2D gridPos) {
@@ -157,6 +127,7 @@ public class MapService {
                     return pos.equals(gridPos);
                 });
     }
+
     public static boolean hasCityAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(CITY)
                 .stream().anyMatch(e -> {
@@ -164,6 +135,7 @@ public class MapService {
                     return pos.equals(gridPos);
                 });
     }
+
     public static boolean hasTankAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(TANK)
                 .stream().anyMatch(e -> {

@@ -9,10 +9,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
-import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
-import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.entitiy.components.*;
 import com.robustgames.robustclient.business.logic.GameState;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Player;
@@ -44,7 +41,7 @@ public class PlayerFactory implements EntityFactory {
                 .onClick(clickedTank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
                     if (TurnService.currentPlayer == Player.PLAYER1){
-                        MapService.deSelectTank();
+                        FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
                     }
@@ -61,12 +58,14 @@ public class PlayerFactory implements EntityFactory {
         var hpComp = new HealthIntComponent(HP);
         hpBar.currentValueProperty().bind(hpComp.valueProperty());
 
-        return FXGL.entityBuilder(data)
+        Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
-                .view(hpBar)
                 .with(hpComp)
                 .viewWithBBox("city1.png")
                 .build();
+        city.addComponent(new CityDataComponent(PLAYER1, city.getViewComponent().getChild(0, Texture.class)));
+        city.getViewComponent().addChild(hpBar);
+        return city;
     }
 
     @Spawns("tank2")
@@ -86,7 +85,7 @@ public class PlayerFactory implements EntityFactory {
                 .onClick(clickedTank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
                     if (TurnService.currentPlayer == PLAYER2){
-                        MapService.deSelectTank();
+                        FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
                     }
@@ -103,11 +102,13 @@ public class PlayerFactory implements EntityFactory {
         var hpComp = new HealthIntComponent(HP);
         hpBar.currentValueProperty().bind(hpComp.valueProperty());
 
-        return FXGL.entityBuilder(data)
+        Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
-                .view(hpBar)
                 .with(hpComp)
                 .viewWithBBox("city1.png")
                 .build();
+        city.addComponent(new CityDataComponent(PLAYER2, city.getViewComponent().getChild(0, Texture.class)));
+        city.getViewComponent().addChild(hpBar);
+        return city;
     }
 }
