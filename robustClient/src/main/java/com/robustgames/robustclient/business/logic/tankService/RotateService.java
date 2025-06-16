@@ -13,63 +13,80 @@ public class RotateService {
     static Texture initialTankTexture;
     static String newTankView;
     static Texture newTankTexture;
+    static Texture tankTexture;
 
-    public static Texture rotateTankLeft(Entity selectedTank) {
+    public static String rotateTankLeft(Entity selectedTank) {
         initialTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture();
-        initialTankView = initialTankTexture.getImage().getUrl().substring(initialTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
+        newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture();
+        initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
 
         switch (initialTankView) {
             case "tank_top_right.png" -> {
                 newTankView = "tank_top_left.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_top_left.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_top_left.png");
             }
             case "tank_top_left.png" -> {
                 newTankView = "tank_down_left.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_down_left.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_down_left.png");
             }
             case "tank_down_left.png" -> {
                 newTankView = "tank_down_right.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_down_right.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_down_right.png");
             }
             case "tank_down_right.png" -> {
                 newTankView = "tank_top_right.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_top_right.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_top_right.png");
             }
         }
+
+
+        if (selectedTank.getViewComponent().getChildren().contains(initialTankTexture)) {
+            newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+            selectedTank.getViewComponent().addChild(newTankTexture);
+            selectedTank.getViewComponent().removeChild(initialTankTexture);
+        }
+        else {
+            newTankTexture.set(tankTexture);
+        }
         selectedTank.getComponent(TankDataComponent.class).setNewTankTexture(newTankTexture);
-        selectedTank.getViewComponent().addChild(newTankTexture);
-        selectedTank.getViewComponent().removeChild(initialTankTexture);
-        return newTankTexture;
+        return newTankView;
 
     }
 
-    public static Texture rotateTankRight(Entity selectedTank) {
+    public static String rotateTankRight(Entity selectedTank) {
         initialTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture();
-        initialTankView = initialTankTexture.getImage().getUrl().substring(initialTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
+        newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture();
+        initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
 
         switch (initialTankView) {
             case "tank_top_right.png" -> {
                 newTankView = "tank_down_right.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_down_right.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_down_right.png");
             }
             case "tank_top_left.png" -> {
                 newTankView = "tank_top_right.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_top_right.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_top_right.png");
             }
             case "tank_down_left.png" -> {
                 newTankView = "tank_top_left.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_top_left.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_top_left.png");
             }
             case "tank_down_right.png" -> {
                 newTankView = "tank_down_left.png";
-                newTankTexture = FXGL.getAssetLoader().loadTexture("tank_down_left.png");
+                tankTexture = FXGL.getAssetLoader().loadTexture("tank_down_left.png");
             }
         }
-        selectedTank.getComponent(TankDataComponent.class).setNewTankTexture(newTankTexture);
-        selectedTank.getViewComponent().addChild(newTankTexture);
-        selectedTank.getViewComponent().removeChild(initialTankTexture);
 
-        return newTankTexture;
+        if (selectedTank.getViewComponent().getChildren().contains(initialTankTexture)) {
+            newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+            selectedTank.getViewComponent().addChild(newTankTexture);
+            selectedTank.getViewComponent().removeChild(initialTankTexture);
+        }
+        else {
+            newTankTexture.set(tankTexture);
+        }
+        selectedTank.getComponent(TankDataComponent.class).setNewTankTexture(newTankTexture);
+        return newTankView;
     }
     //Todo: Hier dann noch die Rotate Turret sachen
 

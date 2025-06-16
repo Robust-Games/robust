@@ -8,33 +8,14 @@ import javafx.geometry.Point2D;
 public class TankDataComponent extends Component {
     private Point2D initialPos;
     private Texture initialTankTexture;
-    private Texture lastTankTexture;
     private Texture newTankTexture;
     private final Player owner;
 
     public TankDataComponent(Player player, Texture view) {
         owner = player;
         initialTankTexture = view;
-        lastTankTexture = view;
+        newTankTexture = view;
     }
-
-    public Player getOwner() {
-        return owner;
-    }
-    public void ResetBeforeTurn(){
-        entity.setPosition(initialPos);
-        if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
-            entity.getViewComponent().removeChild(newTankTexture);
-        }
-        if (entity.getViewComponent().getChildren().contains(lastTankTexture)) {
-            entity.getViewComponent().removeChild(lastTankTexture);
-        }
-        if (entity.getViewComponent().getChildren().contains(initialTankTexture)) {
-            entity.getViewComponent().removeChild(initialTankTexture);
-            entity.getViewComponent().addChild(initialTankTexture);
-        }
-        }
-
     public Point2D getInitialPos() {
         return initialPos;
     }
@@ -59,15 +40,19 @@ public class TankDataComponent extends Component {
         this.newTankTexture = newTankTexture;
     }
 
-    public Texture getLastTankTexture() {
-        return lastTankTexture;
+    public Player getOwner() {
+        return owner;
     }
-
-    public void setLastTankTexture(Texture lastTankTexture) {
-        this.lastTankTexture = lastTankTexture;
+    public void ResetBeforeTurn(){
+        entity.setPosition(initialPos);
+        if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
+            entity.getViewComponent().removeChild(newTankTexture);
+        }
+        if (entity.getViewComponent().getChildren().contains(initialTankTexture)) {
+            entity.getViewComponent().removeChild(initialTankTexture);
+            entity.getViewComponent().addChild(initialTankTexture);
+        }
+        else entity.getViewComponent().addChild(initialTankTexture);
     }
-
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.robustgames.robustclient.business.actions;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.action.Action;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
@@ -9,26 +10,26 @@ import com.robustgames.robustclient.business.logic.tankService.RotateService;
 
 public class RotateAction extends Action {
     private final Texture newTankTexture;
-    private final Direction direction;
+    //private final Direction direction;
 
-    public RotateAction(Texture newTankTexture, Direction direction) {
-        this.newTankTexture = newTankTexture;
-        this.direction = direction;
+    public RotateAction(String newTankTexture, Direction direction) {
+        this.newTankTexture = FXGL.getAssetLoader().loadTexture(newTankTexture);
+        //this.direction = direction;
 
     }
     @Override
     protected void onUpdate(double tpf) {
-        if (direction == Direction.LEFT) {
-            RotateService.rotateTankLeft(entity);
-        }
-        else
-            RotateService.rotateTankRight(entity);
+//        if (direction == Direction.LEFT) {
+//            RotateService.rotateTankLeft(entity);
+//        }
+//        else
+//            RotateService.rotateTankRight(entity);
+        entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
         setComplete();
     }
 
     @Override
     protected void onCompleted() {
         super.onCompleted();
-        entity.getComponent(TankDataComponent.class).setInitialTankTexture(newTankTexture);
     }
 }
