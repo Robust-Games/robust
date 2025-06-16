@@ -34,10 +34,7 @@ public class EndTurnView extends Pane {
             Entity playerTank = MapService.findTankofPlayer(currentPlayer);
             playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
 
-            TurnService.nextPlayer(currentPlayer);
-            getNotificationService().pushNotification("Turn of " + currentPlayer.toString());
-
-            TurnService.executeActions();
+            TurnService.nextPlayer();
         });
 
 

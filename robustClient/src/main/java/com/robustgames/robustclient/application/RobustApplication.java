@@ -67,6 +67,7 @@ public class RobustApplication extends GameApplication  {
         addUINode(endTurnView);
         addUINode(tankButtonView);
         addUINode(tankDataView);
+
     }
     public void onTankClicked(Entity tank) {
         //hp bar visible

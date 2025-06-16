@@ -7,24 +7,13 @@ import com.almasb.fxgl.entity.action.ActionComponent;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 
+import static com.almasb.fxgl.dsl.FXGL.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class TurnService {
     public static Player currentPlayer;
     static boolean player1Ready = false;
     static boolean player2Ready = false;
-
-
-    public static void nextPlayer(Player currentPlayer) {
-        if (currentPlayer == Player.PLAYER1) {
-            player1Ready = true;
-            currentPlayer = Player.PLAYER2;
-        }
-        else {
-            player2Ready = true;
-            currentPlayer = Player.PLAYER1;
-        }
-    }
 
     public static void startTurn(Player player) {
         currentPlayer = player;
@@ -34,9 +23,24 @@ public class TurnService {
         }
     }
 
+    public static void nextPlayer() {
+        if (currentPlayer == Player.PLAYER1) {
+            player1Ready = true;
+            currentPlayer = Player.PLAYER2;
+        }
+        else {
+            player2Ready = true;
+            currentPlayer = Player.PLAYER1;
+            executeActions();
+        }
+        getNotificationService().pushNotification(currentPlayer + "'S TURN" );
+        startTurn(currentPlayer);
+
+    }
+
     public static void executeActions() {
         // Execute all actions simultaneously
-        if (player1Ready) {
+        if (player1Ready && player2Ready) {
             FXGL.getGameWorld().getEntitiesByType(TANK).forEach(tank -> {
                 ActionComponent ac = tank.getComponent(ActionComponent.class);
                 if (ac.isPaused()) {
@@ -63,7 +67,6 @@ public class TurnService {
         player1Ready = false;
         player2Ready = false;
 
-        // Reset action points
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
                 entity.getComponent(APComponent.class).reset();
         });

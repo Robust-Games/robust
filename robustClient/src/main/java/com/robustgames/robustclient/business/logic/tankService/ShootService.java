@@ -34,6 +34,9 @@ public class ShootService {
 
         // Remove the shoot component to prevent multiple shots
         tank.removeComponent(ShootComponent.class);
+
+        spawnAttackTarget(target, tank);
+
     }
 
     /**

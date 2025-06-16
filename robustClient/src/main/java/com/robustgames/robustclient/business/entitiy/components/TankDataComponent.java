@@ -1,9 +1,14 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
+
+import static com.almasb.fxgl.dsl.FXGL.byType;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
 
 public class TankDataComponent extends Component {
     private Point2D initialPos;
@@ -45,6 +50,10 @@ public class TankDataComponent extends Component {
     }
     public void resetBeforeTurn(){
         entity.setPosition(initialPos);
+        getGameWorld().removeEntities(byType(ACTIONSELECTION));
+        if (entity.hasComponent(SelectableComponent.class)){
+            entity.removeComponent(SelectableComponent.class);
+        }
         if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
             entity.getViewComponent().removeChild(newTankTexture);
         }

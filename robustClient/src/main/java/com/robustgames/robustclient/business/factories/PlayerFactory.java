@@ -16,11 +16,13 @@ import com.robustgames.robustclient.business.entitiy.components.TankDataComponen
 import com.robustgames.robustclient.business.logic.GameState;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.TurnService;
 
 import javax.swing.text.html.ImageView;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER1;
+import static com.robustgames.robustclient.business.logic.Player.PLAYER2;
 
 public class PlayerFactory implements EntityFactory {
     private static final int HP = 3;
@@ -35,15 +37,17 @@ public class PlayerFactory implements EntityFactory {
                 .type(TANK)
                 .with(hpComp)
                 .viewWithBBox("tank_top_left.png")
+                .zIndex(10)
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
                 .onClick(clickedTank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    MapService.deSelectTank();
-                    clickedTank.addComponent(new SelectableComponent());
-                    FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
-
+                    if (TurnService.currentPlayer == Player.PLAYER1){
+                        MapService.deSelectTank();
+                        clickedTank.addComponent(new SelectableComponent());
+                        FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+                    }
                 })
                 .build();
         tank.addComponent(new TankDataComponent(PLAYER1, tank.getViewComponent().getChild(0, Texture.class)));
@@ -75,18 +79,20 @@ public class PlayerFactory implements EntityFactory {
                 .type(TANK)
                 .with(hpComp)
                 .viewWithBBox("tank_down_right.png")
+                .zIndex(10)
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
                 .onClick(clickedTank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    MapService.deSelectTank();
-                    clickedTank.addComponent(new SelectableComponent());
-                    FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
-
+                    if (TurnService.currentPlayer == PLAYER2){
+                        MapService.deSelectTank();
+                        clickedTank.addComponent(new SelectableComponent());
+                        FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+                    }
                 })
                 .build();
-        tank.addComponent(new TankDataComponent(PLAYER1, tank.getViewComponent().getChild(0, Texture.class)));
+        tank.addComponent(new TankDataComponent(PLAYER2, tank.getViewComponent().getChild(0, Texture.class)));
         tank.getViewComponent().addChild(hpBar);
         return tank;
     }
