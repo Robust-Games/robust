@@ -10,20 +10,12 @@ import com.robustgames.robustclient.business.logic.tankService.RotateService;
 
 public class RotateAction extends Action {
     private final Texture newTankTexture;
-    //private final Direction direction;
 
-    public RotateAction(String newTankTexture, Direction direction) {
+    public RotateAction(String newTankTexture) {
         this.newTankTexture = FXGL.getAssetLoader().loadTexture(newTankTexture);
-        //this.direction = direction;
-
     }
     @Override
     protected void onUpdate(double tpf) {
-//        if (direction == Direction.LEFT) {
-//            RotateService.rotateTankLeft(entity);
-//        }
-//        else
-//            RotateService.rotateTankRight(entity);
         entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
         setComplete();
     }
