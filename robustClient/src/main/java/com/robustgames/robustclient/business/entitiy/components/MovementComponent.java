@@ -5,6 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.MapService;
 import javafx.geometry.Point2D;
+
 import java.util.Set;
 
 import static com.almasb.fxgl.dsl.FXGL.byType;
@@ -23,7 +24,7 @@ public class MovementComponent extends Component {
             return;
         for (Point2D target : moveTargets) {
             Point2D pos1 = MapService.isoGridToScreen(target);
-            getGameWorld().spawn("moveTiles", pos1.getX()-64, pos1.getY()-64);
+            getGameWorld().spawn("moveTiles", pos1.getX() - 64, pos1.getY() - 64);
         }
     }
 

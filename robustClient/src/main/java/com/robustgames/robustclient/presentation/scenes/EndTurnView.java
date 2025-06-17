@@ -11,7 +11,7 @@ public class EndTurnView extends Pane {
     Button btnEndTurn;
     Label btnEndTurnText;
 
-    public EndTurnView(){
+    public EndTurnView() {
         btnEndTurnText = new Label("End Turn");
         btnEndTurnText.getStyleClass().add("robust-end-btn-text");
 
@@ -28,9 +28,5 @@ public class EndTurnView extends Pane {
         btnEndTurn.setOnAction(event -> {
             System.out.println("End Turn");
         });
-
-
-
     }
-
 }

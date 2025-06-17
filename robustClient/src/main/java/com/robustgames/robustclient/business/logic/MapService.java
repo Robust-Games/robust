@@ -10,6 +10,7 @@ import com.robustgames.robustclient.business.entitiy.components.SelectableCompon
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimExplosionComponent;
 import javafx.geometry.Point2D;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,11 +42,12 @@ public class MapService {
      * @return the corresponding position in grid coordinates
      */
     public static Point2D isoScreenToGrid(Point2D screenPos) {
-        Point2D gridPos2D = new Point2D(screenPos.getX()/TILE_WIDTH_ISO, screenPos.getY()/TILE_HEIGHT);
+        Point2D gridPos2D = new Point2D(screenPos.getX() / TILE_WIDTH_ISO, screenPos.getY() / TILE_HEIGHT);
         int x = (int) ((gridPos2D.getY() - ISO_TILE_ORIGIN_Y) + (gridPos2D.getX() - ISO_TILE_ORIGIN_X));
         int y = (int) ((gridPos2D.getY() - ISO_TILE_ORIGIN_Y) - (gridPos2D.getX() - ISO_TILE_ORIGIN_X));
         return new Point2D(x, y);
     }
+
     /**
      * Converts a screen-space point from isometric coordinates to grid coordinates.
      * This transformation is based on the specified tile dimensions and origin offsets.
@@ -58,16 +60,17 @@ public class MapService {
         return isoScreenToGrid(new Point2D(screenPositionX, screenPositionY));
     }
 
-        /**
-         * Converts an isometric grid position represented by a {@link Point2D}
-         * to its corresponding screen coordinates.
-         *
-         * @param position the position in isometric grid coordinates
-         * @return the corresponding screen coordinates as a {@link Point2D}
-         */
+    /**
+     * Converts an isometric grid position represented by a {@link Point2D}
+     * to its corresponding screen coordinates.
+     *
+     * @param position the position in isometric grid coordinates
+     * @return the corresponding screen coordinates as a {@link Point2D}
+     */
     public static Point2D isoGridToScreen(Point2D position) {
         return isoGridToScreen(position.getX(), position.getY());
     }
+
     /**
      * Converts isometric grid coordinates to screen coordinates, considering the tile dimensions and origin.
      *
@@ -76,8 +79,8 @@ public class MapService {
      * @return a {@code Point2D} representing the equivalent screen coordinates
      */
     public static Point2D isoGridToScreen(double gridX, double gridY) {
-        double screenX = (ISO_TILE_ORIGIN_X * TILE_WIDTH_ISO) + (gridX - gridY) * (TILE_WIDTH_ISO /2.0);
-        double screenY = ISO_TILE_ORIGIN_Y * TILE_HEIGHT + (gridX + gridY) * (TILE_HEIGHT /2.0);
+        double screenX = (ISO_TILE_ORIGIN_X * TILE_WIDTH_ISO) + (gridX - gridY) * (TILE_WIDTH_ISO / 2.0);
+        double screenY = ISO_TILE_ORIGIN_Y * TILE_HEIGHT + (gridX + gridY) * (TILE_HEIGHT / 2.0);
         return new Point2D(screenX, screenY);
     }
 
@@ -111,28 +114,32 @@ public class MapService {
     /**
      * This method searches through all entities in the game world for the one that has the {@code SelectableComponent}.
      * The game only allows one tank to be selected at all times.
+     *
      * @return the selected tank entity, or {@code null} if no such entity is marked as selected.
      */
-    public static Entity findSelectedTank(){
+    public static Entity findSelectedTank() {
         for (Entity e : FXGL.getGameWorld().getEntities()) {
             if (e.hasComponent(SelectableComponent.class))
                 return e;
         }
         return null;
     }
+
     /**
      * Marks the given tank entity as selected by adding a {@code SelectableComponent}.*
+     *
      * @param tank the tank entity to be marked as selected
      */
-    public static void selectTank(Entity tank){
+    public static void selectTank(Entity tank) {
         tank.addComponent(new SelectableComponent());
     }
 
     /**
      * Deselects the specified tank entity by removing its {@code SelectableComponent}.
+     *
      * @param tank the tank entity to be deselected
      */
-    public static void deSelectTank(Entity tank){
+    public static void deSelectTank(Entity tank) {
         tank.removeComponent(SelectableComponent.class);
     }
 
@@ -141,7 +148,7 @@ public class MapService {
      * This method identifies the selected tank by checking for an entity with a {@code SelectableComponent}
      * which only tanks get assigned.
      */
-    public static void deSelectTank(){
+    public static void deSelectTank() {
         Entity tank = findSelectedTank();
         if (tank != null)
             tank.removeComponent(SelectableComponent.class);
@@ -154,6 +161,7 @@ public class MapService {
                     return pos.equals(gridPos);
                 });
     }
+
     public static boolean hasCityAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(CITY)
                 .stream().anyMatch(e -> {
@@ -161,6 +169,7 @@ public class MapService {
                     return pos.equals(gridPos);
                 });
     }
+
     public static boolean hasTankAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(TANK)
                 .stream().anyMatch(e -> {
@@ -192,7 +201,7 @@ public class MapService {
         }
         int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
 
-        if (ap <= 0){
+        if (ap <= 0) {
             getNotificationService().pushNotification("Not enough Action Points!");
             return moveTargets;
         }
@@ -202,9 +211,9 @@ public class MapService {
         Direction[] axes;
 
         if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
-            axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
+            axes = new Direction[]{Direction.LEFT, Direction.RIGHT};
         } else {
-            axes = new Direction[]{ Direction.UP, Direction.DOWN };
+            axes = new Direction[]{Direction.UP, Direction.DOWN};
         }
 
         // 3) Jump along each axis until it hits a mountain or the edge
@@ -247,11 +256,16 @@ public class MapService {
     // Schritt-Funktion
     private static Point2D step(Point2D pos, Direction dir) {
         switch (dir) {
-            case UP:    return new Point2D(pos.getX(), pos.getY() - 1);
-            case DOWN:  return new Point2D(pos.getX(), pos.getY() + 1);
-            case LEFT:  return new Point2D(pos.getX() - 1, pos.getY());
-            case RIGHT: return new Point2D(pos.getX() + 1, pos.getY());
-            default: throw new IllegalArgumentException();
+            case UP:
+                return new Point2D(pos.getX(), pos.getY() - 1);
+            case DOWN:
+                return new Point2D(pos.getX(), pos.getY() + 1);
+            case LEFT:
+                return new Point2D(pos.getX() - 1, pos.getY());
+            case RIGHT:
+                return new Point2D(pos.getX() + 1, pos.getY());
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -266,23 +280,22 @@ public class MapService {
 
         if (target.getType() != TILE) {
             spawnShell(tank, target.getCenter());
-        }
-        else {
+        } else {
             spawnShell(tank, target.getPosition());
         }
 
         getGameTimer().runOnceAfter(() -> {
             if (target.getType() != TILE)
-                target.addComponent(new AnimExplosionComponent(0,0));
+                target.addComponent(new AnimExplosionComponent(0, 0));
             else
-                target.addComponent(new AnimExplosionComponent(-64,-64));
+                target.addComponent(new AnimExplosionComponent(-64, -64));
         }, Duration.millis(target.distance(tank)));
 
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
-            if (target.getComponent(HealthIntComponent.class).getValue()==0)
+            if (target.getComponent(HealthIntComponent.class).getValue() == 0)
                 target.removeFromWorld();
-        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
+        }, Duration.millis(target.distance(tank) + 1200)); //1200 = Explosion animation duration
     }
 
 
@@ -299,8 +312,7 @@ public class MapService {
                     targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack.png";
                 }
             }
-        }
-        else targetPosition = targetPosition.subtract(64,64);
+        } else targetPosition = targetPosition.subtract(64, 64);
 
         FXGL.spawnFadeIn("attackTargetTiles",
                 new SpawnData(targetPosition)
@@ -309,6 +321,7 @@ public class MapService {
                 , Duration.millis(200)
         );
     }
+
     public static void spawnShell(Entity tank, Point2D targetScreenPosition) {
         FXGL.spawnFadeIn("shell",
                 new SpawnData(tank.getCenter())
@@ -318,6 +331,4 @@ public class MapService {
         );
 
     }
-
-
-    }
+}

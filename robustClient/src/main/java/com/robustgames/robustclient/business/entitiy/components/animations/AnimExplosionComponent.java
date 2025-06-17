@@ -14,7 +14,7 @@ public class AnimExplosionComponent extends Component {
         expl = new AnimationChannel(FXGL.image("explosion.png"), 12, 128, 128, Duration.seconds(1.2), 0, 12);
         texture = new AnimatedTexture(expl);
         texture.setTranslateX(xOffset);
-        texture.setTranslateY(16+yOffset);
+        texture.setTranslateY(16 + yOffset);
 
     }
 

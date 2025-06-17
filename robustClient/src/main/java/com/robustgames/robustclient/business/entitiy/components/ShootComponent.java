@@ -45,8 +45,7 @@ public class ShootComponent extends Component {
                     }
                 }
             }
-        }
-        else getNotificationService().pushNotification("Not enough Action Points to shoot!");
+        } else getNotificationService().pushNotification("Not enough Action Points to shoot!");
     }
 
     // Hilfsmethode: Einen Schritt in die Richtung gehen
@@ -63,6 +62,7 @@ public class ShootComponent extends Component {
         }
         throw new IllegalArgumentException();
     }
+
     @Override
     public void onRemoved() {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));

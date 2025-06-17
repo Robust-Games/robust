@@ -11,7 +11,7 @@ public class AnimTankComponent extends Component {
     private final AnimationChannel tankMotorShake;
 
     public AnimTankComponent() {
-        tankMotorShake = new AnimationChannel(FXGL.image("Tank_selected.png"), 2, 128,128,Duration.seconds(0.2), 0, 1);
+        tankMotorShake = new AnimationChannel(FXGL.image("Tank_selected.png"), 2, 128, 128, Duration.seconds(0.2), 0, 1);
         texture = new AnimatedTexture(tankMotorShake);
     }
 
