@@ -51,7 +51,19 @@ public class ShootComponent extends Component {
     }
     @Override
     public void onRemoved() {
+        reset();
+        
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
+    }
+
+    public void reset(){
+        entity.getViewComponent().clearChildren();
+
+        var tankData = entity.getComponent(TankDataComponent.class);
+        tankData.setTurretTexture(null);
+
+        var x = entity.getComponent(TankDataComponent.class).getInitialTankTexture();
+        entity.getViewComponent().addChild(x);
     }
 }
 //ROBUST_DEBUG for tests maybe

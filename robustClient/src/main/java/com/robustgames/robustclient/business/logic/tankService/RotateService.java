@@ -5,6 +5,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Direction;
+import com.robustgames.robustclient.business.logic.MapService;
+import javafx.geometry.Point2D;
 
 public class RotateService {
     static String initialTankView;
@@ -58,4 +60,78 @@ public static String rotateTankLeft(String tankView) {
     }
     //Todo: Hier dann noch die Rotate Turret sachen
 
+    public static void rotateTurret(Point2D tileGridPos, Entity selectedTank){
+
+        initialTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture(); // speichert aktuelle Textur
+        newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture(); // // speichert neue Textur
+        initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1); // Dateiname aktueller Textur
+
+        var tankGridPos = MapService.isoScreenToGrid(selectedTank.getCenter());
+        var diff = tileGridPos.subtract(tankGridPos); // Achsenbestimmung
+
+        var tankData = selectedTank.getComponent(TankDataComponent.class);
+
+        var tankTurret = tankData.getTurretTexture();
+
+        // Grundbauteil um nurnoch Turret zu drehen
+        if(tankTurret == null){
+            switch (initialTankView) {
+                case "tank_top_left.png" -> {
+                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    newTankView = "tank_top_left_alt.png";
+                    newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    selectedTank.getViewComponent().addChild(newTankTexture);
+                }
+
+                case "tank_top_right.png" -> {
+                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    newTankView = "tank_top_right_alt.png";
+                    newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    selectedTank.getViewComponent().addChild(newTankTexture);
+                }
+
+                case "tank_down_left.png" -> {
+                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    newTankView = "tank_down_left_alt.png";
+                    newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    selectedTank.getViewComponent().addChild(newTankTexture);
+                }
+
+                case "tank_down_right.png" -> {
+                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    newTankView = "tank_down_right_alt.png";
+                    newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    selectedTank.getViewComponent().addChild(newTankTexture);
+                }
+            }
+
+        }
+
+        String turretTextureName = null;
+
+        if (diff.getX() > 0 && diff.getY() == 0) {
+            turretTextureName = "tank_turret_down_right.png";
+        } else if (diff.getX() < 0 && diff.getY() == 0) {
+            turretTextureName = "tank_turret_top_left.png";
+        } else if (diff.getY() > 0 && diff.getX() == 0) {
+            turretTextureName = "tank_turret_down_left.png";
+        } else if (diff.getY() < 0 && diff.getX() == 0) {
+            turretTextureName = "tank_turret_top_right.png";
+        }
+
+        if (tankTurret != null) {
+            selectedTank.getViewComponent().removeChild(tankTurret);
+
+        }
+
+        if (turretTextureName != null) {
+            if (tankTurret != null) {
+                selectedTank.getViewComponent().removeChild(tankTurret);
+            }
+
+            tankTurret = FXGL.getAssetLoader().loadTexture(turretTextureName);
+            selectedTank.getViewComponent().addChild(tankTurret);
+            tankData.setTurretTexture(tankTurret);
+        }
+    }
 }
