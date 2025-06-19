@@ -44,15 +44,22 @@ public class MapFactory implements EntityFactory {
     //Tile Grafik, aktuell nicht genutzt
     @Spawns("floorTile")
     public Entity spawnFloor(SpawnData data) {
-       // var hpBar = View would be cracked tile at 1 hp instead of life bar
-        var hpComp = new HealthIntComponent(2);
+        var hpComp = new HealthIntComponent(3);
 
         return FXGL.entityBuilder(data).type(TILE)
                 .zIndex(-10)
                 .with(hpComp)
                 .build();
     }
+    @Spawns("floorTileMountain")
+    public Entity spawnMountainFloor(SpawnData data) {
+        var hpComp = new HealthIntComponent(3);
 
+        return FXGL.entityBuilder(data).type(TILE)
+                .zIndex(-10)
+                .with(hpComp)
+                .build();
+    }
     @Spawns("hoverTile")
     public Entity spawnHoverFloor(SpawnData data) {
         Polygon diamond = new Polygon();

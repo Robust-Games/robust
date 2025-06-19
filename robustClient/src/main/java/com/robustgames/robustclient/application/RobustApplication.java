@@ -18,7 +18,6 @@ import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import java.util.List;
-import java.util.Properties;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
@@ -74,7 +73,6 @@ public class RobustApplication extends GameApplication  {
      * Selects a tank by adding the {@code SelectableComponent} and making its UI elements visible
      */
     public void onTankClicked(Entity tank) {
-        //hp bar visible
         tankButtonView.setVisible(true);
         tankDataView.setVisible(true);
         tankDataView.setSelectedTank(tank);

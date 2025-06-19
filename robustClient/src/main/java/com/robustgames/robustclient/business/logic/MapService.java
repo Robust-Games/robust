@@ -171,6 +171,7 @@ public class MapService {
             getNotificationService().pushNotification("Not enough Action Points!");
             return moveTargets;
         }
+        // TODO Texture selectedTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture();
 
         String state = getTankImageFilename(selectedTank);
         // 2) Choose axes

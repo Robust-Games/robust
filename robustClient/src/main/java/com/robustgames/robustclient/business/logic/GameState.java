@@ -1,9 +1,7 @@
 package com.robustgames.robustclient.business.logic;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.ui.ProgressBar;
-import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.CityDataComponent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -17,7 +15,6 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 /**
  *  Manages turn order, win conditions, etc.
  */
-//TODO turn order
 public class GameState {
     static Player winner;
 
