@@ -4,7 +4,6 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
-import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
 

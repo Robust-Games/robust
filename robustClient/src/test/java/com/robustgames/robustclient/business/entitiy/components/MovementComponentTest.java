@@ -1,19 +1,5 @@
 package com.robustgames.robustclient.business.entitiy.components;
 
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.GameWorld;
-import com.almasb.fxgl.entity.component.Component;
-import com.robustgames.robustclient.business.logic.MapService;
-import javafx.geometry.Point2D;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-
 
 class MovementComponentTest {
 

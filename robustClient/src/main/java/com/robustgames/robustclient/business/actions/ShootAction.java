@@ -2,7 +2,7 @@ package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
