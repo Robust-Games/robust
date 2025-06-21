@@ -18,7 +18,7 @@ jobs:
         run: |
           set -o pipefail
           if grep -rn \
-            --exclude-dir='.github/workflows' \
+            --exclude-dir='.github/workflows'
             '// DEBUG' . | tee /dev/stderr; then
             echo "ERROR: Found // DEBUG comment. Please remove before committing."
             exit 1
@@ -30,7 +30,7 @@ jobs:
         run: |
           set -o pipefail
           if grep -rn \
-            --exclude-dir='.github/workflows' \
+            --exclude-dir='.github/workflows'
             '/\* DEBUG' . | tee /dev/stderr; then
             echo "ERROR: Found /* DEBUG ... */ comment. Please remove before committing."
             exit 1
