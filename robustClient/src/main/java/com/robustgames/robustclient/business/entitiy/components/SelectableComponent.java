@@ -5,7 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimSelectionComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankComponent;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
 import static com.almasb.fxgl.dsl.FXGL.byType;

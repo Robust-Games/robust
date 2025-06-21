@@ -1,17 +1,14 @@
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.entity.Entity;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -79,7 +76,6 @@ public class TankButtonView extends Pane {
                 else {
                     resetActionComponents(tank);
                     tank.getComponent(RotateComponent.class).rotateLeft();
-
                 }
             }
 

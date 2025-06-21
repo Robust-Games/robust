@@ -1,11 +1,15 @@
 package com.robustgames.robustclient.presentation.scenes;
 
+import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class EndTurnView extends Pane {
     Button btnEndTurn;
@@ -26,7 +30,11 @@ public class EndTurnView extends Pane {
 
         //btnEndTurn.setBackground(new BackgroundImage(FXGL.getAssetLoader().loadTexture("frame1.png").getImage()));
         btnEndTurn.setOnAction(event -> {
-            System.out.println("End Turn");
+            Player currentPlayer = TurnService.currentPlayer;
+            Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
+            playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
+
+            TurnService.nextPlayer();
         });
 
 
