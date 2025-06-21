@@ -21,7 +21,7 @@ jobs:
             --exclude-dir=.git \
             --exclude-dir=build \
             --exclude='*.md' \
-            --exclude='.github/workflows/comment-check.yml' \
+            --exclude-dir='.github/workflows' \
             '// DEBUG' . | tee /dev/stderr; then
             echo "ERROR: Found // DEBUG comment(s). Please remove before committing."
             exit 1
@@ -36,7 +36,7 @@ jobs:
             --exclude-dir=.git \
             --exclude-dir=build \
             --exclude='*.md' \
-            --exclude='.github/workflows/comment-check.yml' \
+            --exclude-dir='.github/workflows' \
             '/\* DEBUG' . | tee /dev/stderr; then
             echo "ERROR: Found /* DEBUG ... */ comment(s). Please remove before committing."
             exit 1
