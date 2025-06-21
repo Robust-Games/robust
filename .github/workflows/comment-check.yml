@@ -17,7 +17,12 @@ jobs:
       - name: Check for // DEBUG comments
         run: |
           set -o pipefail
-          if grep -rn --exclude-dir=.git --exclude-dir=build --exclude='*.md' '// DEBUG' . | tee /dev/stderr; then
+          if grep -rn \
+            --exclude-dir=.git \
+            --exclude-dir=build \
+            --exclude='*.md' \
+            --exclude='.github/workflows/comment-check.yml' \
+            '// DEBUG' . | tee /dev/stderr; then
             echo "ERROR: Found // DEBUG comment(s). Please remove before committing."
             exit 1
           else
@@ -27,7 +32,12 @@ jobs:
       - name: Check for /* DEBUG ... */ comments
         run: |
           set -o pipefail
-          if grep -rn --exclude-dir=.git --exclude-dir=build --exclude='*.md' '/\* DEBUG' . | tee /dev/stderr; then
+          if grep -rn \
+            --exclude-dir=.git \
+            --exclude-dir=build \
+            --exclude='*.md' \
+            --exclude='.github/workflows/comment-check.yml' \
+            '/\* DEBUG' . | tee /dev/stderr; then
             echo "ERROR: Found /* DEBUG ... */ comment(s). Please remove before committing."
             exit 1
           else
