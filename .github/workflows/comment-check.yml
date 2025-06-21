@@ -14,31 +14,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check for // DEBUG comments
+      - name: Check for DEBUG comments
         run: |
           set -o pipefail
           if grep -rn \
-            --exclude-dir=.git \
-            --exclude-dir=build \
-            --exclude='*.md' \
             --exclude-dir='.github/workflows' \
             '// DEBUG' . | tee /dev/stderr; then
-            echo "ERROR: Found // DEBUG comment(s). Please remove before committing."
+            echo "ERROR: Found // DEBUG comment. Please remove before committing."
             exit 1
           else
             echo "No // DEBUG comments found."
           fi
 
-      - name: Check for /* DEBUG ... */ comments
+      - name: Check for Block DEBUG comments
         run: |
           set -o pipefail
           if grep -rn \
-            --exclude-dir=.git \
-            --exclude-dir=build \
-            --exclude='*.md' \
             --exclude-dir='.github/workflows' \
             '/\* DEBUG' . | tee /dev/stderr; then
-            echo "ERROR: Found /* DEBUG ... */ comment(s). Please remove before committing."
+            echo "ERROR: Found /* DEBUG ... */ comment. Please remove before committing."
             exit 1
           else
             echo "No /* DEBUG ... */ comments found."
