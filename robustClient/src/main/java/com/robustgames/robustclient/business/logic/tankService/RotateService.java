@@ -82,12 +82,20 @@ public class RotateService {
 
         if (diff.getX() > 0 && diff.getY() == 0) {
             newTankTurretView = "tank_turret_down_right.png";
-        } else if (diff.getX() < 0 && diff.getY() == 0) {
-            newTankTurretView = "tank_turret_top_left.png";
-        } else if (diff.getY() > 0 && diff.getX() == 0) {
+        } else if (diff.getX() > 0 && diff.getY() > 0) {
+            newTankTurretView = "tank_turret_down.png";
+        }else if (diff.getY() > 0 && diff.getX() == 0) {
             newTankTurretView = "tank_turret_down_left.png";
-        } else if (diff.getY() < 0 && diff.getX() == 0) {
+        }else if (diff.getX() < 0 && diff.getY() > 0) {
+            newTankTurretView = "tank_turret_left.png";
+        }else if (diff.getX() < 0 && diff.getY() == 0) {
+            newTankTurretView = "tank_turret_top_left.png";
+        }else if (diff.getX() < 0 && diff.getY() < 0) {
+            newTankTurretView = "tank_turret_top.png";
+        }else if (diff.getY() < 0 && diff.getX() == 0) {
             newTankTurretView = "tank_turret_top_right.png";
+        }else if (diff.getX() > 0 && diff.getY() < 0) {
+            newTankTurretView = "tank_turret_top_left.png";
         }
 
         if (newTankTurretTexture != null) {

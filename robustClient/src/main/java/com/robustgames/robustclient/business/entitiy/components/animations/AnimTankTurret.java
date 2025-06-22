@@ -22,10 +22,11 @@ public class AnimTankTurret extends Component {
 
     @Override
     public void onAdded() {
+        texture.loopAnimationChannel(shootingBarrel);
         entity.getViewComponent().addChild(texture);
-        texture.play();
         getGameTimer().runOnceAfter(() -> {
             entity.getViewComponent().removeChild(texture);
+            entity.removeComponent(this.getClass());
         }, Duration.seconds(0.6));
 
     }

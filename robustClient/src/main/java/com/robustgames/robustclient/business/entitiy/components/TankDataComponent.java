@@ -6,6 +6,7 @@ import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
 
 import static com.almasb.fxgl.dsl.FXGL.byType;
@@ -104,5 +105,6 @@ public class TankDataComponent extends Component {
         if (!entity.getViewComponent().getChildren().contains(initialTankTexture)) {
             entity.getViewComponent().addChild(initialTankTexture);
         }
+        MovementService.changeMountainLayer(entity);
     }
 }

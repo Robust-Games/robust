@@ -3,6 +3,7 @@ package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class MovementComponent extends Component {
     @Override
     public void onAdded() {
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
-
+        MovementService.changeMountainLayer(entity);
         Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
         if (moveTargets.isEmpty())
             return;
