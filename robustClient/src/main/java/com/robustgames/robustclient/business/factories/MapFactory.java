@@ -8,8 +8,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
-import com.robustgames.robustclient.business.logic.MapService;
-import com.robustgames.robustclient.business.logic.MovementService;
+import com.robustgames.robustclient.business.logic.tankService.MovementService;
+import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -44,15 +44,22 @@ public class MapFactory implements EntityFactory {
     //Tile Grafik, aktuell nicht genutzt
     @Spawns("floorTile")
     public Entity spawnFloor(SpawnData data) {
-       // var hpBar = View would be cracked tile at 1 hp instead of life bar
-        var hpComp = new HealthIntComponent(2);
+        var hpComp = new HealthIntComponent(3);
 
         return FXGL.entityBuilder(data).type(TILE)
                 .zIndex(-10)
                 .with(hpComp)
                 .build();
     }
+    @Spawns("floorTileMountain")
+    public Entity spawnMountainFloor(SpawnData data) {
+        var hpComp = new HealthIntComponent(3);
 
+        return FXGL.entityBuilder(data).type(TILE)
+                .zIndex(-10)
+                .with(hpComp)
+                .build();
+    }
     @Spawns("hoverTile")
     public Entity spawnHoverFloor(SpawnData data) {
         Polygon diamond = new Polygon();
@@ -77,7 +84,7 @@ public class MapFactory implements EntityFactory {
     @Spawns("moveTiles")
     public Entity spawnMoveTiles(SpawnData data) {
         var moveTile = FXGL.entityBuilder(data)
-                .onClick(MovementService::moveTank).type(ACTIONSELECTION)
+                .onClick(entity -> MovementService.moveTank(entity)).type(ACTIONSELECTION)
                 .viewWithBBox("Tile_move_selection.png")
                 .build();
         MovementService.changeMountainLayer(moveTile);
@@ -87,10 +94,12 @@ public class MapFactory implements EntityFactory {
     @Spawns("attackTargetTiles")
     public Entity spawnAttackTargetTiles(SpawnData data) {
         Entity target = data.get("target");
+        Entity attackingTank = data.get("attackingTank");
         String targetName = data.get("targetName");
 
+
         return FXGL.entityBuilder(data)
-                .onClick(e -> MapService.shoot(target))
+                .onClick(e -> ShootService.planShoot(target, attackingTank))
                 .type(ACTIONSELECTION)
                 .zIndex(target.getZIndex()+1)
                 .viewWithBBox(targetName)

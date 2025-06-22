@@ -1,22 +1,17 @@
-package com.robustgames.robustclient.business.logic;
+package com.robustgames.robustclient.business.logic.tankService;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.action.ActionComponent;
+import com.robustgames.robustclient.business.actions.MovementAction;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
-
-import java.util.Set;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 
 public class MovementService {
 
@@ -29,11 +24,10 @@ public class MovementService {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
             int distance = (int)selectedTank.distance(clickedCell)/64;
-
             Point2D target = clickedCell.getPosition();
+
             selectedTank.setPosition(target.getX(), target.getY());
             changeMountainLayer(selectedTank);
-
             selectedTank.getComponent(APComponent.class).use(distance);
 
             //removes and adds the SelectableComponent to update animation of tank selection
@@ -42,9 +36,14 @@ public class MovementService {
             selectedTank.addComponent(new SelectableComponent());
             selectedTank.removeComponent(MovementComponent.class);
 
-            }
-        }
+            ActionComponent ac = selectedTank.getComponent(ActionComponent.class);
+            ac.addAction(new MovementAction(clickedCell));
 
+            // Pause until turn execution
+            ac.pause();
+
+        }
+    }
 
     //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
@@ -105,7 +104,7 @@ public class MovementService {
                 mountain.setOpacity(0.5);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(true));
             }
-            else if( inputEntity.isType(TANK)){
+            else if(inputEntity.isType(TANK)){
                 mountain.setOpacity(1);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(false));
             }
