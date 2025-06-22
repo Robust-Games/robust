@@ -36,18 +36,6 @@ public class MovementService {
             changeMountainLayer(selectedTank);
             selectedTank.getComponent(APComponent.class).use(distance);
 
-            // Netzwerk: Sende MoveAction an den Server
-            RobustApplication app = FXGL.<RobustApplication>getAppCast(); // Holt die aktuell laufende Instanz der RobustApplication aus dem FXGL-Framework
-            Connection<Bundle> conn = app.getConnection();
-            if (conn != null) {
-                // Zielposition als Grid-Koordinaten!
-                Point2D gridTarget = MapService.isoScreenToGrid(target);
-                Bundle moveBundle = BundleFactory.createMoveActionBundle(selectedTank, gridTarget);
-                conn.send(moveBundle);
-            } else {
-                System.out.println("No connection set – can't send move!");
-            }
-
             //removes and adds the SelectableComponent to update animation of tank selection
             //(since the tank selection animation is attached to the tile the tank is standing on)
             selectedTank.removeComponent(SelectableComponent.class);

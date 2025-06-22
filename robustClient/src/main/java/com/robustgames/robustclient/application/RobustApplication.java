@@ -78,6 +78,7 @@ public class RobustApplication extends GameApplication {
         addUINode(tankDataView);
 
     }
+
     /**
      * Selects a tank by adding the {@code SelectableComponent} and making its UI elements visible
      */
@@ -86,12 +87,13 @@ public class RobustApplication extends GameApplication {
         tankDataView.setVisible(true);
         tankDataView.setSelectedTank(tank);
     }
+
     /**
      * Deselects the currently selected tank by removing its {@code SelectableComponent}.
      * This method identifies the selected tank by checking for an entity with a {@code SelectableComponent}
      * which only tanks get assigned.
      */
-    public void deSelectTank(){
+    public void deSelectTank() {
         Entity tank = MapService.findSelectedTank();
         if (tank != null) {
             tank.removeComponent(SelectableComponent.class);
@@ -103,7 +105,7 @@ public class RobustApplication extends GameApplication {
     @Override
     protected void initGame() {
         getGameScene().getViewport().setY(-100);
-       // getGameScene().getViewport().setZoom(100);
+        // getGameScene().getViewport().setZoom(100);
         tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
