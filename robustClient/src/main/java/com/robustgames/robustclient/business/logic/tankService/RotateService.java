@@ -98,6 +98,7 @@ public class RotateService {
             newTankTurretTexture = FXGL.getAssetLoader().loadTexture(newTankTurretView);
             selectedTank.getViewComponent().addChild(newTankTurretTexture);
             tankData.setTurretTexture(newTankTurretTexture);
+            tankData.setTurretTextureName(newTankTurretView);
         }
     }
     private static String rotateTankLeft(String tankView) {

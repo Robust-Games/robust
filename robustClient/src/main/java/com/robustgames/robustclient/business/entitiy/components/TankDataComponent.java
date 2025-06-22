@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
 
@@ -17,6 +18,7 @@ public class TankDataComponent extends Component {
     private Texture newTankTexture;
     private final Player owner;
     private Texture turretTexture;
+    private String turretTextureName = "";
     private Texture hullTexture;
 
     public TankDataComponent(Player player, Texture view) {
@@ -67,6 +69,14 @@ public class TankDataComponent extends Component {
     public Player getOwner() {
         return owner;
     }
+    public String getTurretTextureName() {
+        return turretTextureName;
+    }
+
+    public void setTurretTextureName(String turretTextureName) {
+        this.turretTextureName = turretTextureName;
+    }
+
     public void resetBeforeTurn(){
 
         Texture turret = getTurretTexture();
@@ -95,5 +105,4 @@ public class TankDataComponent extends Component {
             entity.getViewComponent().addChild(initialTankTexture);
         }
     }
-
 }

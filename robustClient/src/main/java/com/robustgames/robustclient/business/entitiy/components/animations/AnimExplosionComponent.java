@@ -6,6 +6,8 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
 
+import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
+
 public class AnimExplosionComponent extends Component {
     private final AnimatedTexture texture;
     private AnimationChannel expl;
@@ -22,7 +24,6 @@ public class AnimExplosionComponent extends Component {
     public void onAdded() {
         entity.getViewComponent().addChild(texture);
         texture.play();
-
     }
 
     @Override

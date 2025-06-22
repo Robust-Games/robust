@@ -2,6 +2,7 @@ package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
@@ -50,13 +51,13 @@ public class ShootAction extends Action {
         spawnAttackTarget(originalTarget, entity, true);
 
         RotateService.rotateTurret(targetGridPosition, entity);
-        spawnAttackTarget(originalTarget, entity);
 
         getGameTimer().runOnceAfter(() -> {
             getGameWorld().removeEntities(byType(ACTIONSELECTION));
             Entity currentTarget = findEntityAtPosition();
 
             if (currentTarget != null) {
+                entity.addComponent(new AnimTankTurret(entity.getComponent(TankDataComponent.class).getTurretTextureName()));
                 ShootService.executeShoot(currentTarget, entity);
             } else {
                 System.err.println("No target found at position: " + targetGridPosition);
