@@ -9,7 +9,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameController;
 /**
  *  Manages turn order, win conditions, etc.
  */
-//TODO turn order
+// TODO: turn order
 public class GameState {
 
     private static void gameOver(boolean cityDestroyed, boolean tankDestroyed) {

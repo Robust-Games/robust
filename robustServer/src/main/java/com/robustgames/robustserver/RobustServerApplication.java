@@ -12,6 +12,7 @@ public class RobustServerApplication extends GameApplication {
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Robust Server");
+        settings.setVersion("0.1");
         settings.setWidth(640);
         settings.setHeight(480);
     }

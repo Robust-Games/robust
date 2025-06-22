@@ -9,6 +9,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.net.Connection;
+import com.robustgames.robustclient.business.entitiy.components.IDComponent;
+import com.robustgames.robustclient.business.factories.IDFactory;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.MapService;
@@ -103,6 +105,11 @@ public class RobustApplication extends GameApplication {
         GameWorld world = getGameWorld();
         List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
         for (Entity entity : allEntities) {
+            if ((entity.isType(TILE) || entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
+                    && !entity.hasComponent(IDComponent.class)) {
+                long id = IDFactory.generateId();
+                entity.addComponent(new IDComponent(id));
+            }
             Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
             Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
             if (entity.isType(TILE)) {
