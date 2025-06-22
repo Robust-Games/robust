@@ -10,8 +10,8 @@ import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
-import com.robustgames.robustclient.business.logic.GameState;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.GameState;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 

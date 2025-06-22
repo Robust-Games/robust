@@ -13,7 +13,7 @@ import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.factories.IDFactory;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;

@@ -3,7 +3,7 @@ package com.robustgames.robustclient.business.entitiy.components;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 

@@ -1,4 +1,4 @@
-package com.robustgames.robustclient.business.logic;
+package com.robustgames.robustclient.business.logic.tankService;
 
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
@@ -9,6 +9,7 @@ import com.robustgames.robustclient.business.entitiy.components.MovementComponen
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;

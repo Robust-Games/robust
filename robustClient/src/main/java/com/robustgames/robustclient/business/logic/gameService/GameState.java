@@ -1,4 +1,4 @@
-package com.robustgames.robustclient.business.logic;
+package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.ui.ProgressBar;
 import javafx.scene.paint.Color;
