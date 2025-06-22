@@ -15,7 +15,6 @@ import com.robustgames.robustclient.business.entitiy.components.SelectableCompon
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
