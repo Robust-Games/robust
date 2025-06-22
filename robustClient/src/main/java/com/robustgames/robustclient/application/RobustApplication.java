@@ -102,7 +102,7 @@ public class RobustApplication extends GameApplication  {
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
-        FXGL.setLevelFromMap("mapTest.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
+        FXGL.setLevelFromMap("map1.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
 
         GameWorld world = getGameWorld();
         List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen

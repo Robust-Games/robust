@@ -9,6 +9,7 @@ import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimExplosionComponent;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimMountainComponent;
 import com.robustgames.robustclient.business.logic.gameService.GameState;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -70,7 +71,10 @@ public class ShootService {
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
             if (target.getComponent(HealthIntComponent.class).getValue()==0) {
-                if (target.isType(TANK)||target.isType(CITY)){
+                if (target.getType() == MOUNTAIN) {
+                    target.addComponent(new AnimMountainComponent());
+                }
+                else if (target.isType(TANK)||target.isType(CITY)){
                     target.removeFromWorld();
                     GameState.gameOver();
                 }
@@ -98,11 +102,20 @@ public class ShootService {
         }
         else targetPosition = targetPosition.subtract(64,64);
 
-        FXGL.spawn("attackTargetTiles",
-                new SpawnData(targetPosition)
-                        .put("attackingTank", attackingTank)
-                        .put("target", target)
-                        .put("targetName", targetName));
+        if (target.getType() == CITY) {
+            FXGL.spawn("attackTargetCity",
+                    new SpawnData(targetPosition)
+                            .put("attackingTank", attackingTank)
+                            .put("target", target)
+                            .put("targetName", targetName));
+        }
+        else
+            FXGL.spawn("attackTargetTiles",
+                    new SpawnData(targetPosition)
+                            .put("attackingTank", attackingTank)
+                            .put("target", target)
+                            .put("targetName", targetName)
+            );
     }
 
     public static void spawnShell(Entity tank, Point2D targetScreenPosition) {

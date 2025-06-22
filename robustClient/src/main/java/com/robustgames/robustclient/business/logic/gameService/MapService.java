@@ -23,7 +23,6 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 /**
  * Tracks the tile logic, currently in Orthographic 2D
  */
-//TODO make it work with isometric
 public class MapService {
     private static final int TILE_WIDTH_ORTH = 64;
     private static final int TILE_WIDTH_ISO = 128;

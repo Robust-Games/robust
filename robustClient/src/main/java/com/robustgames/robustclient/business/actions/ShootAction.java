@@ -41,7 +41,7 @@ public class ShootAction extends Action {
      * 1. Shows the target
      * 2. After a short delay to compensate for tank movement, removes the AttackTile and finds the entity currently
      * at target position
-     * 3. Executes the shoot action on the current entity at that position (or tile if tank is found)
+     * 3. Executes the shoot action on the current entity at that position (or tile if tank is not found)
      */
     @Override
     protected void onStarted() {

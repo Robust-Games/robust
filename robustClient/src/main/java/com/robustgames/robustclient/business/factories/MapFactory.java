@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimCityComponent;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.beans.binding.Bindings;
@@ -103,6 +104,22 @@ public class MapFactory implements EntityFactory {
                 .type(ACTIONSELECTION)
                 .zIndex(target.getZIndex()+1)
                 .viewWithBBox(targetName)
+                .build();
+    }
+    @Spawns("attackTargetCity")
+    public Entity spawnAttackTargetCity(SpawnData data) {
+        Entity target = data.get("target");
+        Entity attackingTank = data.get("attackingTank");
+        String targetName = data.get("targetName");
+        HealthIntComponent hpComp = target.getComponent(HealthIntComponent.class);
+
+
+        return FXGL.entityBuilder(data)
+                .onClick(e -> ShootService.planShoot(target, attackingTank))
+                .type(ACTIONSELECTION)
+                .zIndex(target.getZIndex()+1)
+                .with(hpComp)
+                .with(new AnimCityComponent(true))
                 .build();
     }
 

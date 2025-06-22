@@ -10,6 +10,7 @@ import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.*;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimCityComponent;
 import com.robustgames.robustclient.business.logic.gameService.GameState;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
@@ -58,7 +59,8 @@ public class PlayerFactory implements EntityFactory {
         Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
                 .with(hpComp)
-                .viewWithBBox("city1.png")
+                //.viewWithBBox("city1.png")
+                .with(new AnimCityComponent(false))
                 .build();
         city.addComponent(new CityDataComponent(PLAYER1, city.getViewComponent().getChild(0, Texture.class)));
         city.getViewComponent().addChild(hpBar);
