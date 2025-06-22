@@ -7,7 +7,7 @@ import com.robustgames.robustclient.business.actions.MovementAction;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;

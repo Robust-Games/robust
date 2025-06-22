@@ -5,7 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Direction;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
 public class RotateService {
@@ -131,3 +131,6 @@ public class RotateService {
         return newTankHullView;
     }
 }
+/*
+when "aiming" the tank (by adding ShootComponent via button press) I want to display not just the 4 directions of the turret, but the inbetween states as well (since I have the asssets). so, show tank_up.png inbetween tank_top_left.png and tank_top_right.png, how difficult is it to implement that?
+ */

@@ -91,11 +91,9 @@ public class TankDataComponent extends Component {
         if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
             entity.getViewComponent().removeChild(newTankTexture);
         }
-        if (entity.getViewComponent().getChildren().contains(initialTankTexture)) {
-            entity.getViewComponent().removeChild(initialTankTexture);
+        if (!entity.getViewComponent().getChildren().contains(initialTankTexture)) {
             entity.getViewComponent().addChild(initialTankTexture);
         }
-        else entity.getViewComponent().addChild(initialTankTexture);
     }
 
 }

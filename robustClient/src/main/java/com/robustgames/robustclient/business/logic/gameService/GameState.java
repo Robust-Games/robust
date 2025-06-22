@@ -1,10 +1,9 @@
-package com.robustgames.robustclient.business.logic;
+package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.ui.ProgressBar;
-import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.CityDataComponent;
+import com.robustgames.robustclient.business.logic.Player;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 

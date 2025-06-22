@@ -10,12 +10,9 @@ import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.*;
-import com.robustgames.robustclient.business.logic.GameState;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.GameState;
 import com.robustgames.robustclient.business.logic.Player;
-import com.robustgames.robustclient.business.logic.TurnService;
-
-import javax.swing.text.html.ImageView;
+import com.robustgames.robustclient.business.logic.gameService.TurnService;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER1;

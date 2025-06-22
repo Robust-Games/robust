@@ -1,4 +1,5 @@
 package com.robustgames.robustclient.business.logic;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 import org.junit.jupiter.api.Test;
 

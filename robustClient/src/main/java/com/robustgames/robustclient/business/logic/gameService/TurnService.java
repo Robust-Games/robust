@@ -1,4 +1,4 @@
-package com.robustgames.robustclient.business.logic;
+package com.robustgames.robustclient.business.logic.gameService;
 
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.ActionComponent;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.logic.Player;
 
 import static com.almasb.fxgl.dsl.FXGL.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;

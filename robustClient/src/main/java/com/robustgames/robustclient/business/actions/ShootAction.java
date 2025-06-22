@@ -2,7 +2,9 @@ package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
@@ -20,7 +22,7 @@ public class ShootAction extends Action {
 
     /**
      * Creates a new ShootAction targeting the position of the entity
-     * 
+     *
      * @param target The entity that was targeted during planning. This entity's position
      *               is stored, but the entity itself is only used for showing
      */
@@ -45,6 +47,7 @@ public class ShootAction extends Action {
      */
     @Override
     protected void onStarted() {
+        RotateService.rotateTurret(targetGridPosition, entity); // use your existing method
         spawnAttackTarget(originalTarget, entity);
 
         getGameTimer().runOnceAfter(() -> {
@@ -65,7 +68,7 @@ public class ShootAction extends Action {
      * This method is called during action execution to determine what entity
      * is currently at the position that was targeted during planning. This allows the
      * action to correctly handle cases where entities move between planning and execution.
-     * 
+     *
      * @return The entity at the target position, or null if no entity is found
      */
     private Entity findEntityAtPosition() {
@@ -90,18 +93,9 @@ public class ShootAction extends Action {
 
     }
     @Override
-    protected void onQueued() {
-        super.onQueued();
-    }
-
-    @Override
     protected void onCompleted() {
         super.onCompleted();
-    }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
+        entity.getComponent(TankDataComponent.class).resetBeforeTurn();
     }
 
 }

@@ -3,7 +3,7 @@ package com.robustgames.robustclient.business.entitiy.components;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
-import com.robustgames.robustclient.business.logic.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
-import static com.robustgames.robustclient.business.logic.MapService.step;
+import static com.robustgames.robustclient.business.logic.gameService.MapService.step;
 
 public class ShootComponent extends Component {
 
@@ -82,10 +82,10 @@ public class ShootComponent extends Component {
             return;
         }
 
-        if (tankData.getNewTankTexture() != tankData.getInitialTankTexture()){
+        if (tankData.getNewTankTexture() != tankData.getInitialTankTexture() && !entity.getViewComponent().getChildren().contains(tankData.getNewTankTexture())){
             entity.getViewComponent().addChild(tankData.getNewTankTexture());
         }
-        else {
+        else if (!entity.getViewComponent().getChildren().contains(tankData.getInitialTankTexture())){
             entity.getViewComponent().addChild(tankData.getInitialTankTexture());
         }
     }
