@@ -18,6 +18,15 @@ public class TankDataComponent extends Component {
     private Texture newTankTexture;
     private final Player owner;
     private Texture turretTexture;
+    private Texture altTexture;
+
+    public Texture getAltTexture() {
+        return altTexture;
+    }
+
+    public void setAltTexture(Texture texture) {
+        this.altTexture = texture;
+    }
 
     public Texture getTurretTexture() {
         return turretTexture;

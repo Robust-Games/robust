@@ -62,7 +62,6 @@ public static String rotateTankLeft(String tankView) {
 
     public static void rotateTurret(Point2D tileGridPos, Entity selectedTank){
 
-        initialTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture(); // speichert aktuelle Textur
         newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture(); // // speichert neue Textur
         initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1); // Dateiname aktueller Textur
 
@@ -72,35 +71,41 @@ public static String rotateTankLeft(String tankView) {
         var tankData = selectedTank.getComponent(TankDataComponent.class);
 
         var tankTurret = tankData.getTurretTexture();
+        var tankAlt = tankData.getAltTexture();
 
         // Grundbauteil um nurnoch Turret zu drehen
-        if(tankTurret == null){
+        if(tankAlt == null){
             switch (initialTankView) {
                 case "tank_top_left.png" -> {
-                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    selectedTank.getViewComponent().removeChild(newTankTexture);
+
                     newTankView = "tank_top_left_alt.png";
                     newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    tankData.setAltTexture(newTankTexture);
                     selectedTank.getViewComponent().addChild(newTankTexture);
                 }
 
                 case "tank_top_right.png" -> {
-                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    selectedTank.getViewComponent().removeChild(newTankTexture);
                     newTankView = "tank_top_right_alt.png";
                     newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    tankData.setAltTexture(newTankTexture);
                     selectedTank.getViewComponent().addChild(newTankTexture);
                 }
 
                 case "tank_down_left.png" -> {
-                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    selectedTank.getViewComponent().removeChild(newTankTexture);
                     newTankView = "tank_down_left_alt.png";
                     newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    tankData.setAltTexture(newTankTexture);
                     selectedTank.getViewComponent().addChild(newTankTexture);
                 }
 
                 case "tank_down_right.png" -> {
-                    selectedTank.getViewComponent().removeChild(initialTankTexture);
+                    selectedTank.getViewComponent().removeChild(newTankTexture);
                     newTankView = "tank_down_right_alt.png";
                     newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
+                    tankData.setAltTexture(newTankTexture);
                     selectedTank.getViewComponent().addChild(newTankTexture);
                 }
             }

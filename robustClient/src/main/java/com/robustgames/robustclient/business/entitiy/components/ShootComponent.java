@@ -49,6 +49,7 @@ public class ShootComponent extends Component {
         }
         else getNotificationService().pushNotification("Not enough Action Points to shoot!");
     }
+
     @Override
     public void onRemoved() {
         reset();
@@ -57,12 +58,23 @@ public class ShootComponent extends Component {
     }
 
     public void reset(){
-        entity.getViewComponent().clearChildren();
-
         var tankData = entity.getComponent(TankDataComponent.class);
-        tankData.setTurretTexture(null);
 
-        var x = entity.getComponent(TankDataComponent.class).getInitialTankTexture();
+        var turret = tankData.getTurretTexture();
+        if (turret != null && entity.getViewComponent().getChildren().contains(turret)) {
+            entity.getViewComponent().removeChild(turret);
+            tankData.setTurretTexture(null);
+        }
+
+        var alt = tankData.getAltTexture();
+        if (alt != null && entity.getViewComponent().getChildren().contains(alt)) {
+            entity.getViewComponent().removeChild(alt);
+            tankData.setAltTexture(null);
+        }
+        if(alt == null && turret == null){
+            return;
+        }
+        var x = entity.getComponent(TankDataComponent.class).getNewTankTexture();
         entity.getViewComponent().addChild(x);
     }
 }
