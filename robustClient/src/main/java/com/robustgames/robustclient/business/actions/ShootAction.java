@@ -2,6 +2,7 @@ package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
@@ -22,7 +23,6 @@ public class ShootAction extends Action {
 
     /**
      * Creates a new ShootAction targeting the position of the entity
-     *
      * @param target The entity that was targeted during planning. This entity's position
      *               is stored, but the entity itself is only used for showing
      */
@@ -47,7 +47,9 @@ public class ShootAction extends Action {
      */
     @Override
     protected void onStarted() {
-        RotateService.rotateTurret(targetGridPosition, entity); // use your existing method
+        spawnAttackTarget(originalTarget, entity, true);
+
+        RotateService.rotateTurret(targetGridPosition, entity);
         spawnAttackTarget(originalTarget, entity);
 
         getGameTimer().runOnceAfter(() -> {

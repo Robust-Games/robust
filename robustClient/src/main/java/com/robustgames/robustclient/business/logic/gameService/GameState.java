@@ -16,7 +16,6 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 /**
  *  Manages turn order, win conditions, etc.
  */
-//TODO turn order
 public class GameState {
     static Player winner;
 

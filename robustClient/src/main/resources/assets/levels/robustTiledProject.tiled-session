@@ -41,14 +41,14 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
-                4,
-                11
+                11,
+                4
             ],
-            "scale": 0.75,
-            "selectedLayer": 5,
+            "scale": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 640.6666666666666,
-                "y": 350.6666666666667
+                "x": 682.5,
+                "y": 165
             }
         },
         "map1.tmx#EnvironmentEdited": {
@@ -79,16 +79,30 @@
         },
         "mapTest.tmx": {
             "scale": 1,
-            "selectedLayer": 3,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 677,
-                "y": 131
+                "x": 626,
+                "y": 281
             }
         },
         "mapTest.tmx#EnvironmentEdited": {
             "scaleInDock": 1
         },
         "mapTest.tmx#sprite": {
+            "scaleInDock": 1
+        },
+        "mapTest1.tmx": {
+            "scale": 1.2290625,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 256.29290617848966,
+                "y": 223.74777523518944
+            }
+        },
+        "mapTest1.tmx#EnvironmentEdited": {
+            "scaleInDock": 1
+        },
+        "mapTest1.tmx#sprite": {
             "scaleInDock": 1
         },
         "maptest.tmx": {
@@ -119,11 +133,13 @@
     "map.width": 10,
     "openFiles": [
         "map1.tmx",
-        "mapTest.tmx"
+        "mapTest.tmx",
+        "mapTest1.tmx"
     ],
     "project": "robustTiledProject.tiled-project",
     "recentFiles": [
         "map1.tmx",
+        "mapTest1.tmx",
         "mapTest.tmx",
         "maptest.tmx",
         "map2D.tmx",

@@ -34,7 +34,7 @@ public class ShootService {
 
         tank.removeComponent(ShootComponent.class);
 
-        spawnAttackTarget(target, tank);
+        spawnAttackTarget(target, tank, false);
     }
 
     /**
@@ -49,7 +49,6 @@ public class ShootService {
 
         // Damage the target
         target.getComponent(HealthIntComponent.class).damage(1);
-        //TODO Game Over
 
         // Spawn shell
         if (target.getType() != TILE) {
@@ -81,17 +80,19 @@ public class ShootService {
             }        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
     }
 
-    public static void spawnAttackTarget(Entity target, Entity attackingTank) {
+    public static void spawnAttackTarget(Entity target, Entity attackingTank, Boolean duringAction) {
         Point2D targetPosition = target.getPosition();
         String targetName = "Tile_attack_selection.png";
 
         if (target.getType() != TILE) {
-            List<Node> viewChildren = target.getViewComponent().getChildren();
-            for (Node child : viewChildren) {
-                if (child instanceof ImageView view) {
-                    String url = view.getImage().getUrl();
-                    String imageName = url.substring(url.lastIndexOf("/") + 1);
-                    targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack.png";
+            if (!duringAction || !target.isType(TANK)) {//Because the tank attack graphic looks weird if the target tank moves
+                List<Node> viewChildren = target.getViewComponent().getChildren();
+                for (Node child : viewChildren) {
+                    if (child instanceof ImageView view) {
+                        String url = view.getImage().getUrl();
+                        String imageName = url.substring(url.lastIndexOf("/") + 1);
+                        targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack.png";
+                    }
                 }
             }
         }

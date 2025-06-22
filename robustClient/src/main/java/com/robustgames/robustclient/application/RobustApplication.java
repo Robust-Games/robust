@@ -73,7 +73,6 @@ public class RobustApplication extends GameApplication  {
      * Selects a tank by adding the {@code SelectableComponent} and making its UI elements visible
      */
     public void onTankClicked(Entity tank) {
-        //hp bar visible
         tankButtonView.setVisible(true);
         tankDataView.setVisible(true);
         tankDataView.setSelectedTank(tank);

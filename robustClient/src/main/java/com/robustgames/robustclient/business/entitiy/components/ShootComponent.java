@@ -40,10 +40,10 @@ public class ShootComponent extends Component {
                             System.err.println("ALERT! TWO ENTITIES AT THE SAME POSITION");
                         }
                         Entity target = entityList.getFirst();
-                        ShootService.spawnAttackTarget(target, entity);
+                        ShootService.spawnAttackTarget(target, entity, false);
                         break;
                     } else if (!tileList.isEmpty()) {
-                        ShootService.spawnAttackTarget(tileList.getFirst(), entity);
+                        ShootService.spawnAttackTarget(tileList.getFirst(), entity, false);
                     }
                 }
             }
@@ -54,7 +54,7 @@ public class ShootComponent extends Component {
     @Override
     public void onRemoved() {
         reset();
-        
+
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 

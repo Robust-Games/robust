@@ -104,7 +104,7 @@ public class MovementService {
                 mountain.setOpacity(0.5);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(true));
             }
-            else if( inputEntity.isType(TANK)){
+            else if(inputEntity.isType(TANK)){
                 mountain.setOpacity(1);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(false));
             }
