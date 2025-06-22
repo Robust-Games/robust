@@ -1,0 +1,39 @@
+name: Debug Comment Check
+
+on:
+  push:
+    branches: [main, tests]
+  pull_request:
+    branches: [main, tests]
+
+jobs:
+  check-debug-comments:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for DEBUG comments
+        run: |
+          set -o pipefail
+          if grep -rn \
+            --exclude-dir='.github/workflows'
+            '// DEBUG' . | tee /dev/stderr; then
+            echo "ERROR: Found // DEBUG comment. Please remove before committing."
+            exit 1
+          else
+            echo "No // DEBUG comments found."
+          fi
+
+      - name: Check for Block DEBUG comments
+        run: |
+          set -o pipefail
+          if grep -rn \
+            --exclude-dir='.github/workflows'
+            '/\* DEBUG' . | tee /dev/stderr; then
+            echo "ERROR: Found /* DEBUG ... */ comment. Please remove before committing."
+            exit 1
+          else
+            echo "No /* DEBUG ... */ comments found."
+          fi

@@ -11,9 +11,13 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.factories.IDFactory;
+import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
@@ -48,7 +52,7 @@ public class RobustApplication extends GameApplication {
     @Override
     protected void initInput() {
         onBtnDown(MouseButton.SECONDARY, () -> {
-            MapService.deSelectTank();
+            deSelectTank();
             tankDataView.setVisible(false);
             tankButtonView.setVisible(false);
         });
@@ -73,21 +77,35 @@ public class RobustApplication extends GameApplication {
         addUINode(endTurnView);
         addUINode(tankButtonView);
         addUINode(tankDataView);
-    }
 
+    }
+    /**
+     * Selects a tank by adding the {@code SelectableComponent} and making its UI elements visible
+     */
     public void onTankClicked(Entity tank) {
-        //hp bar visible
         tankButtonView.setVisible(true);
         tankDataView.setVisible(true);
         tankDataView.setSelectedTank(tank);
+    }
+    /**
+     * Deselects the currently selected tank by removing its {@code SelectableComponent}.
+     * This method identifies the selected tank by checking for an entity with a {@code SelectableComponent}
+     * which only tanks get assigned.
+     */
+    public void deSelectTank(){
+        Entity tank = MapService.findSelectedTank();
+        if (tank != null) {
+            tank.removeComponent(SelectableComponent.class);
+            tankButtonView.setVisible(false);
+            tankDataView.setVisible(false);
+        }
     }
 
     @Override
     protected void initGame() {
         getGameScene().getViewport().setY(-100);
-        // getGameScene().getViewport().setZoom(100);
-
-        tankButtonView = new TankButtonView(); // Sofort bauen!
+       // getGameScene().getViewport().setZoom(100);
+        tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
 
@@ -117,6 +135,7 @@ public class RobustApplication extends GameApplication {
             } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                 entity.setPosition(isoGridPos.getX() - 64, isoGridPos.getY() - 64);
         }
+        TurnService.startTurn(Player.PLAYER1);
     }
 
     // Connection Getter

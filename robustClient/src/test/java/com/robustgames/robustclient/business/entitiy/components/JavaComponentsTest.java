@@ -7,7 +7,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.component.Required;
 import com.robustgames.robustclient.application.RobustApplication;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +61,7 @@ public class JavaComponentsTest {
                 .with(new APComponent(5))
                 .onClick(tank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    MapService.deSelectTank();
+                    FXGL.<RobustApplication>getAppCast().deSelectTank();
                     tank.addComponent(new SelectableComponent());
                     FXGL.<RobustApplication>getAppCast().onTankClicked(tank);
 

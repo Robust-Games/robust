@@ -13,7 +13,6 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSEL
 
 public class MovementComponent extends Component {
 
-
     @Override
     public void onAdded() {
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());

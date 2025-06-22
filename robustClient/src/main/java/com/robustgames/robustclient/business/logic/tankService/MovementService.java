@@ -3,12 +3,17 @@ package com.robustgames.robustclient.business.logic.tankService;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.action.ActionComponent;
+import com.robustgames.robustclient.business.actions.MovementAction;
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
+import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
+import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
@@ -26,11 +31,9 @@ public class MovementService {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
             int distance = (int) selectedTank.distance(clickedCell) / 64;
-
             Point2D target = clickedCell.getPosition();
             selectedTank.setPosition(target.getX(), target.getY());
             changeMountainLayer(selectedTank);
-
             selectedTank.getComponent(APComponent.class).use(distance);
 
             // Netzwerk: Sende MoveAction an den Server
@@ -51,9 +54,14 @@ public class MovementService {
             selectedTank.addComponent(new SelectableComponent());
             selectedTank.removeComponent(MovementComponent.class);
 
+            ActionComponent ac = selectedTank.getComponent(ActionComponent.class);
+            ac.addAction(new MovementAction(clickedCell));
+
+            // Pause until turn execution
+            ac.pause();
+
         }
     }
-
 
     //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
@@ -80,7 +88,7 @@ public class MovementService {
      * their x and y coordinates.
      *
      * @param fromGrid the starting point on the grid
-     * @param toGrid   the target point on the grid
+     * @param toGrid the target point on the grid
      * @return the Manhattan distance as an integer between the two points
      */
     public static int gridDistance(Point2D fromGrid, Point2D toGrid) {
@@ -117,8 +125,6 @@ public class MovementService {
                 mountain.setOpacity(1);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(false));
             }
-
-
         });
     }
 }

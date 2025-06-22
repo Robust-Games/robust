@@ -73,7 +73,6 @@ public class TankButtonView extends Pane {
                 } else {
                     resetActionComponents(tank);
                     tank.getComponent(RotateComponent.class).rotateLeft();
-
                 }
             }
 
