@@ -2,6 +2,7 @@ package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.logic.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
@@ -58,24 +59,35 @@ public class ShootComponent extends Component {
     }
 
     public void reset(){
-        var tankData = entity.getComponent(TankDataComponent.class);
+        TankDataComponent tankData = entity.getComponent(TankDataComponent.class);
+        boolean hadTextures = false;
 
-        var turret = tankData.getTurretTexture();
+        // Remove turret texture
+        Texture turret = tankData.getTurretTexture();
         if (turret != null && entity.getViewComponent().getChildren().contains(turret)) {
             entity.getViewComponent().removeChild(turret);
             tankData.setTurretTexture(null);
+            hadTextures = true;
         }
 
-        var alt = tankData.getAltTexture();
-        if (alt != null && entity.getViewComponent().getChildren().contains(alt)) {
-            entity.getViewComponent().removeChild(alt);
-            tankData.setAltTexture(null);
+        // Remove hull texture
+        Texture tankHullTexture = tankData.getHullTexture();
+        if (tankHullTexture != null && entity.getViewComponent().getChildren().contains(tankHullTexture)) {
+            entity.getViewComponent().removeChild(tankHullTexture);
+            tankData.setHullTexture(null);
+            hadTextures = true;
         }
-        if(alt == null && turret == null){
+
+        if(!hadTextures){
             return;
         }
-        var x = entity.getComponent(TankDataComponent.class).getNewTankTexture();
-        entity.getViewComponent().addChild(x);
+
+        if (tankData.getNewTankTexture() != tankData.getInitialTankTexture()){
+            entity.getViewComponent().addChild(tankData.getNewTankTexture());
+        }
+        else {
+            entity.getViewComponent().addChild(tankData.getInitialTankTexture());
+        }
     }
 }
 //ROBUST_DEBUG for tests maybe

@@ -105,8 +105,7 @@ public class MapFactory implements EntityFactory {
 
         view.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
             if (isNowHovered) {
-                Entity tank = MapService.findSelectedTank();
-                RotateService.rotateTurret(MapService.isoScreenToGrid(entity.getCenter()) , tank );
+                RotateService.rotateTurret(MapService.isoScreenToGrid(entity.getCenter()) , attackingTank);
             }
         });
 
