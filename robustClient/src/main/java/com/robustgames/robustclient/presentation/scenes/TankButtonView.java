@@ -27,8 +27,6 @@ public class TankButtonView extends Pane {
     Label btnRotateLeftText;
     Label btnRotateRightText;
 
-    private Connection<Bundle> connection = null;
-
     public TankButtonView() {
         String cssPath = getClass().getResource("/assets/ui/css/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);
@@ -50,15 +48,6 @@ public class TankButtonView extends Pane {
                 resetActionComponents(tank);
                 tank.addComponent(new MovementComponent());
             }
-
-            if (connection != null) {
-                Bundle bundle = new Bundle("UserAction");
-                bundle.put("move", "MOVE CLICKED!");
-                connection.send(bundle);
-            } else {
-                System.out.println("No connection yet!");
-            }
-
         });
 
         btnShoot = new Button();
@@ -127,10 +116,5 @@ public class TankButtonView extends Pane {
         tank.removeComponent(MovementComponent.class);
         tank.removeComponent(ShootComponent.class);
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
-    }
-
-    // Zum Nachliefern der Connection
-    public void setConnection(Connection<Bundle> conn) {
-        this.connection = conn;
     }
 }

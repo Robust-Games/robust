@@ -92,13 +92,8 @@ public class RobustApplication extends GameApplication {
         Client<Bundle> client = getNetService().newTCPClient("localhost", 55555);
         client.setOnConnected(conn -> {
             connection = conn; // Merke die Connection für spätere Sends
-            // Nachlieferung!
-            tankButtonView.setConnection(connection);
         });
         client.connectAsync();
-
-        tankDataView = new TankDataView();
-        endTurnView = new EndTurnView();
 
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
@@ -115,6 +110,11 @@ public class RobustApplication extends GameApplication {
             } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                 entity.setPosition(isoGridPos.getX() - 64, isoGridPos.getY() - 64);
         }
+    }
+
+    // Connection Getter
+    public Connection<Bundle> getConnection() {
+        return this.connection;
     }
 
     public static void main(String[] args) {

@@ -1,22 +1,18 @@
 package com.robustgames.robustclient.business.logic;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.net.Connection;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.factories.BundleFactory;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
-
-import java.util.Set;
 
 import static com.robustgames.robustclient.business.entitiy.EntityType.MOUNTAIN;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 
 public class MovementService {
 
@@ -28,7 +24,7 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-            int distance = (int)selectedTank.distance(clickedCell)/64;
+            int distance = (int) selectedTank.distance(clickedCell) / 64;
 
             Point2D target = clickedCell.getPosition();
             selectedTank.setPosition(target.getX(), target.getY());
@@ -36,14 +32,26 @@ public class MovementService {
 
             selectedTank.getComponent(APComponent.class).use(distance);
 
+            // Netzwerk: Sende MoveAction an den Server
+            RobustApplication app = FXGL.<RobustApplication>getAppCast(); // Holt die aktuell laufende Instanz der RobustApplication aus dem FXGL-Framework
+            Connection<Bundle> conn = app.getConnection();
+            if (conn != null) {
+                // Zielposition als Grid-Koordinaten!
+                Point2D gridTarget = MapService.isoScreenToGrid(target);
+                Bundle moveBundle = BundleFactory.createMoveActionBundle(selectedTank, gridTarget);
+                conn.send(moveBundle);
+            } else {
+                System.out.println("No connection set – can't send move!");
+            }
+
             //removes and adds the SelectableComponent to update animation of tank selection
             //(since the tank selection animation is attached to the tile the tank is standing on)
             selectedTank.removeComponent(SelectableComponent.class);
             selectedTank.addComponent(new SelectableComponent());
             selectedTank.removeComponent(MovementComponent.class);
 
-            }
         }
+    }
 
 
     //@burak für später, wenn der Spieler den weg zeichnet
@@ -71,7 +79,7 @@ public class MovementService {
      * their x and y coordinates.
      *
      * @param fromGrid the starting point on the grid
-     * @param toGrid the target point on the grid
+     * @param toGrid   the target point on the grid
      * @return the Manhattan distance as an integer between the two points
      */
     public static int gridDistance(Point2D fromGrid, Point2D toGrid) {
@@ -79,7 +87,7 @@ public class MovementService {
         System.out.println("FromX = " + fromGrid.getX() + ", ToX = " + toGrid.getX());
         System.out.println(dx);
         double dy = Math.abs(toGrid.getY() - fromGrid.getY());
-        return (int)(dx + dy);
+        return (int) (dx + dy);
     }
 
     /**
@@ -99,17 +107,15 @@ public class MovementService {
             int zIndexMountain = (int) (mountainPos.getX() + mountainPos.getY());
             mountain.setZIndex(zIndexMountain);
 
-            if (entityPosition.add(1,0).equals(mountainPos)
-                    || entityPosition.add(0,1).equals(mountainPos)
-                    || entityPosition.add(1,1).equals(mountainPos)) {
+            if (entityPosition.add(1, 0).equals(mountainPos)
+                    || entityPosition.add(0, 1).equals(mountainPos)
+                    || entityPosition.add(1, 1).equals(mountainPos)) {
                 mountain.setOpacity(0.5);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(true));
-            }
-            else if( inputEntity.isType(TANK)){
+            } else if (inputEntity.isType(TANK)) {
                 mountain.setOpacity(1);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(false));
             }
-
 
 
         });
