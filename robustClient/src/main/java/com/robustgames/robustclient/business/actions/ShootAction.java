@@ -1,11 +1,17 @@
 package com.robustgames.robustclient.business.actions;
 
+import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
+import com.almasb.fxgl.net.Connection;
+import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
+
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -20,7 +26,7 @@ public class ShootAction extends Action {
 
     /**
      * Creates a new ShootAction targeting the position of the entity
-     * 
+     *
      * @param target The entity that was targeted during planning. This entity's position
      *               is stored, but the entity itself is only used for showing
      */
@@ -38,13 +44,29 @@ public class ShootAction extends Action {
 
     /**
      * Called when the action starts executing during turn processing.
-     * 1. Shows the target
-     * 2. After a short delay to compensate for tank movement, removes the AttackTile and finds the entity currently
-     * at target position
-     * 3. Executes the shoot action on the current entity at that position (or tile if tank is found)
+     * 1. Sends a ShootAction bundle with all relevant target data to the server before the actual shot is processed.
+     * 2. Shows the attack target indicator at the original planned target position.
+     * 3. After a short delay (to compensate for possible tank movement), removes the attack selection overlay and determines
+     * 4. the entity that is currently at the intended target position.
+     * 5. If a target is found, the shooting logic is executed against the current target entity. Otherwise, an error is logged.
+     * 6. Finally, after a brief animation delay, the action is marked as complete.
+     * <p>
+     * This method ensures the correct target is used, even if entities have moved since the action was originally planned,
+     * and synchronizes the shooting event with the server.
      */
     @Override
     protected void onStarted() {
+        // Network: Send ShootAction bundle to the server
+        RobustApplication app = FXGL.<RobustApplication>getAppCast();
+        Connection<Bundle> conn = app.getConnection();
+        if (conn != null) {
+            // The "entity" is the shooter, "currentTarget" is the intended target
+            Bundle shootBundle = BundleFactory.createShootActionBundle(entity, originalTarget);
+            conn.send(shootBundle);
+        } else {
+            System.out.println("No connection set – can't send shoot!");
+        }
+
         spawnAttackTarget(originalTarget, entity, true);
 
         getGameTimer().runOnceAfter(() -> {
@@ -52,7 +74,11 @@ public class ShootAction extends Action {
             Entity currentTarget = findEntityAtPosition();
 
             if (currentTarget != null) {
-                ShootService.executeShoot(currentTarget, entity);
+                if (currentTarget.hasComponent(com.almasb.fxgl.dsl.components.HealthIntComponent.class)) {
+                    ShootService.executeShoot(currentTarget, entity);
+                } else {
+                    System.err.println("WARN: Target has no HealthIntComponent! " + currentTarget.getType());
+                }
             } else {
                 System.err.println("No target found at position: " + targetGridPosition);
             }
@@ -65,7 +91,7 @@ public class ShootAction extends Action {
      * This method is called during action execution to determine what entity
      * is currently at the position that was targeted during planning. This allows the
      * action to correctly handle cases where entities move between planning and execution.
-     * 
+     *
      * @return The entity at the target position, or null if no entity is found
      */
     private Entity findEntityAtPosition() {
@@ -89,6 +115,7 @@ public class ShootAction extends Action {
     protected void onUpdate(double tpf) {
 
     }
+
     @Override
     protected void onQueued() {
         super.onQueued();

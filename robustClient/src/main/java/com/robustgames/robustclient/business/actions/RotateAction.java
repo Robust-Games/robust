@@ -1,30 +1,57 @@
 package com.robustgames.robustclient.business.actions;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.action.Action;
+import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.texture.Texture;
-import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
-import com.robustgames.robustclient.business.logic.Direction;
-import com.robustgames.robustclient.business.logic.tankService.RotateService;
+import com.robustgames.robustclient.business.factories.BundleFactory;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 
+/**
+ * Action that rotates a tank entity and notifies the server via a Bundle when the rotation begins.
+ */
 public class RotateAction extends Action {
     private final Texture newTankTexture;
+    private final String textureName;
 
+    /**
+     * Constructs a RotateAction for the given texture name.
+     *
+     * @param newTankTexture name of the tank texture that represents the new direction (e.g. "tank_top_left.png")
+     */
     public RotateAction(String newTankTexture) {
+        this.textureName = newTankTexture;
         this.newTankTexture = FXGL.getAssetLoader().loadTexture(newTankTexture);
     }
+
+    /**
+     * Called when the action starts executing during turn processing.
+     * Sends a RotateAction bundle to the server, indicating the new direction, via BundleFactory.
+     */
+    @Override
+    protected void onStarted() {
+        RobustApplication app = FXGL.<RobustApplication>getAppCast();
+        Connection<Bundle> conn = app.getConnection();
+        if (conn != null) {
+            Bundle rotateBundle = BundleFactory.createRotateActionBundle(entity, textureName);
+            conn.send(rotateBundle);
+        } else {
+            System.out.println("No connection set – can't send rotate!");
+        }
+    }
+
     @Override
     protected void onUpdate(double tpf) {
         getGameTimer().runOnceAfter(() -> {
-                    entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
-                    setComplete();
+            entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
+            setComplete();
         }, Duration.millis(200));
     }
-
 
     @Override
     protected void onCompleted() {

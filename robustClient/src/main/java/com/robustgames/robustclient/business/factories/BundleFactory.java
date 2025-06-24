@@ -82,6 +82,29 @@ public class BundleFactory {
     }
 
     /**
+     * Creates a bundle representing a rotate action, to be sent to the server.
+     * The bundle includes the unique entity ID and the new direction (as texture name without ".png").
+     *
+     * @param entity           The entity being rotated (must have an IDComponent).
+     * @param directionTexture The texture filename representing the new direction, e.g., "tank_top_left.png".
+     * @return A Bundle containing the rotate action data.
+     */
+    public static Bundle createRotateActionBundle(Entity entity, String directionTexture) {
+        Bundle bundle = new Bundle("RotateAction");
+        if (entity.hasComponent(IDComponent.class)) {
+            bundle.put("entityId", entity.getComponent(IDComponent.class).getId());
+        } else {
+            bundle.put("entityId", -1);
+        }
+        // Remove ".png" for compactness and consistency with direction format
+        String dir = directionTexture.endsWith(".png")
+                ? directionTexture.substring(0, directionTexture.length() - 4)
+                : directionTexture;
+        bundle.put("direction", dir);
+        return bundle;
+    }
+
+    /**
      * Creates a Bundle describing a shoot action from a shooter to a target entity.
      *
      * @param shooter The entity performing the shoot action.

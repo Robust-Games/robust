@@ -1,19 +1,12 @@
 package com.robustgames.robustclient.business.logic.tankService;
 
-import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.ActionComponent;
 import com.robustgames.robustclient.business.actions.MovementAction;
-import com.almasb.fxgl.net.Connection;
-import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
-import com.robustgames.robustclient.business.factories.BundleFactory;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
