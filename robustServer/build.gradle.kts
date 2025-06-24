@@ -48,6 +48,19 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.jar {
+    manifest {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        attributes(
+            "Main-Class" to "com.robustgames.robustserver.RobustServerApplication"
+        )
+    }
+    // Fat jar bauen (alle Dependencies reinpacken)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
+
 jlink {
     imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
