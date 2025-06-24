@@ -110,11 +110,7 @@ public class RobustApplication extends GameApplication {
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
 
-        Client<Bundle> client = getNetService().newTCPClient("localhost", 55555);
-        client.setOnConnected(conn -> {
-            connection = conn; // Merke die Connection für spätere Sends
-        });
-        client.connectAsync();
+        initializeNetworkClient("localhost", 55555);
 
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
@@ -139,7 +135,23 @@ public class RobustApplication extends GameApplication {
         TurnService.startTurn(Player.PLAYER1);
     }
 
-    // Connection Getter
+    /**
+     * Initializes the network client and establishes a connection to the server.
+     * Once the connection is established, the Connection object is stored for later use.
+     */
+    private void initializeNetworkClient(String ip, int port) {
+        Client<Bundle> client = getNetService().newTCPClient(ip, port);
+        client.setOnConnected(conn -> {
+            connection = conn;
+        });
+        client.connectAsync();
+    }
+
+    /**
+     * Returns the current active network connection to the server.
+     *
+     * @return the active Connection for sending and receiving bundles, or null if not connected
+     */
     public Connection<Bundle> getConnection() {
         return this.connection;
     }

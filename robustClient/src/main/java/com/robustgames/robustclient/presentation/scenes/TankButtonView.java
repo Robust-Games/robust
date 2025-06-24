@@ -108,7 +108,12 @@ public class TankButtonView extends Pane {
 
     }
 
-    // Einheitliches Entfernen der Components
+    /**
+     * Removes movement and shoot components from the specified tank entity,
+     * and deletes all action selection entities from the game world.
+     *
+     * @param tank the tank entity to clear action-related components from
+     */
     private void resetActionComponents(Entity tank) {
         tank.removeComponent(MovementComponent.class);
         tank.removeComponent(ShootComponent.class);

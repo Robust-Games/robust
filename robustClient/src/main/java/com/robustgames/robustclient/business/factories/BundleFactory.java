@@ -9,58 +9,64 @@ import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import javafx.geometry.Point2D;
 
+/**
+ * Utility factory for serializing and deserializing game entities and their actions into Bundles
+ * for network communication between client and server in the robust client architecture.
+ */
 public class BundleFactory {
 
-    // Entity zu Bundle Serialisierung
+    /**
+     * Serializes an Entity into a Bundle for network transmission.
+     *
+     * @param entity The entity to serialize.
+     * @return A Bundle containing the entity's data (id, type, position, AP, direction, action status).
+     */
     public static Bundle entityToBundle(Entity entity) {
         Bundle bundle = new Bundle("Entity");
-
-        // Entity-Identität über IdComponent
         if (entity.hasComponent(IDComponent.class)) {
             bundle.put("id", entity.getComponent(IDComponent.class).getId());
         } else {
-            bundle.put("id", -1); // oder optional: throw new IllegalStateException(...)
+            bundle.put("id", -1);
         }
-        // Typ
         bundle.put("type", entity.getType().toString());
-
-        // Position
         Point2D gridPos = entity.getPosition();
         bundle.put("posX", gridPos.getX());
         bundle.put("posY", gridPos.getY());
-
-        // HP/AP
         if (entity.hasComponent(APComponent.class)) {
             APComponent ap = entity.getComponent(APComponent.class);
             bundle.put("ap", ap.getCurrentAP());
-            bundle.put("maxAP", 5); // Wenn dynamisch, dann ap.getMaxAP()
+            bundle.put("maxAP", 5);
         }
-
-        // Aktuelle Richtung als Bild-Name
         if (entity.hasComponent(RotateComponent.class)) {
             String facing = getTankDirection(entity);
             bundle.put("direction", facing);
         }
-
-        // Status für Turnübergabe
         bundle.put("canMove", entity.hasComponent(MovementComponent.class));
         bundle.put("canShoot", entity.hasComponent(ShootComponent.class));
-
         return bundle;
     }
 
-    // Bundle zu Entity updatet bestehende Entity
+    /**
+     * Updates an existing Entity's state from a Bundle received over the network.
+     *
+     * @param entity The entity to update.
+     * @param bundle The Bundle containing updated state information.
+     */
     public static void updateEntityFromBundle(Entity entity, Bundle bundle) {
         entity.setPosition(bundle.get("posX"), bundle.get("posY"));
-
-        // AP direkt setzen
         if (entity.hasComponent(APComponent.class)) {
             int ap = bundle.get("ap");
             entity.getComponent(APComponent.class).setCurrentAP(ap);
         }
     }
 
-    // Move-Action Bundle
+    /**
+     * Creates a Bundle describing a move action from an entity to a target grid position.
+     *
+     * @param entity        The entity that is moving.
+     * @param targetGridPos The grid position the entity is moving to.
+     * @return A Bundle representing the move action.
+     */
     public static Bundle createMoveActionBundle(Entity entity, Point2D targetGridPos) {
         Bundle bundle = new Bundle("MoveAction");
         if (entity.hasComponent(IDComponent.class)) {
@@ -75,7 +81,13 @@ public class BundleFactory {
         return bundle;
     }
 
-    // Shoot-Action Bundle
+    /**
+     * Creates a Bundle describing a shoot action from a shooter to a target entity.
+     *
+     * @param shooter The entity performing the shoot action.
+     * @param target  The target entity.
+     * @return A Bundle representing the shoot action.
+     */
     public static Bundle createShootActionBundle(Entity shooter, Entity target) {
         Bundle bundle = new Bundle("ShootAction");
         bundle.put("shooterId", shooter.hasComponent(IDComponent.class) ? shooter.getComponent(IDComponent.class).getId() : -1);
@@ -83,13 +95,18 @@ public class BundleFactory {
         return bundle;
     }
 
-    // Tank-Richtung als Bildname
+    /**
+     * Determines the current facing direction of a tank entity based on the filename of its image.
+     *
+     * @param tank The tank entity.
+     * @return The direction as a string (e.g. "tank_top_left"), or an empty string if not found.
+     */
     public static String getTankDirection(Entity tank) {
         for (javafx.scene.Node e : tank.getViewComponent().getChildren()) {
             if (e instanceof javafx.scene.image.ImageView iv) {
                 String url = iv.getImage().getUrl();
                 if (url.contains("tank")) {
-                    String file = url.substring(url.lastIndexOf("/") + 1); // z.B. "tank_top_left.png"
+                    String file = url.substring(url.lastIndexOf("/") + 1);
                     return file.replace(".png", "");
                 }
             }

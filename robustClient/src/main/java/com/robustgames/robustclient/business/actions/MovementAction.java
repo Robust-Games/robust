@@ -21,6 +21,15 @@ public class MovementAction extends Action {
         this.target = target;
     }
 
+    /**
+     * Called when the movement action starts.
+     * <p>
+     * This method sends a movement action bundle to the server,
+     * informing it about the intended move of the entity to the target's grid position.
+     * If a network connection exists, the move information is serialized using {@link BundleFactory}
+     * and transmitted over the network. If there is no connection, a message is logged instead.
+     * </p>
+     */
     @Override
     protected void onStarted() {
         // Netzwerk: Sende MoveAction an den Server
@@ -47,6 +56,7 @@ public class MovementAction extends Action {
             setComplete();
         }
     }
+
     @Override
     protected void onQueued() {
         super.onQueued();

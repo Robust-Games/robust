@@ -104,7 +104,8 @@ public class MapService {
         double worldY = gridY * TILE_HEIGHT;
         return new Point2D(worldX, worldY);
     }
-    public static Entity findTankOfPlayer(Player player){
+
+    public static Entity findTankOfPlayer(Player player) {
         for (Entity tank : FXGL.getGameWorld().getEntitiesByComponent(TankDataComponent.class)) {
             if (tank.getComponent(TankDataComponent.class).getOwner().equals(player)) {
                 return tank;
@@ -127,6 +128,12 @@ public class MapService {
         return null;
     }
 
+    /**
+     * Checks if there is a mountain entity at the specified grid position.
+     *
+     * @param gridPos the grid position to check for a mountain entity
+     * @return {@code true} if a mountain entity exists at the given position; {@code false} otherwise
+     */
     public static boolean hasMountainAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(EntityType.MOUNTAIN)
                 .stream().anyMatch(e -> {
@@ -226,16 +233,29 @@ public class MapService {
         return "";
     }
 
-    // Schritt-Funktion
+    /**
+     * Calculates the next position on the grid by moving one step in the specified direction.
+     *
+     * @param pos the current grid position
+     * @param dir the direction to step towards
+     * @return the new grid position after moving one step in the specified direction
+     * @throws IllegalArgumentException if the given direction is not recognized
+     */
     public static Point2D step(Point2D pos, Direction dir) {
         switch (dir) {
-            case UP:    return new Point2D(pos.getX(), pos.getY() - 1);
-            case DOWN:  return new Point2D(pos.getX(), pos.getY() + 1);
-            case LEFT:  return new Point2D(pos.getX() - 1, pos.getY());
-            case RIGHT: return new Point2D(pos.getX() + 1, pos.getY());
-            default: throw new IllegalArgumentException();
+            case UP:
+                return new Point2D(pos.getX(), pos.getY() - 1);
+            case DOWN:
+                return new Point2D(pos.getX(), pos.getY() + 1);
+            case LEFT:
+                return new Point2D(pos.getX() - 1, pos.getY());
+            case RIGHT:
+                return new Point2D(pos.getX() + 1, pos.getY());
+            default:
+                throw new IllegalArgumentException();
         }
     }
+
     /**
      * Removes the first child with an image URL containing the word "tank"
      * from the given entity's view component and returns the file name of the removed image.
@@ -259,7 +279,7 @@ public class MapService {
         return x;
     }
 
-    public static Texture findTankView(Entity tank){
+    public static Texture findTankView(Entity tank) {
         List<Node> ch = tank.getViewComponent().getChildren();
         String x = "";
         for (Node e : ch) {
