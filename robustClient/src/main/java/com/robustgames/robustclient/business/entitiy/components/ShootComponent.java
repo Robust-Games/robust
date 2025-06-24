@@ -48,6 +48,7 @@ public class ShootComponent extends Component {
             }
         } else getNotificationService().pushNotification("Not enough Action Points to shoot!");
     }
+
     @Override
     public void onRemoved() {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
