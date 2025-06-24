@@ -137,12 +137,19 @@ public class RobustApplication extends GameApplication {
 
     /**
      * Initializes the network client and establishes a connection to the server.
-     * Once the connection is established, the Connection object is stored for later use.
+     * Once the connection is established, the Connection object is stored for later use,
+     * and a message handler is registered to handle incoming responses from the server.
      */
     private void initializeNetworkClient(String ip, int port) {
         Client<Bundle> client = getNetService().newTCPClient(ip, port);
         client.setOnConnected(conn -> {
             connection = conn;
+
+            // Register handler for server messages
+            conn.addMessageHandlerFX((c, responseBundle) -> {
+                System.out.println("Received from server: " + responseBundle);
+                // Optional: Do something with the server message!
+            });
         });
         client.connectAsync();
     }
