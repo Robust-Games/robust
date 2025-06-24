@@ -8,7 +8,9 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
+import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
@@ -97,13 +99,24 @@ public class MapFactory implements EntityFactory {
         Entity attackingTank = data.get("attackingTank");
         String targetName = data.get("targetName");
 
+        var view = FXGL.getAssetLoader().loadTexture(targetName); // manuell erstellen für hoverFunktion
 
-        return FXGL.entityBuilder(data)
-                .onClick(e -> ShootService.planShoot(target, attackingTank))
-                .type(ACTIONSELECTION)
-                .zIndex(target.getZIndex()+1)
-                .viewWithBBox(targetName)
-                .build();
+
+        var entity = FXGL.entityBuilder(data)
+                    .onClick(e -> ShootService.planShoot(target, attackingTank))
+                    .type(ACTIONSELECTION)
+                    .zIndex(target.getZIndex()+1)
+                    .viewWithBBox(view)
+                    .build();
+
+        view.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
+            if (isNowHovered) {
+                RotateService.rotateTurret(MapService.isoScreenToGrid(entity.getCenter()) , attackingTank);
+            }
+        });
+
+
+        return entity;
     }
 
     @Spawns("shell")

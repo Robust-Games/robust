@@ -173,17 +173,23 @@ public class MapService {
             getNotificationService().pushNotification("Not enough Action Points!");
             return moveTargets;
         }
-        // TODO Texture selectedTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture();
+        String state = "";
+        if (selectedTank.getViewComponent().getChildren().contains(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture())){
+            state = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
+        }
+        else{
+            state = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
+        }
 
-        String state = getTankImageFilename(selectedTank);
         // 2) Choose axes
         Direction[] axes;
 
         if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
             axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
-        } else {
+        } else if (state.equals("tank_top_right.png") || state.equals("tank_down_left.png")) {
             axes = new Direction[]{ Direction.UP, Direction.DOWN };
         }
+        else throw new IllegalArgumentException("Invalid Tank State! in MapService getTankMoveTargets: " + state + " is not a valid state for a tank!");
 
         // 3) Jump along each axis until it hits a mountain or the edge
         for (Direction dir : axes) {
@@ -200,75 +206,14 @@ public class MapService {
         return moveTargets;
     }
 
-    /**
-     * Retrieves the filename of the tank image associated with the given entity.
-     * This method searches the view components of the entity for an {@code ImageView}
-     * containing an image whose URL includes the word "tank".
-     *
-     * @param tank the entity representing a tank, whose image filename is to be extracted
-     * @return the filename of the tank image, or an empty string if no such image is found
-     */
-    private static String getTankImageFilename(Entity tank) {
-        List<Node> ch = tank.getViewComponent().getChildren();
-        for (Node e : ch) {
-            if (e instanceof ImageView iv) {
-                String url = iv.getImage().getUrl();
-                if (url.contains("tank")) {
-                    return url.substring(url.lastIndexOf("/") + 1);
-                }
-            }
-        }
-        return "";
-    }
-
     // Schritt-Funktion
     public static Point2D step(Point2D pos, Direction dir) {
-        switch (dir) {
-            case UP:    return new Point2D(pos.getX(), pos.getY() - 1);
-            case DOWN:  return new Point2D(pos.getX(), pos.getY() + 1);
-            case LEFT:  return new Point2D(pos.getX() - 1, pos.getY());
-            case RIGHT: return new Point2D(pos.getX() + 1, pos.getY());
-            default: throw new IllegalArgumentException();
-        }
+        return switch (dir) {
+            case UP -> new Point2D(pos.getX(), pos.getY() - 1);
+            case DOWN -> new Point2D(pos.getX(), pos.getY() + 1);
+            case LEFT -> new Point2D(pos.getX() - 1, pos.getY());
+            case RIGHT -> new Point2D(pos.getX() + 1, pos.getY());
+            default -> throw new IllegalArgumentException();
+        };
     }
-    /**
-     * Removes the first child with an image URL containing the word "tank"
-     * from the given entity's view component and returns the file name of the removed image.
-     *
-     * @param tank the entity from which the tank image is to be removed
-     * @return the file name of the removed tank's image, or an empty string if no such image was found
-     */
-    public static String findAndDeleteTankView(Entity tank) {
-        List<Node> ch = tank.getViewComponent().getChildren();
-        String x = "";
-        for (Node e : ch) {
-            if (e instanceof ImageView iv) {
-                String url = iv.getImage().getUrl();
-                if (url.contains("tank")) {
-                    x = url.substring(url.lastIndexOf("/") + 1);
-                    tank.getViewComponent().removeChild(e);
-                    break;
-                }
-            }
-        }
-        return x;
-    }
-
-    public static Texture findTankView(Entity tank){
-        List<Node> ch = tank.getViewComponent().getChildren();
-        String x = "";
-        for (Node e : ch) {
-            if (e instanceof ImageView iv) {
-                String url = iv.getImage().getUrl();
-                if (url.contains("tank")) {
-                    return (Texture) e;
-                    //x = url.substring(url.lastIndexOf("/") + 1);
-                    //break;
-                }
-            }
-        }
-        return null;
-    }
-
-
     }
