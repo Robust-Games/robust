@@ -56,7 +56,7 @@ public class JavaComponentsTest {
         return FXGL.entityBuilder(data)
                 .type(TANK)
                 .with(hpComp)
-                .viewWithBBox("tank_top_left.png")
+                //.viewWithBBox("tank_top_left.png")
                 .with(new RotateComponent())
                 .with(new APComponent(5))
                 .onClick(tank ->{
