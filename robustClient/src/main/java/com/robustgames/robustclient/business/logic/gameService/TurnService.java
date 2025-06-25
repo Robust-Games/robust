@@ -10,11 +10,13 @@ import com.robustgames.robustclient.business.logic.Player;
 
 import static com.almasb.fxgl.dsl.FXGL.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
+import static com.robustgames.robustclient.business.factories.PowerupFactory.spawnRandomHpPowerup;
 
 public class TurnService {
     public static Player currentPlayer;
     static boolean player1Ready = false;
     static boolean player2Ready = false;
+    private static int currentRound = 1;
 
     public static void startTurn(Player player) {
         currentPlayer = player;
@@ -67,6 +69,8 @@ public class TurnService {
     private static void reset() {
         player1Ready = false;
         player2Ready = false;
+        currentRound += 1;
+        spawnRandomHpPowerup();
 
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
                 entity.getComponent(APComponent.class).reset();

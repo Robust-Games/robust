@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
+import com.robustgames.robustclient.business.logic.PowerUp;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
@@ -127,6 +128,13 @@ public class MapFactory implements EntityFactory {
                 .type(SHELL)
                 .viewWithBBox("shell.gif")
                 .with(new ShellComponent(targetLocation))
+                .build();
+    }
+    @Spawns("hpPowerup")
+    public Entity spawnHpPowerup(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(PowerUp.HEALTH)
+                .viewWithBBox("tank_top_right.png")
                 .build();
     }
 }
