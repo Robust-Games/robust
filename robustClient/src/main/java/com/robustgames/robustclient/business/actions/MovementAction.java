@@ -1,6 +1,7 @@
 package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
@@ -11,6 +12,8 @@ import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
+
+import java.io.Serializable;
 
 public class MovementAction extends Action {
     private final Entity target;
@@ -74,6 +77,23 @@ public class MovementAction extends Action {
     protected void onCancelled() {
         super.onCancelled();
     }
+
+    public Bundle toBundle() {
+        Bundle bundle = new Bundle("MovementAction");
+        bundle.put("targetId", (Serializable) target.typeProperty());
+        bundle.put("speed", speed);
+        return bundle;
+    }
+    /*
+
+    public static MovementAction fromBundle(Bundle bundle, EntityLookup lookup) {
+        String targetId = bundle.get("targetId");
+        Entity targetEntity = lookup.getEntityById(targetId);
+        MovementAction action = new MovementAction(targetEntity);
+        action.speed = bundle.getDouble("speed");
+        return action;
+    }
+*/
 
 }
 

@@ -22,6 +22,7 @@ import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class RobustApplication extends GameApplication {
     TankButtonView tankButtonView;
     TankDataView tankDataView;
     EndTurnView endTurnView;
+    private int clientId = -1; // -1 = nicht gesetzt
+
 
     private Connection<Bundle> connection;
 
@@ -132,7 +135,6 @@ public class RobustApplication extends GameApplication {
             } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                 entity.setPosition(isoGridPos.getX() - 64, isoGridPos.getY() - 64);
         }
-        TurnService.startTurn(Player.PLAYER1);
     }
 
     /**
@@ -142,17 +144,49 @@ public class RobustApplication extends GameApplication {
      */
     private void initializeNetworkClient(String ip, int port) {
         Client<Bundle> client = getNetService().newTCPClient(ip, port);
+
         client.setOnConnected(conn -> {
             connection = conn;
 
-            // Register handler for server messages
+            Bundle hello = new Bundle("hello");
+            conn.send(hello);
+
             conn.addMessageHandlerFX((c, responseBundle) -> {
-                System.out.println("Received from server: " + responseBundle);
-                // Optional: Do something with the server message!
+                String name = responseBundle.getName();
+
+                if ("assign_id".equals(name)) {
+                    clientId = responseBundle.get("id");
+                    System.out.println("Client assigned ID: " + clientId);
+                }
+
+                if ("start_game".equals(name)) {
+                    System.out.println("Both clients connected. Starting game...");
+
+                    // Spielstart MUSS im FX-Thread passieren!
+                    runOnce(this::initGameAfterConnection, Duration.ZERO);
+                }
             });
         });
+
         client.connectAsync();
     }
+
+    private void initGameAfterConnection() {
+        getGameScene().getViewport().setY(-100);
+        tankButtonView = new TankButtonView();
+        tankDataView = new TankDataView();
+        endTurnView = new EndTurnView();
+
+        FXGL.getGameWorld().addEntityFactory(new MapFactory());
+        FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
+
+        FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
+        FXGL.setLevelFromMap("mapTest.tmx");
+
+        // ... Rest von initGame()
+        TurnService.startTurn(Player.PLAYER1);
+    }
+
 
     /**
      * Returns the current active network connection to the server.
@@ -161,6 +195,7 @@ public class RobustApplication extends GameApplication {
      */
     public Connection<Bundle> getConnection() {
         return this.connection;
+
     }
 
     public static void main(String[] args) {

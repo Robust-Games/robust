@@ -65,8 +65,6 @@ public class RobustServerApplication extends GameApplication {
                         break;
                     }
 
-                    // Andere Nachrichten können hier ergänzt werden
-
                     default:
                         System.out.println("Unknown message type: " + type);
                         break;
