@@ -3,21 +3,19 @@ package com.robustgames.robustserver;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-/**
- * The RobustServerApplication listens for incoming Bundles from clients
- * and responds with an acknowledgment message.
- */
 public class RobustServerApplication extends GameApplication {
 
-    /**
-     * Configures basic application settings such as window size, version, and title.
-     *
-     * @param settings The GameSettings object to be configured.
-     */
+    private final Map<Connection<Bundle>, Integer> clientIds = new HashMap<>();
+    private int nextId = 1;
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Robust Server");
@@ -26,24 +24,53 @@ public class RobustServerApplication extends GameApplication {
         settings.setHeight(480);
     }
 
-    /**
-     * Initializes the FXGL TCP server, listens for client connections,
-     * and handles incoming Bundles by sending an acknowledgment response.
-     */
     @Override
     protected void initGame() {
         Server<Bundle> server = getNetService().newTCPServer(55555);
 
         server.setOnConnected(connection -> {
+
             connection.addMessageHandlerFX((conn, bundle) -> {
                 System.out.println("Received from client: " + bundle);
+                String type = bundle.getName();
 
-                // Create and send a response bundle
-                Bundle response = new Bundle("ServerResponse");
-                response.put("status", "ACK");
-                response.put("message", "Hello Client, your bundle (" + bundle.getName() + ") was received!");
+                switch (type) {
+                    case "hello": {
+                        // Client hat sich mit "hello" gemeldet -> ID zuweisen
+                        if (!clientIds.containsKey(conn)) {
+                            clientIds.put(conn, nextId++);
+                            System.out.println("Assigned tentative ID " + clientIds.get(conn) + " to a client");
+                        }
 
-                conn.send(response);
+                        // Prüfen, ob 2 Clients verbunden sind
+                        if (clientIds.size() == 2) {
+                            // IDs an beide Clients senden
+                            clientIds.forEach((clientConn, id) -> {
+                                Bundle assign = new Bundle("assign_id");
+                                assign.put("id", id);
+                                clientConn.send(assign);
+                                System.out.println("Sent assign_id " + id + " to client");
+                            });
+                        }
+                        break;
+                    }
+
+                    case "ServerResponse": {
+                        int clientId = clientIds.getOrDefault(conn, -1);
+                        System.out.println("Nachricht von Client-ID: " + clientId);
+                        Bundle response = new Bundle("ServerResponse");
+                        response.put("status", "ACK");
+                        response.put("message", "Hello Client, your bundle (" + bundle.getName() + ") was received!");
+                        conn.send(response);
+                        break;
+                    }
+
+                    // Andere Nachrichten können hier ergänzt werden
+
+                    default:
+                        System.out.println("Unknown message type: " + type);
+                        break;
+                }
             });
         });
 
