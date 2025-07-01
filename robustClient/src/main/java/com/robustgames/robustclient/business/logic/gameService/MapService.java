@@ -2,7 +2,6 @@ package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
@@ -11,11 +10,7 @@ import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
@@ -146,7 +141,7 @@ public class MapService {
     }
 
     // Optional: Map-Grenzen prüfen
-    public static boolean isOverTheEdge(Point2D gridPos) {
+    public static boolean isWithinMapLimits(Point2D gridPos) {
         return gridPos.getX() >= 0 && gridPos.getX() < 8 && gridPos.getY() >= 0 && gridPos.getY() < 8;
     }
 
@@ -177,7 +172,7 @@ public class MapService {
             state = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
         }
         else{
-            state = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
+            state = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getNewTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
         }
 
         // 2) Choose axes
@@ -195,11 +190,16 @@ public class MapService {
             Point2D current = tankPos;
             for (int stepCount = 1; stepCount <= ap; stepCount++) {
                 current = step(current, dir);
+                System.out.println("\n"+current + " AAAAAAAAAAAAA");
 
-                if (!isOverTheEdge(current) || hasMountainAt(current))
+                if (!isWithinMapLimits(current) || hasMountainAt(current)){
+                    System.out.println("SASASASASAS");
                     break;
-                if (!hasTankAt(current) && !hasCityAt(current))
+                }
+                if (!hasTankAt(current) && !hasCityAt(current)) {
+                    System.out.println("FDSDSDSDSDSD");
                     moveTargets.add(current);
+                }
             }
         }
         return moveTargets;

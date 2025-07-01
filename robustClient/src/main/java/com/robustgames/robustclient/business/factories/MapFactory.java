@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
+import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimCityComponent;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
@@ -47,21 +48,51 @@ public class MapFactory implements EntityFactory {
     //Tile Grafik, aktuell nicht genutzt
     @Spawns("floorTile")
     public Entity spawnFloor(SpawnData data) {
-        var hpComp = new HealthIntComponent(3);
-
-        return FXGL.entityBuilder(data).type(TILE)
-                .zIndex(-10)
+        var hpComp = new HealthIntComponent(2);
+        Texture floorTexture = FXGL.getAssetLoader().loadTexture("floor_tile1.png");
+        var floor = FXGL.entityBuilder(data).type(TILE)
+                .zIndex(-1)
                 .with(hpComp)
                 .build();
+
+        floor.getViewComponent().addChild(floorTexture);
+        Texture hoverTexture = FXGL.getAssetLoader().loadTexture("Tile_selection.png");
+        hoverTexture.mouseTransparentProperty().setValue(true);
+        floorTexture.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
+            if (isNowHovered) {
+                if (!floor.getViewComponent().getChildren().contains(hoverTexture)) {
+                    floor.getViewComponent().addChild(hoverTexture);
+                }
+            }
+            else if (wasHovered)
+                floor.getViewComponent().removeChild(hoverTexture);
+        });
+
+        return floor;
     }
     @Spawns("floorTileMountain")
     public Entity spawnMountainFloor(SpawnData data) {
-        var hpComp = new HealthIntComponent(3);
-
-        return FXGL.entityBuilder(data).type(TILE)
-                .zIndex(-10)
+        var hpComp = new HealthIntComponent(2);
+        Texture floorTexture = FXGL.getAssetLoader().loadTexture("floorTileMountain1.png");
+        var floorMountain = FXGL.entityBuilder(data).type(TILE)
+                .zIndex(-1)
                 .with(hpComp)
                 .build();
+        floorMountain.getViewComponent().addChild(floorTexture);
+
+        Texture hoverTexture = FXGL.getAssetLoader().loadTexture("Tile_selection.png");
+        hoverTexture.mouseTransparentProperty().setValue(true);
+        floorTexture.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
+            if (isNowHovered) {
+                if (!floorMountain.getViewComponent().getChildren().contains(hoverTexture)) {
+                    floorMountain.getViewComponent().addChild(hoverTexture);
+                }
+            }
+            else if (wasHovered)
+                floorMountain.getViewComponent().removeChild(hoverTexture);
+        });
+
+        return floorMountain;
     }
     @Spawns("hoverTile")
     public Entity spawnHoverFloor(SpawnData data) {
@@ -73,7 +104,7 @@ public class MapFactory implements EntityFactory {
                 -64.0, 32.0     // Left
         );
         diamond.setOpacity(0.40);
-        var cell = FXGL.entityBuilder(data).type(TILE).viewWithBBox(diamond)
+        var cell = FXGL.entityBuilder(data).type(HOVER).viewWithBBox(diamond)
                 .with(new HealthIntComponent(2))//TODO Destructable tiles
                 .build();
         diamond.fillProperty().bind(
@@ -87,7 +118,8 @@ public class MapFactory implements EntityFactory {
     @Spawns("moveTiles")
     public Entity spawnMoveTiles(SpawnData data) {
         var moveTile = FXGL.entityBuilder(data)
-                .onClick(entity -> MovementService.moveTank(entity)).type(ACTIONSELECTION)
+                .onClick(MovementService::moveTank)
+                .type(ACTIONSELECTION)
                 .viewWithBBox("Tile_move_selection.png")
                 .build();
         MovementService.changeMountainLayer(moveTile);
@@ -109,13 +141,6 @@ public class MapFactory implements EntityFactory {
                     .zIndex(target.getZIndex()+1)
                     .viewWithBBox(view)
                     .build();
-
-        view.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
-            if (isNowHovered) {
-                RotateService.rotateTurret(MapService.isoScreenToGrid(entity.getCenter()) , attackingTank);
-            }
-        });
-
 
         return entity;
     }

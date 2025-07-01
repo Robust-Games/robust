@@ -54,7 +54,7 @@ public class ShootService {
 
         // Spawn shell
         if (target.getType() != TILE) {
-            spawnShell(tank, target.getCenter());
+            spawnShell(tank, target.getPosition());
         }
         else {
             spawnShell(tank, target.getPosition());
@@ -65,7 +65,7 @@ public class ShootService {
             if (target.getType() != TILE)
                 target.addComponent(new AnimExplosionComponent(0,0));
             else
-                target.addComponent(new AnimExplosionComponent(-64,-64));
+                target.addComponent(new AnimExplosionComponent(0,-64));
         }, Duration.millis(target.distance(tank)));
 
         // Remove explosion and the target (if it dies) after animation completes
@@ -104,7 +104,7 @@ public class ShootService {
                 }
             }
         }
-        else targetPosition = targetPosition.subtract(64,64);
+        else targetPosition = targetPosition.subtract(0, 64);
 
         if (target.getType() == CITY) {
             FXGL.spawn("attackTargetCity",

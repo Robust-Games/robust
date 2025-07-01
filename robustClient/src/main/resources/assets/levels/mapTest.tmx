@@ -92,7 +92,7 @@
  </objectgroup>
  <objectgroup id="3" name="Player 2">
   <object id="7" name="Player 2 City" type="city2" x="0" y="0" width="64" height="64"/>
-  <object id="8" name="Player 2 Tank" type="tank2" x="128" y="0" width="64" height="64"/>
+  <object id="8" name="Player 2 Tank" type="tank2" x="320" y="320" width="64" height="64"/>
  </objectgroup>
  <layer id="6" name="Tile Layer 2" width="10" height="10">
   <data encoding="csv">
@@ -110,7 +110,7 @@
  </layer>
  <objectgroup id="4" name="mountains">
   <object id="9" name="mountain" type="mountain" x="256" y="320" width="64" height="64"/>
-  <object id="10" name="mountain" type="mountain" x="320" y="320" width="64" height="64"/>
+  <object id="10" name="mountain" type="mountain" x="320" y="256" width="64" height="64"/>
   <object id="11" name="mountain" type="mountain" x="384" y="320" width="64" height="64"/>
   <object id="12" name="mountain" type="mountain" x="448" y="320" width="64" height="64"/>
   <object id="16" name="mountain" type="mountain" x="0" y="128" width="64" height="64"/>

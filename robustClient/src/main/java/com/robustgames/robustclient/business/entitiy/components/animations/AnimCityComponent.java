@@ -50,29 +50,20 @@ public class AnimCityComponent extends Component {
         currentHP = entity.getComponent(HealthIntComponent.class).getValue();
         if (animatedTexture.getAnimationChannel() == city1Animation && underAttack) {
             animatedTexture.loopAnimationChannel(city1AttackAnimation);
-            System.out.println("case 1");
         }
         if (maxHP - 1 == currentHP) {
-            System.out.println("case 2 HP " + animatedTexture.getAnimationChannel().getImage().getUrl());
-            System.out.println(underAttack);
-
-            if (animatedTexture.getAnimationChannel() == city2Animation && underAttack){
-                System.err.println("case 2 Attack");
+            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack){
                 animatedTexture.loopAnimationChannel(city2AttackAnimation);
             }
             else if (animatedTexture.getAnimationChannel() == city1Animation){
-                System.err.println("case 2 to city 2");
                 animatedTexture.loopAnimationChannel(city2Animation);
             }
         }
         else if (maxHP - 2 == currentHP) {
-            System.out.println("case 3 HP");
-            if (animatedTexture.getAnimationChannel() == city3Animation && underAttack){
-                System.err.println("case 3 Attack");
+            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack){
                 animatedTexture.loopAnimationChannel(city3AttackAnimation);
             }
             else if (animatedTexture.getAnimationChannel() == city2Animation) {
-                System.err.println("case 2 to city 3");
                 animatedTexture.loopAnimationChannel(city3Animation);
             }
         }

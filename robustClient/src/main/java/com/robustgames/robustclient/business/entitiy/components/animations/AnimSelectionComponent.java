@@ -11,9 +11,8 @@ public class AnimSelectionComponent extends Component {
     private AnimationChannel tankSelectionMarker;
 
     public AnimSelectionComponent() {
-        tankSelectionMarker = new AnimationChannel(FXGL.image("Tank_selected_Border.png"), 4, 128, 128, Duration.seconds(1), 0, 3);
+        tankSelectionMarker = new AnimationChannel(FXGL.image("Tank_selected_Border.png"), 4, 128, 128, Duration.seconds(0.4), 0, 3);
         texture = new AnimatedTexture(tankSelectionMarker);
-        texture.setTranslateX(-64);
         texture.setTranslateY(-64);
 
     }

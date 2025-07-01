@@ -6,7 +6,9 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
+import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
+import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
@@ -86,6 +88,12 @@ public class RobustApplication extends GameApplication  {
         Entity tank = MapService.findSelectedTank();
         if (tank != null) {
             tank.removeComponent(SelectableComponent.class);
+            if (tank.hasComponent(ShootComponent.class)) {
+                tank.removeComponent(ShootComponent.class);
+            }
+            if (tank.hasComponent(MovementComponent.class)) {
+                tank.removeComponent(MovementComponent.class);
+            }
             tankButtonView.setVisible(false);
             tankDataView.setVisible(false);
         }
@@ -102,18 +110,20 @@ public class RobustApplication extends GameApplication  {
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
-        FXGL.setLevelFromMap("map1.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
+        FXGL.setLevelFromMap("mapTest2.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
 
         GameWorld world = getGameWorld();
         List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
         for (Entity entity : allEntities) {
             Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
-            Point2D isoGridPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
+            Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
             if (entity.isType(TILE)) {
-                entity.setPosition(isoGridPos.getX(), isoGridPos.getY());
+                entity.setPosition(isoScreenPos.getX()-64, isoScreenPos.getY()+1);
             }
+            else if(entity.isType(HOVER))
+                entity.setPosition(isoScreenPos.getX(), isoScreenPos.getY());
             else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
-                entity.setPosition(isoGridPos.getX()-64, isoGridPos.getY()-64);
+                entity.setPosition(isoScreenPos.getX()-64, isoScreenPos.getY()-64);
         }
         TurnService.startTurn(Player.PLAYER1);
     }

@@ -18,8 +18,8 @@ public class SelectableComponent extends Component {
     @Override
     public void onAdded() {
         //entity.addComponent(new AnimTankComponent()); //TODO Update Animation for every direction
-        Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
-        tileOfTank = getGameWorld().getEntitiesAt(MapService.isoGridToScreen(tankPos)).getFirst();
+        Point2D tankPos = new Point2D(entity.getPosition().getX(), entity.getPosition().getY()+65);
+        tileOfTank = getGameWorld().getEntitiesAt(tankPos).getFirst();
         tileOfTank.addComponent(new AnimSelectionComponent());
     }
 

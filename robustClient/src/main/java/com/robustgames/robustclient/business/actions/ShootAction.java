@@ -13,8 +13,7 @@ import javafx.util.Duration;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
-import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 import static com.robustgames.robustclient.business.logic.tankService.ShootService.spawnAttackTarget;
 
 public class ShootAction extends Action {
@@ -29,14 +28,10 @@ public class ShootAction extends Action {
      */
     public ShootAction(Entity target) {
         this.originalTarget = target;
-        boolean isTargetTile = target.isType(TILE);
 
-        if (isTargetTile) {
-            this.targetScreenPosition = target.getPosition();
-        } else {
-            this.targetScreenPosition = target.getCenter();
-        }
-        this.targetGridPosition = MapService.isoScreenToGrid(targetScreenPosition);
+        this.targetScreenPosition = target.getPosition();
+
+        this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
 
     /**
@@ -54,7 +49,14 @@ public class ShootAction extends Action {
 
         getGameTimer().runOnceAfter(() -> {
             getGameWorld().removeEntities(byType(ACTIONSELECTION));
-            Entity currentTarget = findEntityAtPosition();
+            Entity currentTarget;
+            if (originalTarget.isType(TILE)) {
+                currentTarget = findEntityAtPosition(originalTarget, true);
+            }
+            else if (originalTarget.isType(TANK)) {
+                currentTarget = findEntityAtPosition(originalTarget, false);
+            }
+            else currentTarget = originalTarget;
 
             if (currentTarget != null) {
                 entity.addComponent(new AnimTankTurret(entity.getComponent(TankDataComponent.class).getTurretTextureName()));
@@ -67,28 +69,45 @@ public class ShootAction extends Action {
     }
 
     /**
-     * Finds the entity currently at the target position.
+     * Finds the entity at the target position.
      * This method is called during action execution to determine what entity
-     * is currently at the position that was targeted during planning. This allows the
+     * is currently at the position which was initially targeted during planning. This allows the
      * action to correctly handle cases where entities move between planning and execution.
      *
      * @return The entity at the target position, or null if no entity is found
      */
-    private Entity findEntityAtPosition() {
-        Point2D entityPos = MapService.isoGridToScreen(targetGridPosition).subtract(64, 64);
+    private Entity findEntityAtPosition(Entity targetEntity, Boolean TargetIsTile) {
+        if (TargetIsTile) {
+            Point2D posEntity = targetScreenPosition.subtract(0, 65);
+            List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
+            System.out.println("ENTITY LIST " + entityList + "\n");
+            if (!entityList.isEmpty()) {
+                if (entityList.size() > 1) {
+                    throw new IllegalStateException("More than one entity found at target position "
+                            + targetGridPosition);
+                }
+                return entityList.getFirst();
+            }
+            else return targetEntity;
 
-        List<Entity> entitiesAtPosition = getGameWorld().getEntitiesAt(entityPos);
-        if (!entitiesAtPosition.isEmpty()) {
-            return entitiesAtPosition.getFirst();
         }
-
-        // If no entity found at the entity position, check at the tile position
-        List<Entity> tilesAtPosition = getGameWorld().getEntitiesAt(targetScreenPosition);
-        if (!tilesAtPosition.isEmpty()) {
-            return tilesAtPosition.getFirst();
+        else{
+            if (targetEntity.getPosition().equals(targetScreenPosition))
+                return targetEntity;
+            else {
+                Point2D posTile = (targetScreenPosition).add(0, 65);
+                List<Entity> tileList = getGameWorld().getEntitiesAt(posTile);
+                System.out.println("TILE LIST " + tileList);
+                if (!tileList.isEmpty()) {
+                    if (tileList.size() > 1) {
+                        throw new IllegalStateException("More than one entity found at target position "
+                                + targetGridPosition);
+                    }
+                    return tileList.getFirst();
+                }
+                else throw new IllegalStateException("No Tile found at target position @findEntityAtPosition - ShootAction");
+            }
         }
-
-        return null;
     }
 
     @Override

@@ -16,6 +16,7 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSEL
 public class TankDataComponent extends Component {
     private Point2D initialPos;
     private Texture initialTankTexture;
+    private String initialTankView;
     private Texture newTankTexture;
     private final Player owner;
     private Texture turretTexture;
@@ -26,7 +27,11 @@ public class TankDataComponent extends Component {
         owner = player;
         initialTankTexture = view;
         newTankTexture = view;
+        initialTankView = view.getImage().getUrl();
+        initialTankView = initialTankView.substring(initialTankView.lastIndexOf("/") + 1);
     }
+
+    public String getInitialTankView() {return initialTankView;}
 
     public Texture getHullTexture() {
         return hullTexture;
@@ -43,6 +48,7 @@ public class TankDataComponent extends Component {
     public void setTurretTexture(Texture texture) {
         this.turretTexture = texture;
     }
+
     public Point2D getInitialPos() {
         return initialPos;
     }

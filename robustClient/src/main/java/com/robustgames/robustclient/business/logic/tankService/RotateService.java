@@ -8,6 +8,8 @@ import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
+import static java.lang.Math.abs;
+
 public class RotateService {
     static String initialTankView;
     static Texture initialTankTexture;
@@ -59,9 +61,12 @@ public class RotateService {
         initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
 
         Point2D tankGridPos = MapService.isoScreenToGrid(selectedTank.getCenter());
-        Point2D diff = tileGridPos.subtract(tankGridPos); // Achsenbestimmung
+        Point2D diff = tileGridPos.subtract(tankGridPos);
+        //ROBUST_DEBUG Part Two - Checking the differences of the coordinates in isometric space
+       /* System.out.println("tankGridPos = " + tankGridPos + "");
+        System.out.println("diff = " + diff);*/
 
-        // Grundbauteil um nur noch Turret zu drehen
+        // Only instantiated once, afterwards only the turret rotates
         if(newTankHullTexture == null){
             newTankHullView = changeTankHull(initialTankView);
             newTankHullTexture = FXGL.getAssetLoader().loadTexture(newTankHullView);
@@ -78,24 +83,27 @@ public class RotateService {
 
         }
 
-        newTankTurretView = null;
-
         if (diff.getX() > 0 && diff.getY() == 0) {
             newTankTurretView = "tank_turret_down_right.png";
-        } else if (diff.getX() > 0 && diff.getY() > 0) {
+        } else if (diff.getX() > 0 && diff.getY() > 0 && diff.getX() == diff.getY()) {
             newTankTurretView = "tank_turret_down.png";
-        }else if (diff.getY() > 0 && diff.getX() == 0) {
+        }else if (diff.getX() == 0 && diff.getY() > 0) {
             newTankTurretView = "tank_turret_down_left.png";
-        }else if (diff.getX() < 0 && diff.getY() > 0) {
+        }else if (diff.getX() < 0 && diff.getY() > 0 && abs(diff.getX()) == diff.getY()) {
             newTankTurretView = "tank_turret_left.png";
         }else if (diff.getX() < 0 && diff.getY() == 0) {
             newTankTurretView = "tank_turret_top_left.png";
-        }else if (diff.getX() < 0 && diff.getY() < 0) {
+        }else if (diff.getX() < 0 && diff.getY() < 0 && diff.getX() == diff.getY()) {
             newTankTurretView = "tank_turret_top.png";
-        }else if (diff.getY() < 0 && diff.getX() == 0) {
+        }else if (diff.getX() == 0 && diff.getY() < 0) {
             newTankTurretView = "tank_turret_top_right.png";
-        }else if (diff.getX() > 0 && diff.getY() < 0) {
-            newTankTurretView = "tank_turret_top_left.png";
+        }else if (diff.getX() > 0 && diff.getY() < 0 && diff.getX() == abs(diff.getY())) {
+            newTankTurretView = "tank_turret_right.png";
+        }else{
+            if (newTankTurretTexture != null)
+                newTankTurretView = tankData.getTurretTextureName();
+            else
+                newTankTurretView = "tank_turret_top_left.png";
         }
 
         if (newTankTurretTexture != null) {
