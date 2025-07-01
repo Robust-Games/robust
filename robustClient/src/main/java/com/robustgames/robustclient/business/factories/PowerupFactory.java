@@ -14,9 +14,10 @@ public class PowerupFactory {
     static int count = 0;
 
     public static void spawnRandomHpPowerup() {
-        if(count < 2){
+        if(count > 1){
             return;
         }
+
         while (true) {
             int x = (int)(Math.random() * 8);
             int y = (int)(Math.random() * 8);

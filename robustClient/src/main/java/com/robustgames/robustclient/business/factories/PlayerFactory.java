@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.action.ActionComponent;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.*;
@@ -31,6 +32,7 @@ public class PlayerFactory implements EntityFactory {
                 .type(TANK)
                 .with(hpComp)
                 .viewWithBBox("tank_top_left.png")
+                .with(new CollidableComponent(true))
                 .zIndex(10)
                 .with(new ActionComponent())
                 .with(new RotateComponent())
@@ -75,6 +77,7 @@ public class PlayerFactory implements EntityFactory {
                 .type(TANK)
                 .with(hpComp)
                 .viewWithBBox("tank_down_right.png")
+                .with(new CollidableComponent(true))
                 .zIndex(10)
                 .with(new ActionComponent())
                 .with(new RotateComponent())

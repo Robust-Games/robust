@@ -3,12 +3,16 @@ package com.robustgames.robustclient.application;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.physics.CollisionHandler;
+import com.robustgames.robustclient.business.entitiy.EntityType;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
+import com.robustgames.robustclient.business.logic.PowerUp;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
@@ -117,6 +121,20 @@ public class RobustApplication extends GameApplication  {
         }
         TurnService.startTurn(Player.PLAYER1);
     }
+
+//    @Override // 1
+//    protected void initPhysics() {
+//
+//        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.TANK, PowerUp.HEALTH) {
+//            @Override
+//            protected void onCollisionBegin(Entity tank, Entity powerup) {
+//
+//                tank.getComponent(HealthIntComponent.class).restore(1);
+//                powerup.removeFromWorld();
+//
+//            }
+//        });
+//    }
 
     public static void main(String[] args) {
         launch(args);
