@@ -22,6 +22,7 @@ public class TankDataComponent extends Component {
         initialTankTexture = view;
         newTankTexture = view;
     }
+
     public Point2D getInitialPos() {
         return initialPos;
     }
@@ -49,7 +50,8 @@ public class TankDataComponent extends Component {
     public Player getOwner() {
         return owner;
     }
-    public void resetBeforeTurn(){
+
+    public void resetBeforeTurn() {
         entity.setPosition(initialPos);
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
         FXGL.<RobustApplication>getAppCast().deSelectTank();

@@ -39,6 +39,8 @@ public class RobustApplication extends GameApplication {
 
     private Connection<Bundle> connection;
 
+    private String assignedPlayer;
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("ROBUST");
@@ -145,10 +147,25 @@ public class RobustApplication extends GameApplication {
         client.setOnConnected(conn -> {
             connection = conn;
 
-            // Register handler for server messages
             conn.addMessageHandlerFX((c, responseBundle) -> {
                 System.out.println("Received from server: " + responseBundle);
-                // Optional: Do something with the server message!
+
+                switch (responseBundle.getName()) {
+                    case "GameStart" -> {
+                        assignedPlayer = responseBundle.get("assignedPlayer");
+                        System.out.println("Assigned role: " + assignedPlayer);
+                    }
+                    case "ServerACK" -> {
+                        System.out.println("ACK received: " + responseBundle.get("originalBundle"));
+                    }
+                    case "Reject" -> {
+                        System.out.println("Rejected: " + responseBundle.get("message"));
+                        getGameController().exit();
+                    }
+                    default -> {
+                        System.out.println("Unhandled bundle: " + responseBundle.getName());
+                    }
+                }
             });
         });
         client.connectAsync();
@@ -162,6 +179,16 @@ public class RobustApplication extends GameApplication {
     public Connection<Bundle> getConnection() {
         return this.connection;
     }
+
+    /**
+     * Returns the assigned player role from the server ("PLAYER1" or "PLAYER2").
+     *
+     * @return the assigned player role string
+     */
+    public String getAssignedPlayer() {
+        return assignedPlayer;
+    }
+
 
     public static void main(String[] args) {
         launch(args);

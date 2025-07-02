@@ -16,51 +16,6 @@ import javafx.geometry.Point2D;
 public class BundleFactory {
 
     /**
-     * Serializes an Entity into a Bundle for network transmission.
-     *
-     * @param entity The entity to serialize.
-     * @return A Bundle containing the entity's data (id, type, position, AP, direction, action status).
-     */
-    public static Bundle entityToBundle(Entity entity) {
-        Bundle bundle = new Bundle("Entity");
-        if (entity.hasComponent(IDComponent.class)) {
-            bundle.put("id", entity.getComponent(IDComponent.class).getId());
-        } else {
-            bundle.put("id", -1);
-        }
-        bundle.put("type", entity.getType().toString());
-        Point2D gridPos = entity.getPosition();
-        bundle.put("posX", gridPos.getX());
-        bundle.put("posY", gridPos.getY());
-        if (entity.hasComponent(APComponent.class)) {
-            APComponent ap = entity.getComponent(APComponent.class);
-            bundle.put("ap", ap.getCurrentAP());
-            bundle.put("maxAP", 5);
-        }
-        if (entity.hasComponent(RotateComponent.class)) {
-            String facing = getTankDirection(entity);
-            bundle.put("direction", facing);
-        }
-        bundle.put("canMove", entity.hasComponent(MovementComponent.class));
-        bundle.put("canShoot", entity.hasComponent(ShootComponent.class));
-        return bundle;
-    }
-
-    /**
-     * Updates an existing Entity's state from a Bundle received over the network.
-     *
-     * @param entity The entity to update.
-     * @param bundle The Bundle containing updated state information.
-     */
-    public static void updateEntityFromBundle(Entity entity, Bundle bundle) {
-        entity.setPosition(bundle.get("posX"), bundle.get("posY"));
-        if (entity.hasComponent(APComponent.class)) {
-            int ap = bundle.get("ap");
-            entity.getComponent(APComponent.class).setCurrentAP(ap);
-        }
-    }
-
-    /**
      * Creates a Bundle describing a move action from an entity to a target grid position.
      *
      * @param entity        The entity that is moving.
@@ -116,24 +71,5 @@ public class BundleFactory {
         bundle.put("shooterId", shooter.hasComponent(IDComponent.class) ? shooter.getComponent(IDComponent.class).getId() : -1);
         bundle.put("targetId", target.hasComponent(IDComponent.class) ? target.getComponent(IDComponent.class).getId() : -1);
         return bundle;
-    }
-
-    /**
-     * Determines the current facing direction of a tank entity based on the filename of its image.
-     *
-     * @param tank The tank entity.
-     * @return The direction as a string (e.g. "tank_top_left"), or an empty string if not found.
-     */
-    public static String getTankDirection(Entity tank) {
-        for (javafx.scene.Node e : tank.getViewComponent().getChildren()) {
-            if (e instanceof javafx.scene.image.ImageView iv) {
-                String url = iv.getImage().getUrl();
-                if (url.contains("tank")) {
-                    String file = url.substring(url.lastIndexOf("/") + 1);
-                    return file.replace(".png", "");
-                }
-            }
-        }
-        return "";
     }
 }

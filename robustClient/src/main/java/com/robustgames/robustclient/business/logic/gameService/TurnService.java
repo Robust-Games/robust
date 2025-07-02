@@ -4,6 +4,7 @@ package com.robustgames.robustclient.business.logic.gameService;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.ActionComponent;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Player;
@@ -18,9 +19,17 @@ public class TurnService {
 
     public static void startTurn(Player player) {
         currentPlayer = player;
-        Entity playerTank = MapService.findTankOfPlayer(player);
-        if (playerTank != null) {
-            playerTank.getComponent(TankDataComponent.class).setInitialPos();
+
+        String myPlayerName = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+
+        if (myPlayerName != null && myPlayerName.equals(currentPlayer.toString())) {
+            // Nur dieser Client darf jetzt aktiv sein
+            Entity playerTank = MapService.findTankOfPlayer(player);
+            if (playerTank != null) {
+                playerTank.getComponent(TankDataComponent.class).setInitialPos();
+            }
+        } else {
+            System.out.println("Waiting for other player...");
         }
     }
 
@@ -28,9 +37,8 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
-            getNotificationService().pushNotification(currentPlayer + "'S TURN" );
-        }
-        else {
+            getNotificationService().pushNotification(currentPlayer + "'S TURN");
+        } else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
             executeActions();
@@ -69,9 +77,9 @@ public class TurnService {
         player2Ready = false;
 
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
-                entity.getComponent(APComponent.class).reset();
+            entity.getComponent(APComponent.class).reset();
         });
-        getNotificationService().pushNotification(currentPlayer + "'S TURN" );
+        getNotificationService().pushNotification(currentPlayer + "'S TURN");
     }
 }
 

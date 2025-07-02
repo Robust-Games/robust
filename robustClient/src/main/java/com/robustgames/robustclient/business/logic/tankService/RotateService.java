@@ -13,15 +13,14 @@ public class RotateService {
     static Texture newTankTexture;
     static Texture tankTexture;
 
-    public static String rotateTank(Entity selectedTank,  Direction direction) {
+    public static String rotateTank(Entity selectedTank, Direction direction) {
         initialTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture();
         newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture();
         initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
 
-        if (direction == Direction.LEFT){
+        if (direction == Direction.LEFT) {
             newTankView = rotateTankLeft(initialTankView);
-        }
-        else if (direction == Direction.RIGHT){
+        } else if (direction == Direction.RIGHT) {
             newTankView = rotateTankRight(initialTankView);
         }
 
@@ -29,8 +28,7 @@ public class RotateService {
             newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
             selectedTank.getViewComponent().addChild(newTankTexture);
             selectedTank.getViewComponent().removeChild(initialTankTexture);
-        }
-        else {
+        } else {
             tankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
             newTankTexture.set(tankTexture);
         }
@@ -38,15 +36,17 @@ public class RotateService {
         return newTankView;
 
     }
-public static String rotateTankLeft(String tankView) {
-    switch (tankView) {
-        case "tank_top_right.png" -> newTankView = "tank_top_left.png";
-        case "tank_top_left.png" -> newTankView = "tank_down_left.png";
-        case "tank_down_left.png" -> newTankView = "tank_down_right.png";
-        case "tank_down_right.png" -> newTankView = "tank_top_right.png";
+
+    public static String rotateTankLeft(String tankView) {
+        switch (tankView) {
+            case "tank_top_right.png" -> newTankView = "tank_top_left.png";
+            case "tank_top_left.png" -> newTankView = "tank_down_left.png";
+            case "tank_down_left.png" -> newTankView = "tank_down_right.png";
+            case "tank_down_right.png" -> newTankView = "tank_top_right.png";
+        }
+        return newTankView;
     }
-    return newTankView;
-}
+
     public static String rotateTankRight(String tankView) {
         switch (tankView) {
             case "tank_top_right.png" -> newTankView = "tank_down_right.png";

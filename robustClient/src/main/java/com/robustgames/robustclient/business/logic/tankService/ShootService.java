@@ -40,9 +40,9 @@ public class ShootService {
     /**
      * This method executes the shot at the target.
      * It's meant to be called from ShootAction during turn execution.
-     * 
+     *
      * @param target The target entity to shoot at
-     * @param tank The tank entity doing the shooting
+     * @param tank   The tank entity doing the shooting
      */
     public static void executeShoot(Entity target, Entity tank) {
         if (tank == null) return;
@@ -53,31 +53,30 @@ public class ShootService {
         // Spawn shell
         if (target.getType() != TILE) {
             spawnShell(tank, target.getCenter());
-        }
-        else {
+        } else {
             spawnShell(tank, target.getPosition());
         }
 
         // Add explosion animation after bullet travels there
         getGameTimer().runOnceAfter(() -> {
             if (target.getType() != TILE)
-                target.addComponent(new AnimExplosionComponent(0,0));
+                target.addComponent(new AnimExplosionComponent(0, 0));
             else
-                target.addComponent(new AnimExplosionComponent(-64,-64));
+                target.addComponent(new AnimExplosionComponent(-64, -64));
         }, Duration.millis(target.distance(tank)));
 
         // Remove explosion and the target (if it dies) after animation completes
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
-            if (target.getComponent(HealthIntComponent.class).getValue()==0) {
-                if (target.isType(TANK)||target.isType(CITY)){
+            if (target.getComponent(HealthIntComponent.class).getValue() == 0) {
+                if (target.isType(TANK) || target.isType(CITY)) {
                     target.removeFromWorld();
                     GameState.gameOver();
-                }
-                else {
+                } else {
                     target.removeFromWorld();
                 }
-            }        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
+            }
+        }, Duration.millis(target.distance(tank) + 1200)); //1200 = Explosion animation duration
     }
 
     public static void spawnAttackTarget(Entity target, Entity attackingTank, Boolean duringAction) {
@@ -95,8 +94,7 @@ public class ShootService {
                     }
                 }
             }
-        }
-        else targetPosition = targetPosition.subtract(64,64);
+        } else targetPosition = targetPosition.subtract(64, 64);
 
         FXGL.spawn("attackTargetTiles",
                 new SpawnData(targetPosition)
@@ -114,6 +112,4 @@ public class ShootService {
         );
 
     }
-
-
 }
