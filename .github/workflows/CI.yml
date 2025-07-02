@@ -2,13 +2,13 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [main, tests]
+    branches: [main]
     paths:
       - 'robustClient/**'
       - 'robustServer/**'
       - '.github/workflows/**'
   pull_request:
-    branches: [main, tests]
+    branches: [main]
     paths:
       - 'robustClient/**'
       - 'robustServer/**'
@@ -65,7 +65,7 @@ jobs:
 
       - name: Run tests (robustServer)
         working-directory: robustServer
-        run: ./gradlew test
+        run: ./gradlew test --info
 
       - name: Generate coverage report (robustServer)
         working-directory: robustServer

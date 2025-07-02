@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [main, tests]
+    branches: [main]
     paths:
       - 'robustServer/**'
       - '.github/workflows/**'
