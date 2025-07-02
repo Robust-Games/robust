@@ -2,13 +2,13 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [main, tests]
+    branches: [main]
     paths:
       - 'robustClient/**'
       - 'robustServer/**'
       - '.github/workflows/**'
   pull_request:
-    branches: [main, tests]
+    branches: [main]
     paths:
       - 'robustClient/**'
       - 'robustServer/**'
