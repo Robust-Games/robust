@@ -8,15 +8,15 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 
-public class AnimExplosionComponent extends Component {
+public class AnimTankTurret extends Component {
     private final AnimatedTexture texture;
-    private AnimationChannel expl;
+    private AnimationChannel shootingBarrel;
 
-    public AnimExplosionComponent(int xOffset, int yOffset) {
-        expl = new AnimationChannel(FXGL.image("explosion.png"), 12, 128, 128, Duration.seconds(1.2), 0, 12);
-        texture = new AnimatedTexture(expl);
-        texture.setTranslateX(xOffset);
-        texture.setTranslateY(16+yOffset);
+    public AnimTankTurret(String tankTurretView) {
+        String tankTurretViewShoot = tankTurretView.substring(0, tankTurretView.lastIndexOf(".")) + "_shoot.png";
+        shootingBarrel = new AnimationChannel(FXGL.image(tankTurretViewShoot), 6, 128, 128, Duration.seconds(0.6), 0, 5);
+        texture = new AnimatedTexture(shootingBarrel);
+
 
     }
 
@@ -24,6 +24,10 @@ public class AnimExplosionComponent extends Component {
     public void onAdded() {
         entity.getViewComponent().addChild(texture);
         texture.play();
+        getGameTimer().runOnceAfter(() -> {
+            entity.getViewComponent().removeChild(texture);
+        }, Duration.seconds(0.6));
+
     }
 
     @Override
@@ -31,4 +35,5 @@ public class AnimExplosionComponent extends Component {
         super.onRemoved();
         entity.getViewComponent().removeChild(texture);
     }
+
 }
