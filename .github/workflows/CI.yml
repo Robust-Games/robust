@@ -65,7 +65,7 @@ jobs:
 
       - name: Run tests (robustServer)
         working-directory: robustServer
-        run: ./gradlew test
+        run: ./gradlew test --info
 
       - name: Generate coverage report (robustServer)
         working-directory: robustServer
