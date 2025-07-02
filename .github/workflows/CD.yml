@@ -30,12 +30,12 @@ jobs:
 
       - name: Get commit message
         id: get_commit
-        run: echo "COMMIT_MSG<<EOF" >> $GITHUB_ENV && git log -1 --pretty=%B >> $GITHUB_ENV && echo "EOF" >> $GITHUB_ENV
+        run: echo "COMMIT_MSG=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
       - name: Create GitHub Release (robustServer)
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: robustServer-${{ github.sha }}
+          tag_name: robustServer-${{ github.sha }}-server
           release_name: robustServer Release ${{ github.sha }}
           body: ${{ env.COMMIT_MSG }}
         env:
@@ -44,7 +44,7 @@ jobs:
       - name: Upload Release Asset (robustServer)
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: robustServer-${{ github.sha }}
+          tag_name: robustServer-${{ github.sha }}-server
           files: robustServer/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -72,12 +72,12 @@ jobs:
 
       - name: Get commit message
         id: get_commit_client
-        run: echo "COMMIT_MSG_CLIENT<<EOF" >> $GITHUB_ENV && git log -1 --pretty=%B >> $GITHUB_ENV && echo "EOF" >> $GITHUB_ENV
+        run: echo "COMMIT_MSG_CLIENT=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
       - name: Create GitHub Release (robustClient)
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: robustClient-${{ github.sha }}
+          tag_name: robustClient-${{ github.sha }}-client
           release_name: robustClient Release ${{ github.sha }}
           body: ${{ env.COMMIT_MSG_CLIENT }}
         env:
@@ -86,7 +86,7 @@ jobs:
       - name: Upload Release Asset (robustClient)
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: robustClient-${{ github.sha }}
+          tag_name: robustClient-${{ github.sha }}-client
           files: robustClient/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
