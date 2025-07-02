@@ -15,7 +15,10 @@ import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -50,6 +53,21 @@ public class MapFactory implements EntityFactory {
     public Entity spawnFloor(SpawnData data) {
         var hpComp = new HealthIntComponent(2);
         Texture floorTexture = FXGL.getAssetLoader().loadTexture("floor_tile1.png");
+
+        ObjectProperty<Image> imageProp = new SimpleObjectProperty<>(FXGL.getAssetLoader().loadImage("floor_tile1.png"));
+        floorTexture.imageProperty().bind(imageProp);
+
+        hpComp.valueProperty().addListener((obs, old, newHP) -> {
+            if (newHP.intValue() >1) {
+                imageProp.set(FXGL.getAssetLoader().loadImage("floor_tile1.png"));
+            }
+            else if (newHP.intValue() == 1)
+                imageProp.set(FXGL.getAssetLoader().loadImage("floor_tile2.png"));
+            else if (newHP.intValue() == 0)
+                floorTexture.imageProperty().unbind();
+        });
+
+
         var floor = FXGL.entityBuilder(data).type(TILE)
                 .zIndex(-1)
                 .with(hpComp)
@@ -74,6 +92,18 @@ public class MapFactory implements EntityFactory {
     public Entity spawnMountainFloor(SpawnData data) {
         var hpComp = new HealthIntComponent(2);
         Texture floorTexture = FXGL.getAssetLoader().loadTexture("floorTileMountain1.png");
+
+        ObjectProperty<Image> imageProp = new SimpleObjectProperty<>(FXGL.getAssetLoader().loadImage("floorTileMountain1.png"));
+        floorTexture.imageProperty().bind(imageProp);
+        hpComp.valueProperty().addListener((obs, old, newHP) -> {
+            if (newHP.intValue() > 1) {
+                imageProp.set(FXGL.getAssetLoader().loadImage("floorTileMountain1.png"));
+            }else if (newHP.intValue() == 1)
+                imageProp.set(FXGL.getAssetLoader().loadImage("floorTileMountain2.png"));
+            else if (newHP.intValue() == 0)
+                floorTexture.imageProperty().unbind();
+        });
+
         var floorMountain = FXGL.entityBuilder(data).type(TILE)
                 .zIndex(-1)
                 .with(hpComp)

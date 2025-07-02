@@ -59,7 +59,6 @@ public class PlayerFactory implements EntityFactory {
         Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
                 .with(hpComp)
-                //.viewWithBBox("city1.png")
                 .with(new AnimCityComponent(false))
                 .build();
         city.addComponent(new CityDataComponent(PLAYER1, city.getViewComponent().getChild(0, Texture.class)));
@@ -104,9 +103,9 @@ public class PlayerFactory implements EntityFactory {
         Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
                 .with(hpComp)
-                .viewWithBBox("city1.png")
+                .with(new AnimCityComponent(false))
                 .build();
-        city.addComponent(new CityDataComponent(PLAYER2, city.getViewComponent().getChild(0, Texture.class)));
+        city.addComponent(new CityDataComponent(PLAYER1, city.getViewComponent().getChild(0, Texture.class)));
         city.getViewComponent().addChild(hpBar);
         return city;
     }

@@ -27,6 +27,11 @@ public class AnimExplosionComponent extends Component {
     }
 
     @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+    }
+
+    @Override
     public void onRemoved() {
         super.onRemoved();
         entity.getViewComponent().removeChild(texture);

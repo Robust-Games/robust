@@ -23,6 +23,10 @@ public class AnimSelectionComponent extends Component {
         texture.loopAnimationChannel(tankSelectionMarker);
 
     }
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+    }
 
     @Override
     public void onRemoved() {

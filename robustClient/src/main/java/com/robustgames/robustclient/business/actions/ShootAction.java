@@ -31,7 +31,14 @@ public class ShootAction extends Action {
 
         this.targetScreenPosition = target.getPosition();
 
-        this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
+        if (target.getType() == CITY) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
+        }
+        else if (target.getType() == TILE) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
+        }
+        else
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
 
     /**
@@ -80,7 +87,6 @@ public class ShootAction extends Action {
         if (TargetIsTile) {
             Point2D posEntity = targetScreenPosition.subtract(0, 65);
             List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
-            System.out.println("ENTITY LIST " + entityList + "\n");
             if (!entityList.isEmpty()) {
                 if (entityList.size() > 1) {
                     throw new IllegalStateException("More than one entity found at target position "
@@ -97,7 +103,6 @@ public class ShootAction extends Action {
             else {
                 Point2D posTile = (targetScreenPosition).add(0, 65);
                 List<Entity> tileList = getGameWorld().getEntitiesAt(posTile);
-                System.out.println("TILE LIST " + tileList);
                 if (!tileList.isEmpty()) {
                     if (tileList.size() > 1) {
                         throw new IllegalStateException("More than one entity found at target position "

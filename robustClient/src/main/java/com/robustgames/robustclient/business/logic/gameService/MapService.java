@@ -3,16 +3,11 @@ package com.robustgames.robustclient.business.logic.gameService;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.business.entitiy.EntityType;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
-import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
-import java.util.HashSet;
-import java.util.Set;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**
@@ -119,15 +114,18 @@ public class MapService {
     public static boolean hasMountainAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(EntityType.MOUNTAIN)
                 .stream().anyMatch(e -> {
-                    Point2D pos = isoScreenToGrid(e.getCenter());
+                    Point2D pos = isoScreenToGrid(e.getPosition().add(64,64));
                     return pos.equals(gridPos);
                 });
     }
+    public static boolean hasDestroyedTileAt(Point2D gridPos) {
+        return FXGL.getGameWorld().getEntitiesAt(isoGridToScreen(gridPos).add(-64,1)).isEmpty();
+    }
 
-    public static boolean hasCityAt(Point2D gridPos) {
+        public static boolean hasCityAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(CITY)
                 .stream().anyMatch(e -> {
-                    Point2D pos = isoScreenToGrid(e.getCenter());
+                    Point2D pos = isoScreenToGrid(e.getPosition().add(64,64));
                     return pos.equals(gridPos);
                 });
     }
@@ -135,7 +133,7 @@ public class MapService {
     public static boolean hasTankAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(TANK)
                 .stream().anyMatch(e -> {
-                    Point2D pos = isoScreenToGrid(e.getCenter());
+                    Point2D pos = isoScreenToGrid(e.getPosition().add(64,64));
                     return pos.equals(gridPos);
                 });
     }
@@ -145,74 +143,4 @@ public class MapService {
         return gridPos.getX() >= 0 && gridPos.getX() < 8 && gridPos.getY() >= 0 && gridPos.getY() < 8;
     }
 
-    /**
-     * Calculates all valid move targets for a tank based on its current position.
-     * The movement is constrained by the tank's orientation, valid tiles within the map,
-     * and any terrain restrictions such as mountains.
-     *
-     * @param tankPos the current position of the tank in grid coordinates
-     * @return a set of grid positions representing valid move targets for the tank
-     */
-    public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
-        Set<Point2D> moveTargets = new HashSet<>();
-        Entity selectedTank = findSelectedTank();
-
-        if (selectedTank == null) {
-            getNotificationService().pushNotification("Not enough Action Points!");
-            return moveTargets;
-        }
-        int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
-
-        if (ap <= 0){
-            getNotificationService().pushNotification("Not enough Action Points!");
-            return moveTargets;
-        }
-        String state = "";
-        if (selectedTank.getViewComponent().getChildren().contains(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture())){
-            state = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
-        }
-        else{
-            state = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getNewTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
-        }
-
-        // 2) Choose axes
-        Direction[] axes;
-
-        if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
-            axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
-        } else if (state.equals("tank_top_right.png") || state.equals("tank_down_left.png")) {
-            axes = new Direction[]{ Direction.UP, Direction.DOWN };
-        }
-        else throw new IllegalArgumentException("Invalid Tank State! in MapService getTankMoveTargets: " + state + " is not a valid state for a tank!");
-
-        // 3) Jump along each axis until it hits a mountain or the edge
-        for (Direction dir : axes) {
-            Point2D current = tankPos;
-            for (int stepCount = 1; stepCount <= ap; stepCount++) {
-                current = step(current, dir);
-                System.out.println("\n"+current + " AAAAAAAAAAAAA");
-
-                if (!isWithinMapLimits(current) || hasMountainAt(current)){
-                    System.out.println("SASASASASAS");
-                    break;
-                }
-                if (!hasTankAt(current) && !hasCityAt(current)) {
-                    System.out.println("FDSDSDSDSDSD");
-                    moveTargets.add(current);
-                }
-            }
-        }
-        return moveTargets;
-    }
-
-    // Schritt-Funktion
-    public static Point2D step(Point2D pos, Direction dir) {
-        return switch (dir) {
-            case UP -> new Point2D(pos.getX(), pos.getY() - 1);
-            case DOWN -> new Point2D(pos.getX(), pos.getY() + 1);
-            case LEFT -> new Point2D(pos.getX() - 1, pos.getY());
-            case RIGHT -> new Point2D(pos.getX() + 1, pos.getY());
-            default -> throw new IllegalArgumentException();
-        };
-    }
-    }
+}

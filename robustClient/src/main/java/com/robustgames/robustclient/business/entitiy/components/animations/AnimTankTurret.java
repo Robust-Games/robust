@@ -30,6 +30,10 @@ public class AnimTankTurret extends Component {
         }, Duration.seconds(0.6));
 
     }
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+    }
 
     @Override
     public void onRemoved() {

@@ -25,6 +25,10 @@ public class AnimMountainComponent extends Component {
         texture.setOnCycleFinished(()->
                 entity.removeFromWorld());
     }
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+    }
 
     @Override
     public void onRemoved() {

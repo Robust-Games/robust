@@ -17,7 +17,7 @@ import java.util.List;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 import static com.robustgames.robustclient.business.logic.gameService.MapService.isoScreenToGrid;
-import static com.robustgames.robustclient.business.logic.gameService.MapService.step;
+import static com.robustgames.robustclient.business.logic.tankService.MovementService.step;
 
 public class ShootComponent extends Component {
     private EventHandler<MouseEvent> aimHandler;

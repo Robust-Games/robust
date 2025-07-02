@@ -21,6 +21,10 @@ public class AnimTankComponent extends Component {
         texture.loopAnimationChannel(tankMotorShake);
     }
 
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+    }
 
     @Override
     public void onRemoved() {

@@ -12,6 +12,7 @@ import com.robustgames.robustclient.business.entitiy.components.animations.AnimE
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimMountainComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.logic.gameService.GameState;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -72,7 +73,7 @@ public class ShootService {
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
             tank.removeComponent(AnimTankTurret.class);
-            if (target.getComponent(HealthIntComponent.class).getValue()==0) {
+            if (target.getComponent(HealthIntComponent.class).getValue()<=0) {
                 if (target.getType() == MOUNTAIN) {
                     target.addComponent(new AnimMountainComponent());
                 }
@@ -85,7 +86,8 @@ public class ShootService {
                 else {
                     target.removeFromWorld();
                 }
-            }        }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
+            }
+            }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
     }
 
     public static void spawnAttackTarget(Entity target, Entity attackingTank, Boolean duringAction) {
@@ -104,7 +106,9 @@ public class ShootService {
                 }
             }
         }
-        else targetPosition = targetPosition.subtract(0, 64);
+        else if (target.getType() == TILE) {
+            targetPosition = targetPosition.subtract(0, 63);
+        }
 
         if (target.getType() == CITY) {
             FXGL.spawn("attackTargetCity",

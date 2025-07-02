@@ -17,7 +17,7 @@ public class MovementComponent extends Component {
     public void onAdded() {
         Point2D tankPos = MapService.isoScreenToGrid(entity.getCenter());
         MovementService.changeMountainLayer(entity);
-        Set<Point2D> moveTargets = MapService.getTankMoveTargets(tankPos);
+        Set<Point2D> moveTargets = MovementService.getTankMoveTargets(tankPos);
         if (moveTargets.isEmpty())
             return;
         for (Point2D target : moveTargets) {
