@@ -61,6 +61,7 @@ public class MovementService {
      */
     public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
         Set<Point2D> moveTargets = new HashSet<>();
+        //Set<Set<Point2D>> move2Targets = new HashSet<>();
         Entity selectedTank = MapService.findSelectedTank();
 
         if (selectedTank == null) {
@@ -108,6 +109,7 @@ public class MovementService {
                 }
             }
         }
+        //move2Targets.add(moveTargets);
         return moveTargets;
     }
 

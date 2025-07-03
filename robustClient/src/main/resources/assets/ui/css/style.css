@@ -1,6 +1,6 @@
 @font-face {
     -fx-font-family: 'Arcade Normal';
-    src: url('../../fonts/ARCADE_N.TTF') format('truetype');
+    src: url('../fonts/ARCADE_N.TTF') format('truetype');
 }
 
 /*.scoreBox {*/
@@ -13,7 +13,12 @@
 /*    -fx-font-size: 40px;*/
 /*    -fx-text-fill: white;*/
 /*}*/
-
+.tooltip{
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
+    -fx-font-size: 10px;
+    -fx-font-family: 'Arcade Normal';
+}
 .apText{
     -fx-fill: white;
     -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
@@ -80,3 +85,4 @@
     -fx-font-size: 24px;
     -fx-font-family: 'Arcade Normal';
 }
+

@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.components.IntegerComponent;
 
 public class APComponent extends RechargeableIntComponent {
     private final int maxAP = 5;
+    private double apCost = 0;
     //protected int currentAP;
 
     public APComponent (int maxAP){
@@ -29,6 +30,12 @@ public class APComponent extends RechargeableIntComponent {
 
     public int getCurrentAP() {
         return getValue();
+    }
+    public double getAPCost() {
+        return apCost;
+    }
+    public void setAPCost(double apCost) {
+        this.apCost = apCost;
     }
 
 }

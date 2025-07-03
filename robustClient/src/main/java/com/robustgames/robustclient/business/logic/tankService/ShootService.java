@@ -58,7 +58,7 @@ public class ShootService {
             spawnShell(tank, target.getPosition());
         }
         else {
-            spawnShell(tank, target.getPosition());
+            spawnShell(tank, target.getPosition().add(64, 1) );
         }
 
         // Add explosion animation after bullet travels there
@@ -92,7 +92,7 @@ public class ShootService {
 
     public static void spawnAttackTarget(Entity target, Entity attackingTank, Boolean duringAction) {
         Point2D targetPosition = target.getPosition();
-        String targetName = "Tile_attack_selection.png";
+        String targetName = "Tile_attack_selection";
 
         if (target.getType() != TILE) {
             if (!duringAction || !target.isType(TANK)) {//Because the tank attack graphic looks weird if the target tank moves
@@ -101,7 +101,7 @@ public class ShootService {
                     if (child instanceof ImageView view) {
                         String url = view.getImage().getUrl();
                         String imageName = url.substring(url.lastIndexOf("/") + 1);
-                        targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack.png";
+                        targetName = imageName.substring(0, imageName.lastIndexOf(".")) + "_attack";
                     }
                 }
             }

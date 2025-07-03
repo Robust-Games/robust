@@ -7,6 +7,7 @@ import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -18,21 +19,30 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSEL
 public class TankButtonView extends Pane {
     Button btnMove;
     Button btnShoot;
+    Button btnRotate;
     Button btnRotateLeft;
     Button btnRotateRight;
     Label btnMoveText;
     Label btnShootText;
+    Label btnRotateText;
     Label btnRotateLeftText;
     Label btnRotateRightText;
+    Tooltip shootingTooltip = new Tooltip("Costs 3AP, but Ends your Turn\nDeal one Damage to whatever you hit");
+    Tooltip movingTooltip = new Tooltip("Costs one AP per tile moved");
+    Tooltip rotatingTooltip = new Tooltip("Rotate your Tank to change direction to drive in\nCosts one AP");
 
 
     public TankButtonView() {
         String cssPath = getClass().getResource("/assets/ui/css/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);
-        btnMoveText = new Label("Move -1AP/Tile");
-        btnShootText = new Label("Shoot -3AP");
+
+        VBox buttonBox = new VBox(10);
+        btnMoveText = new Label("Move");
+        btnShootText = new Label("Shoot");
+        btnRotateText = new Label("Rotate");
         btnRotateLeftText = new Label("Rotate Left");
         btnRotateRightText = new Label("Rotate Right");
+        btnRotateText.getStyleClass().add("robust-btn-text");
         btnMoveText.getStyleClass().add("robust-btn-text");
         btnShootText.getStyleClass().add("robust-btn-text");
         btnRotateLeftText.getStyleClass().add("robust-btn-text");
@@ -40,18 +50,21 @@ public class TankButtonView extends Pane {
 
         btnMove = new Button();
         btnMove.setGraphic(btnMoveText);
+        btnMove.setTooltip(movingTooltip);
         btnMove.getStyleClass().add("robust-btn");
         btnMove.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
                 resetActionComponents(tank);
                 tank.addComponent(new MovementComponent());
+
             }
 
         });
 
         btnShoot = new Button();
         btnShoot.setGraphic(btnShootText);
+        btnShoot.setTooltip(shootingTooltip);
         btnShoot.getStyleClass().add("robust-btn");
         btnShoot.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
@@ -101,13 +114,12 @@ public class TankButtonView extends Pane {
 
         });
 
-        VBox buttonBox = new VBox(10);
         buttonBox.getChildren().addAll(
-                btnMove, btnShoot, btnRotateLeft, btnRotateRight
+                btnMove, btnShoot
         );
         //buttonBox.setAlignment(Pos.CENTER);
         this.setTranslateX(getAppWidth() / 32.0);
-        this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 200);
+        this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 100);
         this.getChildren().add(buttonBox);
 
     }
