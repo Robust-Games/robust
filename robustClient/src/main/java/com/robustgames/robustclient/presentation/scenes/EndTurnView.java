@@ -32,7 +32,7 @@ public class EndTurnView extends Pane {
         btnEndTurn.setOnAction(event -> {
             Player currentPlayer = TurnService.currentPlayer;
             Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
-            playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
+            // playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
 
             TurnService.nextPlayer();
         });

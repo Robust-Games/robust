@@ -1,7 +1,9 @@
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
@@ -24,7 +26,9 @@ public class BundleFactory {
      */
     public static Bundle createMoveActionBundle(Entity entity, Point2D targetGridPos) {
         Bundle bundle = new Bundle("MoveAction");
+        int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
         if (entity.hasComponent(IDComponent.class)) {
+            bundle.put("clientId", clientId);
             bundle.put("entityId", entity.getComponent(IDComponent.class).getId());
         } else {
             bundle.put("entityId", -1);

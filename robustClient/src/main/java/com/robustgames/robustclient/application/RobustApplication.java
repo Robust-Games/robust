@@ -36,10 +36,19 @@ public class RobustApplication extends GameApplication {
     TankButtonView tankButtonView;
     TankDataView tankDataView;
     EndTurnView endTurnView;
+    private int clientId = -1; // -1 = nicht gesetzt
 
     private Connection<Bundle> connection;
 
     private String assignedPlayer;
+
+    public void setClientId(int id) {
+        this.clientId = id;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -106,13 +115,23 @@ public class RobustApplication extends GameApplication {
 
     @Override
     protected void initGame() {
+        // Netzwerkverbindung starten (asynchron)
+        initializeNetworkClient("localhost", 55555);
+
+        // Warten auf Server-Antwort (clientId != -1)
+        while (clientId == -1) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         getGameScene().getViewport().setY(-100);
         // getGameScene().getViewport().setZoom(100);
         tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
-
-        initializeNetworkClient("localhost", 55555);
 
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
@@ -147,6 +166,9 @@ public class RobustApplication extends GameApplication {
         client.setOnConnected(conn -> {
             connection = conn;
 
+            Bundle hello = new Bundle("hello");
+            conn.send(hello);
+
             conn.addMessageHandlerFX((c, responseBundle) -> {
                 System.out.println("Received from server: " + responseBundle);
 
@@ -161,6 +183,18 @@ public class RobustApplication extends GameApplication {
                     case "Reject" -> {
                         System.out.println("Rejected: " + responseBundle.get("message"));
                         getGameController().exit();
+                    }
+                    case "move_action" -> {
+                        System.out.println("MoveAction empfangen: " + responseBundle);
+                        // TODO: verarbeitung bundle
+                    }
+                    case "assign_id" -> {
+                        int id = responseBundle.get("id");
+                        setClientId(id);
+                        System.out.println("Client-ID erhalten: " + id);
+                    }
+                    case "hello" -> {
+                        System.out.println("Hello vom Server erhalten");
                     }
                     default -> {
                         System.out.println("Unhandled bundle: " + responseBundle.getName());

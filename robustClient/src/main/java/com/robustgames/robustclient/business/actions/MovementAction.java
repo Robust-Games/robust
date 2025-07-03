@@ -36,13 +36,28 @@ public class MovementAction extends Action {
         RobustApplication app = FXGL.<RobustApplication>getAppCast(); // Holt die aktuell laufende Instanz der RobustApplication aus dem FXGL-Framework
         Connection<Bundle> conn = app.getConnection();
         if (conn != null) {
+            // Client-ID holen
+            int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
+
             // Zielposition als Grid-Koordinaten (Center des Tiles)
             Point2D gridTarget = MapService.isoScreenToGrid(target.getCenter());
             Bundle moveBundle = BundleFactory.createMoveActionBundle(entity, gridTarget);
+            moveBundle.put("clientId", clientId);
             conn.send(moveBundle);
+
+            // DEBUG
+            System.out.println(" Sending moveBundle:");
+            System.out.println("  clientId: " + clientId);
+            System.out.println("  gridTarget: " + gridTarget);
+            System.out.println("  bundleName: " + moveBundle.getName());
+
+
         } else {
             System.out.println("No connection set – can't send move!");
+
         }
+
+
     }
 
     @Override
