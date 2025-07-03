@@ -50,11 +50,9 @@ public class ShootComponent extends Component {
 
                     Point2D posTile = MapService.isoGridToScreen(currentGridPos).subtract(64, -1);
                     tileList = getGameWorld().getEntitiesAt(posTile);
-                    // debug System.out.println("TILE LIST " + tileList);
 
                     Point2D posEntity = MapService.isoGridToScreen(currentGridPos).subtract(64, 64);
                     entityList = getGameWorld().getEntitiesAt(posEntity);
-                    // debug System.out.println("ENTITY LIST " + entityList + "\n");
 
                     if (!entityList.isEmpty()) {
                         if (entityList.size() > 1) {

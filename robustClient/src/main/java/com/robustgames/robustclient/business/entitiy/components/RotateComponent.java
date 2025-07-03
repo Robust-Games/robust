@@ -9,18 +9,23 @@ import com.robustgames.robustclient.business.logic.tankService.RotateService;
 public class RotateComponent extends Component {
     String newTankTexture;
     public void rotateLeft(){
-        newTankTexture = RotateService.rotateTank(entity, Direction.LEFT);
-        ActionComponent ac = entity.getComponent(ActionComponent.class);
-        ac.addAction(new RotateAction(newTankTexture));
-        ac.pause();
+        if (entity.getComponent(APComponent.class).canUse(1)) {
+            newTankTexture = RotateService.rotateTank(entity, Direction.LEFT);
+            entity.getComponent(APComponent.class).use(1);
+            ActionComponent ac = entity.getComponent(ActionComponent.class);
+            ac.addAction(new RotateAction(newTankTexture));
+            ac.pause();
+        }
     }
 
     public void rotateRight() {
-        newTankTexture = RotateService.rotateTank(entity, Direction.RIGHT);
-
-        ActionComponent ac = entity.getComponent(ActionComponent.class);
-        ac.addAction(new RotateAction(newTankTexture));
-        ac.pause();
+        if (entity.getComponent(APComponent.class).canUse(1)) {
+            newTankTexture = RotateService.rotateTank(entity, Direction.RIGHT);
+            entity.getComponent(APComponent.class).use(1);
+            ActionComponent ac = entity.getComponent(ActionComponent.class);
+            ac.addAction(new RotateAction(newTankTexture));
+            ac.pause();
+        }
     }
 
 }
