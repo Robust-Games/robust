@@ -60,10 +60,10 @@ public class ShootComponent extends Component {
                                     + currentGridPos);
                         }
                         Entity target = entityList.getFirst();
-                        ShootService.spawnAttackTarget(target, entity, false);
+                        ShootService.spawnAttackTarget(target, entity);
                         break;
                     } else if (!tileList.isEmpty()) {
-                        ShootService.spawnAttackTarget(tileList.getFirst(), entity, false);
+                        ShootService.spawnAttackTarget(tileList.getFirst(), entity);
                     }
                 }
             }

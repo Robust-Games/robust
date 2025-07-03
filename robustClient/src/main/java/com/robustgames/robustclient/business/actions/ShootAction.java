@@ -50,7 +50,7 @@ public class ShootAction extends Action {
      */
     @Override
     protected void onStarted() {
-        spawnAttackTarget(originalTarget, entity, true);
+        spawnAttackTarget(originalTarget, entity);
 
         RotateService.rotateTurret(targetGridPosition, entity);
 

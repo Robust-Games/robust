@@ -74,7 +74,7 @@
  </objectgroup>
  <objectgroup id="3" name="Player 2">
   <object id="7" name="Player 2 City" type="city2" x="0" y="0" width="64" height="64"/>
-  <object id="8" name="Player 2 Tank" type="tank2" x="128" y="0" width="64" height="64"/>
+  <object id="8" name="Player 2 Tank" type="tank2" x="192" y="448" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="2" name="Player 1">
   <object id="5" name="Player 1 City" type="city1" x="448" y="448" width="64" height="64"/>

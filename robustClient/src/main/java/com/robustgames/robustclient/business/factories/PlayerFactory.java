@@ -20,7 +20,7 @@ import static com.robustgames.robustclient.business.logic.Player.PLAYER1;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER2;
 
 public class PlayerFactory implements EntityFactory {
-    private static final int HP = 3;
+    private static final int HP = 10;
 
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {

@@ -76,6 +76,7 @@ public class TankDataComponent extends Component {
     public Player getOwner() {
         return owner;
     }
+
     public String getTurretTextureName() {
         return turretTextureName;
     }
