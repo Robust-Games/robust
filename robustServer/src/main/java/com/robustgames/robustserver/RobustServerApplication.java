@@ -3,7 +3,11 @@ package com.robustgames.robustserver;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -15,6 +19,10 @@ import static com.almasb.fxgl.dsl.FXGL.*;
  * and manages message handling between connected clients.
  */
 public class RobustServerApplication extends GameApplication {
+
+    private final Map<Connection<Bundle>, Integer> clientIds = new HashMap<>();
+    private final Map<Integer, Connection<Bundle>> idToConnection = new HashMap<>();
+    private int nextId = 1;
 
     private GameSession session;
 
@@ -39,23 +47,74 @@ public class RobustServerApplication extends GameApplication {
         server.setOnConnected(conn -> {
             System.out.println("[Server] New client connected.");
             session.tryAddClient(conn);
+            conn.addMessageHandlerFX((connection, bundle) -> {
+                String type = bundle.getName();
+                System.out.println("Received bundle: " + type + " from " + connection);
+
+                switch (type) {
+                    case "hello": {
+                        // Client hat sich mit "hello" gemeldet -> ID zuweisen
+
+                        if (!clientIds.containsKey(connection)) {
+                            clientIds.put(connection, nextId);
+                            idToConnection.put(nextId, connection); // <-- fehlt, sonst kein Routing
+                            System.out.println("Assigned ID " + nextId + " to a client");
+                            nextId++;
+                        }
+
+                        // Prüfen, ob 2 Clients verbunden sind
+                        if (clientIds.size() == 2) {
+                            // IDs an beide Clients senden
+                            clientIds.forEach((clientConn, id) -> {
+                                Bundle assign = new Bundle("assign_id");
+                                assign.put("clientId", id);
+                                clientConn.send(assign);
+                                System.out.println("Sent assign_id " + id + " to client");
+                            });
+                        }
+                        break;
+                    }
+                    default: {
+                        // Sender-ID aus Bundle lesen
+                        int senderId = bundle.get("id");
+                        Connection<Bundle> targetConn = getOtherClientConnection(senderId);
+
+                        if (targetConn != null) {
+                            targetConn.send(bundle);
+                            System.out.println("Forwarded bundle '" + type + "' from client " + senderId + " to opponent.");
+                        } else {
+                            System.out.println("Opponent not connected. Cannot forward bundle from client " + senderId);
+                        }
+                        break;
+                    }
+                }
+            });
+            server.setOnDisconnected(conne -> {
+                System.out.println("[Server] Client disconnected.");
+                // Spieler-Zuordnung aufheben
+                if (conne.equals(session.getPlayer1())) {
+                    System.out.println("[Session] PLAYER1 disconnected.");
+                    session.clearPlayer1();
+                } else if (conne.equals(session.getPlayer2())) {
+                    System.out.println("[Session] PLAYER2 disconnected.");
+                    session.clearPlayer2();
+                }
+            });
+
         });
-
-        server.setOnDisconnected(conn -> {
-            System.out.println("[Server] Client disconnected.");
-
-            // Spieler-Zuordnung aufheben
-            if (conn.equals(session.getPlayer1())) {
-                System.out.println("[Session] PLAYER1 disconnected.");
-                session.clearPlayer1();
-            } else if (conn.equals(session.getPlayer2())) {
-                System.out.println("[Session] PLAYER2 disconnected.");
-                session.clearPlayer2();
-            }
-        });
-
-        System.out.println("[Server] Listening on port 55555.");
         server.startAsync();
+    }
+
+    /**
+     * Liefert die Verbindung des jeweils anderen Clients.
+     */
+    private Connection<Bundle> getOtherClientConnection(int senderId) {
+        if (senderId == 1 && idToConnection.containsKey(2)) {
+            return idToConnection.get(2);
+        } else if (senderId == 2 && idToConnection.containsKey(1)) {
+            return idToConnection.get(1);
+        }
+        return null;
     }
 
     public static void main(String[] args) {
