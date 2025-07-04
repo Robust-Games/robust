@@ -26,20 +26,11 @@ public class BundleFactory {
      */
     public static Bundle createMoveActionBundle(Entity entity, Point2D targetGridPos) {
         Bundle bundle = new Bundle("MoveAction");
-        int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
-        if (entity.hasComponent(IDComponent.class)) {
-            bundle.put("clientId", clientId);
-            bundle.put("entityId", entity.getComponent(IDComponent.class).getId());
-        } else {
-            bundle.put("entityId", -1);
-        }
-        bundle.put("fromX", entity.getPosition().getX());
-        bundle.put("fromY", entity.getPosition().getY());
+        bundle.put("entityId", entity.hasComponent(IDComponent.class) ? entity.getComponent(IDComponent.class).getId() : -1);
         bundle.put("toX", targetGridPos.getX());
         bundle.put("toY", targetGridPos.getY());
         return bundle;
     }
-
     /**
      * Creates a bundle representing a rotate action, to be sent to the server.
      * The bundle includes the unique entity ID and the new direction (as texture name without ".png").

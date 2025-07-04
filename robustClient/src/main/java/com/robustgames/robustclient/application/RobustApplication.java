@@ -3,12 +3,16 @@ package com.robustgames.robustclient.application;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.net.Connection;
+import com.robustgames.robustclient.business.actions.MovementAction;
+import com.robustgames.robustclient.business.actions.RotateAction;
+import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.factories.IDFactory;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
@@ -17,11 +21,13 @@ import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
+import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -184,12 +190,75 @@ public class RobustApplication extends GameApplication {
                         System.out.println("Rejected: " + responseBundle.get("message"));
                         getGameController().exit();
                     }
-                    case "move_action" -> {
+                    case "MoveAction" -> {
                         System.out.println("MoveAction empfangen: " + responseBundle);
-                        // TODO: verarbeitung bundle
+
+                        long entityId = responseBundle.get("entityId");
+                        double toX = responseBundle.get("toX");
+                        double toY = responseBundle.get("toY");
+
+                        Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
+                                .filter(e -> e.getComponent(IDComponent.class).getId() == entityId)
+                                .findFirst()
+                                .orElse(null);
+
+                        if (tank != null) {
+                            Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
+                            Entity dummyTarget = FXGL.entityBuilder().at(screenTarget).build();
+
+                            MovementAction moveAction = new MovementAction(dummyTarget);
+                            tank.getComponent(ActionComponent.class).addAction(moveAction);
+                            tank.getComponent(ActionComponent.class).pause();
+                        }
                     }
+
+                    case "RotateAction" -> {
+                        System.out.println("RotateAction empfangen: " + responseBundle);
+
+                        long entityId = responseBundle.get("entityId");
+                        String textureName = responseBundle.get("direction") + ".png";
+
+                        Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
+                                .filter(e -> e.getComponent(IDComponent.class).getId() == entityId)
+                                .findFirst()
+                                .orElse(null);
+
+                        if (tank == null) {
+                            System.err.println("Tank mit ID " + entityId + " nicht gefunden.");
+                            return;
+                        }
+
+                        RotateAction rotateAction = new RotateAction(textureName);
+                        ActionComponent ac = tank.getComponent(ActionComponent.class);
+                        ac.addAction(rotateAction);
+                        ac.pause();
+                   }
+
+                    case "ShootAction" -> {
+                        long shooterId = responseBundle.get("shooterId");
+                        long targetId = responseBundle.get("targetId");
+
+                        Entity shooter = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
+                                .filter(e -> e.getComponent(IDComponent.class).getId() == shooterId)
+                                .findFirst().orElse(null);
+
+                        Entity target = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
+                                .filter(e -> e.getComponent(IDComponent.class).getId() == targetId)
+                                .findFirst().orElse(null);
+
+                        if (shooter != null && target != null) {
+                            ShootAction shootAction = new ShootAction(target);
+                            shooter.getComponent(ActionComponent.class).addAction(shootAction);
+                            shooter.getComponent(ActionComponent.class).pause();
+                        } else {
+                            System.err.println("Shooter or target not found for ShootAction");
+                        }
+                    }
+
+
+
                     case "assign_id" -> {
-                        int id = responseBundle.get("id");
+                        int id = responseBundle.get("clientId");
                         setClientId(id);
                         System.out.println("Client-ID erhalten: " + id);
                     }

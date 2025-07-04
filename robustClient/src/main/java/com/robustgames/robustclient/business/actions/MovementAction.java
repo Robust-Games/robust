@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
@@ -41,7 +42,8 @@ public class MovementAction extends Action {
 
             // Zielposition als Grid-Koordinaten (Center des Tiles)
             Point2D gridTarget = MapService.isoScreenToGrid(target.getCenter());
-            Bundle moveBundle = BundleFactory.createMoveActionBundle(entity, gridTarget);
+            // long tileId = target.getComponent(IDComponent.class).getId(); // erstellt Tile ID
+            Bundle moveBundle = BundleFactory.createMoveActionBundle(entity, gridTarget); // ID mitgeben
             moveBundle.put("clientId", clientId);
             conn.send(moveBundle);
 
@@ -49,6 +51,7 @@ public class MovementAction extends Action {
             System.out.println(" Sending moveBundle:");
             System.out.println("  clientId: " + clientId);
             System.out.println("  gridTarget: " + gridTarget);
+    //        System.out.println("  tileId: " + tileId);
             System.out.println("  bundleName: " + moveBundle.getName());
 
 

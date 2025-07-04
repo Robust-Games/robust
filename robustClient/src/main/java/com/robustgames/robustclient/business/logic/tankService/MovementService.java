@@ -44,7 +44,18 @@ public class MovementService {
         }
     }
 
-    //@burak für später, wenn der Spieler den weg zeichnet
+//    public static void moveTankSended(double toX, double toY, Entity selectedTank) {
+//        Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
+//        Point2D direction = screenTarget.subtract(selectedTank.getPosition()).normalize();
+//        selectedTank.translate(direction.multiply(tpf * 200));  // z. B. in einem Timer
+//
+//        if (selectedTank.distance(screenTarget) < 5) {
+//            selectedTank.setPosition(screenTarget);
+//            MovementService.changeMountainLayer(selectedTank);
+//        }
+//    }
+
+        //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
 //        Entity selectedTank = MapService.findSelectedTank();
 //        if (selectedTank != null)  { // prüft ob was gewählt wurde
