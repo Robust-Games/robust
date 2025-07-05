@@ -76,7 +76,7 @@ public class RobustServerApplication extends GameApplication {
                     }
                     default: {
                         // Sender-ID aus Bundle lesen
-                        int senderId = bundle.get("id");
+                        int senderId = bundle.get("clientId");
                         Connection<Bundle> targetConn = getOtherClientConnection(senderId);
 
                         if (targetConn != null) {

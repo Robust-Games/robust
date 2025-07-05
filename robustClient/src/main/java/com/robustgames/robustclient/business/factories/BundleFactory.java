@@ -41,6 +41,9 @@ public class BundleFactory {
      */
     public static Bundle createRotateActionBundle(Entity entity, String directionTexture) {
         Bundle bundle = new Bundle("RotateAction");
+        int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
+        bundle.put("clientId", clientId);
+
         if (entity.hasComponent(IDComponent.class)) {
             bundle.put("entityId", entity.getComponent(IDComponent.class).getId());
         } else {
@@ -50,7 +53,7 @@ public class BundleFactory {
         String dir = directionTexture.endsWith(".png")
                 ? directionTexture.substring(0, directionTexture.length() - 4)
                 : directionTexture;
-        bundle.put("direction", dir);
+        bundle.put("direction", dir); // oben entfernt ?
         return bundle;
     }
 
@@ -63,6 +66,8 @@ public class BundleFactory {
      */
     public static Bundle createShootActionBundle(Entity shooter, Entity target) {
         Bundle bundle = new Bundle("ShootAction");
+        int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
+        bundle.put("clientId", clientId);
         bundle.put("shooterId", shooter.hasComponent(IDComponent.class) ? shooter.getComponent(IDComponent.class).getId() : -1);
         bundle.put("targetId", target.hasComponent(IDComponent.class) ? target.getComponent(IDComponent.class).getId() : -1);
         return bundle;

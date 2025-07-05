@@ -224,7 +224,7 @@ public class RobustApplication extends GameApplication {
                                 .orElse(null);
 
                         if (tank == null) {
-                            System.err.println("Tank mit ID " + entityId + " nicht gefunden.");
+                            System.err.println("Tank mit ID " + entityId + " nicht gefunden");
                             return;
                         }
 
@@ -251,7 +251,7 @@ public class RobustApplication extends GameApplication {
                             shooter.getComponent(ActionComponent.class).addAction(shootAction);
                             shooter.getComponent(ActionComponent.class).pause();
                         } else {
-                            System.err.println("Shooter or target not found for ShootAction");
+                            System.err.println("Shooter oder Target nicht gefunden");
                         }
                     }
 
