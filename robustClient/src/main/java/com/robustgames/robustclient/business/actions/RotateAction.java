@@ -8,6 +8,7 @@ import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
+import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
@@ -18,6 +19,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 public class RotateAction extends Action {
     private final Texture newTankTexture;
     private final String textureName;
+    private boolean isLocal;
 
     /**
      * Constructs a RotateAction for the given texture name.
@@ -27,6 +29,13 @@ public class RotateAction extends Action {
     public RotateAction(String newTankTexture) {
         this.textureName = newTankTexture;
         this.newTankTexture = FXGL.getAssetLoader().loadTexture(newTankTexture);
+        isLocal = true;
+    }
+
+    public RotateAction(String newTankTexture, boolean isLocal) {
+        this.textureName = newTankTexture;
+        this.newTankTexture = FXGL.getAssetLoader().loadTexture(newTankTexture);
+        this.isLocal = isLocal;
     }
 
     /**
@@ -35,15 +44,28 @@ public class RotateAction extends Action {
      */
     @Override
     protected void onStarted() {
-        RobustApplication app = FXGL.<RobustApplication>getAppCast();
+//        RobustApplication app = FXGL.<RobustApplication>getAppCast();
+//        Connection<Bundle> conn = app.getConnection();
+//        if (conn != null) {
+//            Bundle rotateBundle = BundleFactory.createRotateActionBundle(entity, textureName);
+//            conn.send(rotateBundle);
+//        } else {
+//            System.out.println("No connection set – can't send rotate!");
+//        }
+    }
+
+    @Override
+    protected void onQueued() {
+        if (!isLocal) return;
+
+        RobustApplication app = FXGL.getAppCast();
         Connection<Bundle> conn = app.getConnection();
         if (conn != null) {
             Bundle rotateBundle = BundleFactory.createRotateActionBundle(entity, textureName);
             conn.send(rotateBundle);
-        } else {
-            System.out.println("No connection set – can't send rotate!");
         }
     }
+
 
     @Override
     protected void onUpdate(double tpf) {

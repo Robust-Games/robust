@@ -13,6 +13,7 @@ import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.actions.MovementAction;
 import com.robustgames.robustclient.business.actions.RotateAction;
 import com.robustgames.robustclient.business.actions.ShootAction;
+import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.factories.IDFactory;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
@@ -206,7 +207,7 @@ public class RobustApplication extends GameApplication {
                             Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
                             Entity dummyTarget = FXGL.entityBuilder().at(screenTarget).build();
 
-                            MovementAction moveAction = new MovementAction(dummyTarget);
+                            MovementAction moveAction = new MovementAction(dummyTarget, false);
                             tank.getComponent(ActionComponent.class).addAction(moveAction);
                             tank.getComponent(ActionComponent.class).pause();
                         }
@@ -228,7 +229,7 @@ public class RobustApplication extends GameApplication {
                             return;
                         }
 
-                        RotateAction rotateAction = new RotateAction(textureName);
+                        RotateAction rotateAction = new RotateAction(textureName, false);
                         ActionComponent ac = tank.getComponent(ActionComponent.class);
                         ac.addAction(rotateAction);
                         ac.pause();
@@ -247,12 +248,23 @@ public class RobustApplication extends GameApplication {
                                 .findFirst().orElse(null);
 
                         if (shooter != null && target != null) {
-                            ShootAction shootAction = new ShootAction(target);
+                            ShootAction shootAction = new ShootAction(target, false);
                             shooter.getComponent(ActionComponent.class).addAction(shootAction);
                             shooter.getComponent(ActionComponent.class).pause();
                         } else {
                             System.err.println("Shooter oder Target nicht gefunden");
                         }
+                    }
+                    case "ExecuteTurn" -> {
+                        System.out.println("ExecuteTurn empfangen - Aktionen starten");
+
+                        FXGL.getGameWorld().getEntitiesByType(TANK).forEach(tank -> {
+                            ActionComponent ac = tank.getComponent(ActionComponent.class);
+                            if (ac.isPaused()) {
+                                ac.resume();
+                            }
+                            tank.getComponent(APComponent.class).reset();
+                        });
                     }
 
 

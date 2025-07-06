@@ -72,4 +72,10 @@ public class BundleFactory {
         bundle.put("targetId", target.hasComponent(IDComponent.class) ? target.getComponent(IDComponent.class).getId() : -1);
         return bundle;
     }
+
+    public static void signalTurnFinished() {
+        Bundle ready = new Bundle("PlayerReady");
+        ready.put("clientId", FXGL.<RobustApplication>getAppCast().getClientId());
+        FXGL.<RobustApplication>getAppCast().getConnection().send(ready);
+    }
 }

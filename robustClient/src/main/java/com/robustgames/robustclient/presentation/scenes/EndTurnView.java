@@ -1,7 +1,10 @@
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.business.entitiy.components.APComponent;
+import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
@@ -32,6 +35,11 @@ public class EndTurnView extends Pane {
         btnEndTurn.setOnAction(event -> {
             Player currentPlayer = TurnService.currentPlayer;
             Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
+
+            playerTank.removeComponent(SelectableComponent.class);
+            playerTank.getComponent(APComponent.class).setCurrentAP(0);
+
+            BundleFactory.signalTurnFinished(); // sendet Nachricht
             // playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
 
             TurnService.nextPlayer();

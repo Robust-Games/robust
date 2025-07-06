@@ -10,16 +10,24 @@ import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
 
 public class MovementAction extends Action {
     private final Entity target;
+    private boolean isLocal;
     private double speed = 200; // pixels/sec
 
 
     public MovementAction(Entity target) {
         this.target = target;
+        this.isLocal = true;
+    }
+
+    public MovementAction(Entity target, boolean isLocal){
+        this.target = target;
+        this.isLocal = isLocal;
     }
 
     /**
@@ -33,34 +41,26 @@ public class MovementAction extends Action {
      */
     @Override
     protected void onStarted() {
-        // Netzwerk: Sende MoveAction an den Server
-        RobustApplication app = FXGL.<RobustApplication>getAppCast(); // Holt die aktuell laufende Instanz der RobustApplication aus dem FXGL-Framework
-        Connection<Bundle> conn = app.getConnection();
-        if (conn != null) {
-            // Client-ID holen
-            int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
-
-            // Zielposition als Grid-Koordinaten (Center des Tiles)
-            Point2D gridTarget = MapService.isoScreenToGrid(target.getCenter());
-            // long tileId = target.getComponent(IDComponent.class).getId(); // erstellt Tile ID
-            Bundle moveBundle = BundleFactory.createMoveActionBundle(entity, gridTarget); // ID mitgeben
-            moveBundle.put("clientId", clientId);
-            conn.send(moveBundle);
-
-            // DEBUG
-            System.out.println(" Sending moveBundle:");
-            System.out.println("  clientId: " + clientId);
-            System.out.println("  gridTarget: " + gridTarget);
-    //        System.out.println("  tileId: " + tileId);
-            System.out.println("  bundleName: " + moveBundle.getName());
-
-
-        } else {
-            System.out.println("No connection set – can't send move!");
-
-        }
-
-
+//        // Netzwerk: Sende MoveAction an den Server
+//        RobustApplication app = FXGL.<RobustApplication>getAppCast(); // Holt die aktuell laufende Instanz der RobustApplication aus dem FXGL-Framework
+//        Connection<Bundle> conn = app.getConnection();
+//        if (conn != null) {
+//            // Client-ID holen
+//            int clientId = FXGL.<RobustApplication>getAppCast().getClientId();
+//
+//            // Zielposition als Grid-Koordinaten (Center des Tiles)
+//            Point2D gridTarget = MapService.isoScreenToGrid(target.getCenter());
+//            // long tileId = target.getComponent(IDComponent.class).getId(); // erstellt Tile ID
+//            Bundle moveBundle = BundleFactory.createMoveActionBundle(entity, gridTarget); // ID mitgeben
+//            moveBundle.put("clientId", clientId);
+//            conn.send(moveBundle);
+//
+//            // DEBUG
+//            System.out.println(" Sending moveBundle:");
+//
+//        } else {
+//            System.out.println("No connection set – can't send move!");
+//        }
     }
 
     @Override
@@ -77,8 +77,19 @@ public class MovementAction extends Action {
 
     @Override
     protected void onQueued() {
-        super.onQueued();
+        if (!isLocal) return;
+
+        RobustApplication app = FXGL.getAppCast();
+        Connection<Bundle> conn = app.getConnection();
+        if (conn != null) {
+            int clientId = app.getClientId();
+            Point2D gridTarget = MapService.isoScreenToGrid(target.getCenter());
+            Bundle moveBundle = BundleFactory.createMoveActionBundle(entity, gridTarget);
+            moveBundle.put("clientId", clientId);
+            conn.send(moveBundle);
+        }
     }
+
 
 
     @Override

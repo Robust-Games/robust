@@ -24,6 +24,9 @@ public class RobustServerApplication extends GameApplication {
     private final Map<Integer, Connection<Bundle>> idToConnection = new HashMap<>();
     private int nextId = 1;
 
+    private boolean player1Ready = false;
+    private boolean player2Ready = false;
+
     private GameSession session;
 
     @Override
@@ -74,6 +77,31 @@ public class RobustServerApplication extends GameApplication {
                         }
                         break;
                     }
+
+                    case "PlayerReady": {
+                        int clientId = bundle.get("clientId");
+                        System.out.println("Received PlayerReady from client " + clientId);
+
+                        if (clientId == 1) player1Ready = true;
+                        if (clientId == 2) player2Ready = true;
+
+                        if (player1Ready && player2Ready) {
+                            System.out.println("Both players ready, sending ExecuteTurn");
+
+                            Bundle executeTurn = new Bundle("ExecuteTurn");
+
+                            idToConnection.values().forEach(connTarget -> {
+                                connTarget.send(executeTurn);
+                                System.out.println("Sent ExecuteTurn to client");
+                            });
+
+                            // Reset
+                            player1Ready = false;
+                            player2Ready = false;
+                        }
+                        break;
+                    }
+
                     default: {
                         // Sender-ID aus Bundle lesen
                         int senderId = bundle.get("clientId");
@@ -88,6 +116,8 @@ public class RobustServerApplication extends GameApplication {
                         break;
                     }
                 }
+
+
             });
             server.setOnDisconnected(conne -> {
                 System.out.println("[Server] Client disconnected.");

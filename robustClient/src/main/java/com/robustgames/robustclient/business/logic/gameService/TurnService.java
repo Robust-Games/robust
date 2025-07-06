@@ -41,7 +41,7 @@ public class TurnService {
         } else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
-            executeActions();
+            //executeActions();
         }
         startTurn(currentPlayer);
 

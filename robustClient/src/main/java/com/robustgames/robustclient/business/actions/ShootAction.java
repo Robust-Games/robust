@@ -23,6 +23,7 @@ public class ShootAction extends Action {
     private final Point2D targetGridPosition;
     private final Point2D targetScreenPosition;
     private final Entity originalTarget;
+    private boolean isLocal;
 
     /**
      * Creates a new ShootAction targeting the position of the entity
@@ -33,6 +34,7 @@ public class ShootAction extends Action {
     public ShootAction(Entity target) {
         this.originalTarget = target;
         boolean isTargetTile = target.isType(TILE);
+        this.isLocal = true;
 
         if (isTargetTile) {
             this.targetScreenPosition = target.getPosition();
@@ -41,6 +43,20 @@ public class ShootAction extends Action {
         }
         this.targetGridPosition = MapService.isoScreenToGrid(targetScreenPosition);
     }
+
+    public ShootAction(Entity target, boolean isLocal) {
+        this.originalTarget = target;
+        boolean isTargetTile = target.isType(TILE);
+        this.isLocal = isLocal;
+
+        if (isTargetTile) {
+            this.targetScreenPosition = target.getPosition();
+        } else {
+            this.targetScreenPosition = target.getCenter();
+        }
+        this.targetGridPosition = MapService.isoScreenToGrid(targetScreenPosition);
+    }
+
 
     /**
      * Called when the action starts executing during turn processing.
@@ -56,16 +72,16 @@ public class ShootAction extends Action {
      */
     @Override
     protected void onStarted() {
-        // Network: Send ShootAction bundle to the server
-        RobustApplication app = FXGL.<RobustApplication>getAppCast();
-        Connection<Bundle> conn = app.getConnection();
-        if (conn != null) {
-            // The "entity" is the shooter, "currentTarget" is the intended target
-            Bundle shootBundle = BundleFactory.createShootActionBundle(entity, originalTarget);
-            conn.send(shootBundle);
-        } else {
-            System.out.println("No connection set – can't send shoot!");
-        }
+//        // Network: Send ShootAction bundle to the server
+//        RobustApplication app = FXGL.<RobustApplication>getAppCast();
+//        Connection<Bundle> conn = app.getConnection();
+//        if (conn != null) {
+//            // The "entity" is the shooter, "currentTarget" is the intended target
+//            Bundle shootBundle = BundleFactory.createShootActionBundle(entity, originalTarget);
+//            conn.send(shootBundle);
+//        } else {
+//            System.out.println("No connection set – can't send shoot!");
+//        }
 
         spawnAttackTarget(originalTarget, entity, true);
 
@@ -118,7 +134,14 @@ public class ShootAction extends Action {
 
     @Override
     protected void onQueued() {
-        super.onQueued();
+        if (!isLocal) return;
+
+        RobustApplication app = FXGL.getAppCast();
+        Connection<Bundle> conn = app.getConnection();
+        if (conn != null) {
+            Bundle shootBundle = BundleFactory.createShootActionBundle(entity, originalTarget);
+            conn.send(shootBundle);
+        }
     }
 
     @Override
