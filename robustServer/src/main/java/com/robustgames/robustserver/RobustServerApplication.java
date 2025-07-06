@@ -75,8 +75,14 @@ public class RobustServerApplication extends GameApplication {
                         break;
                     }
                     default: {
+                        Integer senderIdd = bundle.get("clientId");
+                        if (senderIdd == null) {
+                            System.out.println("[Server] WARN: Bundle '" + bundle.getName() + "' hat keine clientId – wird ignoriert.");
+                            return;
+                        }
+
                         // Sender-ID aus Bundle lesen
-                        int senderId = bundle.get("id");
+                        int senderId = bundle.get("clientId");
                         Connection<Bundle> targetConn = getOtherClientConnection(senderId);
 
                         if (targetConn != null) {
@@ -89,18 +95,18 @@ public class RobustServerApplication extends GameApplication {
                     }
                 }
             });
-            server.setOnDisconnected(conne -> {
-                System.out.println("[Server] Client disconnected.");
-                // Spieler-Zuordnung aufheben
-                if (conne.equals(session.getPlayer1())) {
-                    System.out.println("[Session] PLAYER1 disconnected.");
-                    session.clearPlayer1();
-                } else if (conne.equals(session.getPlayer2())) {
-                    System.out.println("[Session] PLAYER2 disconnected.");
-                    session.clearPlayer2();
-                }
-            });
 
+        });
+        server.setOnDisconnected(conne -> {
+            System.out.println("[Server] Client disconnected.");
+            // Spieler-Zuordnung aufheben
+            if (conne.equals(session.getPlayer1())) {
+                System.out.println("[Session] PLAYER1 disconnected.");
+                session.clearPlayer1();
+            } else if (conne.equals(session.getPlayer2())) {
+                System.out.println("[Session] PLAYER2 disconnected.");
+                session.clearPlayer2();
+            }
         });
         server.startAsync();
     }
