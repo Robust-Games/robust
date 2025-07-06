@@ -40,7 +40,20 @@ public class PlayerFactory implements EntityFactory {
                 .with(new APComponent(5))
                 .onClick(clickedTank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    if (TurnService.currentPlayer == Player.PLAYER1){
+
+                    String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+                    Player owner = clickedTank.getComponent(TankDataComponent.class).getOwner();
+
+                    if (!owner.toString().equals(myPlayer)) {
+                        System.out.println("Nicht dein Panzer. Klick ignoriert.");
+                        return;
+                    }
+
+                    FXGL.<RobustApplication>getAppCast().deSelectTank();
+                    clickedTank.addComponent(new SelectableComponent());
+                    FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+
+                    if (TurnService.currentPlayer == Player.PLAYER1){ // Für LOKAL
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
@@ -84,7 +97,23 @@ public class PlayerFactory implements EntityFactory {
                 .with(new APComponent(5))
                 .onClick(clickedTank ->{
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    if (TurnService.currentPlayer == PLAYER2){
+
+
+
+                    String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+                    Player owner = clickedTank.getComponent(TankDataComponent.class).getOwner();
+
+                    if (!owner.toString().equals(myPlayer)) {
+                        System.out.println("Nicht dein Panzer. Klick ignoriert.");
+                        return;
+                    }
+
+                    FXGL.<RobustApplication>getAppCast().deSelectTank();
+                    clickedTank.addComponent(new SelectableComponent());
+                    FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+
+                    // Kein zugriff auf eigenen panzer
+                    if (TurnService.currentPlayer == Player.PLAYER2){ // Für LOKAL
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
