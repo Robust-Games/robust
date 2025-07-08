@@ -110,6 +110,5 @@ public class ShootService {
                         .put("targetLocation", targetScreenPosition)
                 , Duration.millis(10)
         );
-
     }
 }

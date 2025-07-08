@@ -38,7 +38,7 @@ public class PlayerFactory implements EntityFactory {
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
-                .onClick(clickedTank ->{
+                .onClick(clickedTank -> {
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
 
                     String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
@@ -53,7 +53,7 @@ public class PlayerFactory implements EntityFactory {
                     clickedTank.addComponent(new SelectableComponent());
                     FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
 
-                    if (TurnService.currentPlayer == Player.PLAYER1){ // Für LOKAL
+                    if (TurnService.currentPlayer == Player.PLAYER1) { // Für LOKAL
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
@@ -95,9 +95,8 @@ public class PlayerFactory implements EntityFactory {
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
-                .onClick(clickedTank ->{
+                .onClick(clickedTank -> {
                     //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-
 
 
                     String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
@@ -113,7 +112,7 @@ public class PlayerFactory implements EntityFactory {
                     FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
 
                     // Kein zugriff auf eigenen panzer
-                    if (TurnService.currentPlayer == Player.PLAYER2){ // Für LOKAL
+                    if (TurnService.currentPlayer == Player.PLAYER2) { // Für LOKAL
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);

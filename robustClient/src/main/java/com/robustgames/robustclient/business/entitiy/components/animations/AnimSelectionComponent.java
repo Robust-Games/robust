@@ -15,14 +15,12 @@ public class AnimSelectionComponent extends Component {
         texture = new AnimatedTexture(tankSelectionMarker);
         texture.setTranslateX(-64);
         texture.setTranslateY(-64);
-
     }
 
     @Override
     public void onAdded() {
         entity.getViewComponent().addChild(texture);
         texture.loopAnimationChannel(tankSelectionMarker);
-
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
-import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;

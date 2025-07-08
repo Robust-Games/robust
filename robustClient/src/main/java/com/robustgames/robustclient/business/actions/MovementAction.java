@@ -6,11 +6,9 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.application.RobustApplication;
-import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
-import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
 
@@ -25,7 +23,7 @@ public class MovementAction extends Action {
         this.isLocal = true;
     }
 
-    public MovementAction(Entity target, boolean isLocal){
+    public MovementAction(Entity target, boolean isLocal) {
         this.target = target;
         this.isLocal = isLocal;
     }
@@ -89,7 +87,6 @@ public class MovementAction extends Action {
             conn.send(moveBundle);
         }
     }
-
 
 
     @Override

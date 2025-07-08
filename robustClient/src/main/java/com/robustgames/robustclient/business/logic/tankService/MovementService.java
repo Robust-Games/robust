@@ -55,7 +55,7 @@ public class MovementService {
 //        }
 //    }
 
-        //@burak für später, wenn der Spieler den weg zeichnet
+    //@burak für später, wenn der Spieler den weg zeichnet
 //    public static void rotateAutomatically(Entity tile) {
 //        Entity selectedTank = MapService.findSelectedTank();
 //        if (selectedTank != null)  { // prüft ob was gewählt wurde
@@ -80,7 +80,7 @@ public class MovementService {
      * their x and y coordinates.
      *
      * @param fromGrid the starting point on the grid
-     * @param toGrid the target point on the grid
+     * @param toGrid   the target point on the grid
      * @return the Manhattan distance as an integer between the two points
      */
     public static int gridDistance(Point2D fromGrid, Point2D toGrid) {

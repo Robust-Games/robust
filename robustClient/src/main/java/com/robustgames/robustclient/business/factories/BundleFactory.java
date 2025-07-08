@@ -4,11 +4,7 @@ import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.application.RobustApplication;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
-import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
-import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import javafx.geometry.Point2D;
 
 /**
@@ -31,6 +27,7 @@ public class BundleFactory {
         bundle.put("toY", targetGridPos.getY());
         return bundle;
     }
+
     /**
      * Creates a bundle representing a rotate action, to be sent to the server.
      * The bundle includes the unique entity ID and the new direction (as texture name without ".png").

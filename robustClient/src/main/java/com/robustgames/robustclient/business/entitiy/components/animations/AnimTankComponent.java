@@ -26,5 +26,4 @@ public class AnimTankComponent extends Component {
         super.onRemoved();
         entity.getViewComponent().removeChild(texture);
     }
-
 }

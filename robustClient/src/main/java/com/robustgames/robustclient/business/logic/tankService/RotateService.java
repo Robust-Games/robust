@@ -57,5 +57,4 @@ public class RotateService {
         return newTankView;
     }
     //Todo: Hier dann noch die Rotate Turret sachen
-
 }

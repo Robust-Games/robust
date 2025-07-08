@@ -15,14 +15,12 @@ public class AnimExplosionComponent extends Component {
         texture = new AnimatedTexture(expl);
         texture.setTranslateX(xOffset);
         texture.setTranslateY(16 + yOffset);
-
     }
 
     @Override
     public void onAdded() {
         entity.getViewComponent().addChild(texture);
         texture.play();
-
     }
 
     @Override

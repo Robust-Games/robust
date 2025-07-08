@@ -8,7 +8,8 @@ import com.robustgames.robustclient.business.logic.tankService.RotateService;
 
 public class RotateComponent extends Component {
     String newTankTexture;
-    public void rotateLeft(){
+
+    public void rotateLeft() {
         newTankTexture = RotateService.rotateTank(entity, Direction.LEFT);
         ActionComponent ac = entity.getComponent(ActionComponent.class);
         ac.addAction(new RotateAction(newTankTexture));
@@ -22,5 +23,4 @@ public class RotateComponent extends Component {
         ac.addAction(new RotateAction(newTankTexture));
         ac.pause();
     }
-
 }
