@@ -1,10 +1,13 @@
 package com.robustgames.robustclient.presentation.scenes;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
+import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
@@ -38,9 +41,11 @@ public class EndTurnView extends Pane {
 
             playerTank.removeComponent(SelectableComponent.class);
             playerTank.getComponent(APComponent.class).setCurrentAP(0);
-
-            BundleFactory.signalTurnFinished(); // sendet Nachricht
-            // playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
+            if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)) {
+                BundleFactory.signalTurnFinished(); // sendet Nachricht
+            }
+            if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.LOCAL))
+                playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
 
             TurnService.nextPlayer();
         });

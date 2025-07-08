@@ -352,6 +352,10 @@ public class RobustApplication extends GameApplication {
         return assignedPlayer;
     }
 
+    public Gamemode getSelectedGamemode() {
+        return selectedGamemode;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
