@@ -17,6 +17,7 @@ public class TankDataComponent extends Component {
     private Point2D initialPos;
     private Texture initialTankTexture;
     private String initialTankView;
+    private String newTankView;
     private Texture newTankTexture;
     private final Player owner;
     private Texture turretTexture;
@@ -29,6 +30,7 @@ public class TankDataComponent extends Component {
         newTankTexture = view;
         initialTankView = view.getImage().getUrl();
         initialTankView = initialTankView.substring(initialTankView.lastIndexOf("/") + 1);
+        newTankView = initialTankView;
     }
 
     public String getInitialTankView() {return initialTankView;}
@@ -62,7 +64,11 @@ public class TankDataComponent extends Component {
     }
 
     public void setInitialTankTexture(Texture initialTankTexture) {
+        this.initialTankTexture.set(initialTankTexture);
         this.initialTankTexture = initialTankTexture;
+        initialTankView = initialTankTexture.getImage().getUrl();
+        initialTankView = initialTankView.substring(initialTankView.lastIndexOf("/") + 1);
+
     }
 
     public Texture getNewTankTexture() {
@@ -71,6 +77,8 @@ public class TankDataComponent extends Component {
 
     public void setNewTankTexture(Texture newTankTexture) {
         this.newTankTexture = newTankTexture;
+        newTankView = newTankTexture.getImage().getUrl();
+        newTankView = newTankView.substring(newTankView.lastIndexOf("/") + 1);
     }
 
     public Player getOwner() {
@@ -85,33 +93,48 @@ public class TankDataComponent extends Component {
         this.turretTextureName = turretTextureName;
     }
 
-    public void resetBeforeTurn(){
+    public String getNewTankView() {
+        return newTankView;
+    }
 
+    public void resetBeforeTurn(){
+        // Clean up all textures
         Texture turret = getTurretTexture();
         if (turret != null && entity.getViewComponent().getChildren().contains(turret)) {
             entity.getViewComponent().removeChild(turret);
             setTurretTexture(null);
         }
+
         Texture tankHullTexture = getHullTexture();
         if (tankHullTexture != null && entity.getViewComponent().getChildren().contains(tankHullTexture)) {
             entity.getViewComponent().removeChild(tankHullTexture);
             setHullTexture(null);
         }
 
+        // Reset position and remove entities
         entity.setPosition(initialPos);
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
         FXGL.<RobustApplication>getAppCast().deSelectTank();
+
+        // Remove components
         if (entity.hasComponent(ShootComponent.class))
             entity.removeComponent(ShootComponent.class);
         if (entity.hasComponent(MovementComponent.class))
             entity.removeComponent(MovementComponent.class);
 
+        // Remove any other textures that might be in the view component
         if (entity.getViewComponent().getChildren().contains(newTankTexture)) {
             entity.getViewComponent().removeChild(newTankTexture);
         }
+
+        // Add the initial tank texture back if it's not already there
         if (!entity.getViewComponent().getChildren().contains(initialTankTexture)) {
             entity.getViewComponent().addChild(initialTankTexture);
         }
+
+        // Reset the newTankTexture to be the same as initialTankTexture
+        newTankTexture = initialTankTexture;
+
         MovementService.changeMountainLayer(entity);
     }
 }

@@ -55,20 +55,20 @@ public class ShootComponent extends Component {
                     entityList = getGameWorld().getEntitiesAt(posEntity);
 
                     if (!entityList.isEmpty()) {
-                        if (entityList.size() > 1) {
+                        if (entityList.size() > 1 ) {
                             throw new IllegalStateException("More than one entity found at target position "
                                     + currentGridPos);
                         }
                         Entity target = entityList.getFirst();
-                        ShootService.spawnAttackTarget(target, entity);
-                        break;
+                        ShootService.spawnAttackTarget(target, entity, false);
+                        if (entityList.getFirst().getType() != TANK)
+                            break;
                     } else if (!tileList.isEmpty()) {
-                        ShootService.spawnAttackTarget(tileList.getFirst(), entity);
+                        ShootService.spawnAttackTarget(tileList.getFirst(), entity, false);
                     }
                 }
             }
         }
-        else getNotificationService().pushNotification("Not enough Action Points to shoot!");
     }
 
     @Override

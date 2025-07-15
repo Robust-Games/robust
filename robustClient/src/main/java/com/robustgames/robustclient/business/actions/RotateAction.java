@@ -17,7 +17,7 @@ public class RotateAction extends Action {
     @Override
     protected void onUpdate(double tpf) {
         getGameTimer().runOnceAfter(() -> {
-                    entity.getComponent(TankDataComponent.class).getInitialTankTexture().set(newTankTexture);
+                    entity.getComponent(TankDataComponent.class).setInitialTankTexture(newTankTexture);
                     setComplete();
         }, Duration.millis(200));
     }
@@ -26,5 +26,7 @@ public class RotateAction extends Action {
     @Override
     protected void onCompleted() {
         super.onCompleted();
+        entity.getComponent(TankDataComponent.class).resetBeforeTurn();
+
     }
 }

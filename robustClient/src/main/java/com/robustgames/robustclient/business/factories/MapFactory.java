@@ -13,6 +13,7 @@ import com.robustgames.robustclient.business.entitiy.components.MovementComponen
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimCityComponent;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimZero;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.beans.property.ObjectProperty;
@@ -33,9 +34,18 @@ public class MapFactory implements EntityFactory {
     @Spawns("Background")
     public Entity spawnBackground(SpawnData data) {
         return FXGL.entityBuilder(data)
-                .view(new Rectangle(data.<Integer>get("width"), data.<Integer>get("height"), Color.GREY))
+                .view("background.png")
                 .with(new IrremovableComponent())
+                .with(new AnimZero())
                 .zIndex(-100)
+                .build();
+    }
+    @Spawns("MapBorder")
+    public Entity spawnBorder(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .view("mapBorder.png")
+                .with(new IrremovableComponent())
+                .zIndex(-99)
                 .build();
     }
 

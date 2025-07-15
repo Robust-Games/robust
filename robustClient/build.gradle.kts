@@ -3,11 +3,11 @@ plugins {
     application
     id("org.javamodularity.moduleplugin") version "1.8.12"
     id("org.openjfx.javafxplugin") version "0.0.13"
-    id("org.beryx.jlink") version "2.25.0"
+    id("org.beryx.jlink") version "3.1.1"
 }
 
 group = "com.example"
-version = "1.0-SNAPSHOT"
+version = "1"
 
 repositories {
     mavenCentral()
@@ -40,15 +40,9 @@ dependencies {
         exclude(group = "org.openjfx")
        // exclude(group = "org.jetbrains.kotlin")
     }
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    testImplementation("org.mockito:mockito-core:5.4.0")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.4.0")
+
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
 
 jlink {
     imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
@@ -56,5 +50,11 @@ jlink {
     launcher {
         name = "app"
     }
+    jpackage {
+            // Force it to use Java 21
+            jvmArgs = listOf("--enable-preview")
+            // Make sure it bundles the JRE
+            installerOptions = listOf("--resource-dir", "src/main/resources")
+        }
     addExtraDependencies("kotlin.stdlib")
 }

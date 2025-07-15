@@ -6,7 +6,7 @@
  <tileset firstgid="101" name="EnvironmentEdited" tilewidth="128" tileheight="128" tilecount="160" columns="10">
   <image source="EnvironmentEdited.png" width="1280" height="2048"/>
  </tileset>
- <objectgroup draworder="index" id="7" name="floor">
+ <objectgroup draworder="index" id="7" name="floor" locked="1">
   <object id="239" type="floorTile" x="0" y="0" width="64" height="64"/>
   <object id="280" type="floorTile" x="64" y="0" width="64" height="64"/>
   <object id="281" type="floorTile" x="128" y="0" width="64" height="64"/>
@@ -74,11 +74,11 @@
  </objectgroup>
  <objectgroup id="3" name="Player 2">
   <object id="7" name="Player 2 City" type="city2" x="0" y="0" width="64" height="64"/>
-  <object id="8" name="Player 2 Tank" type="tank2" x="128" y="0" width="64" height="64"/>
+  <object id="8" name="Player 2 Tank" type="tank2" x="64" y="192" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="2" name="Player 1">
   <object id="5" name="Player 1 City" type="city1" x="448" y="448" width="64" height="64"/>
-  <object id="6" name="Player 1 Tank" type="tank1" x="320" y="448" width="64" height="64"/>
+  <object id="6" name="Player 1 Tank" type="tank1" x="64" y="384" width="64" height="64"/>
  </objectgroup>
  <layer id="6" name="Tile Layer 2" width="10" height="10">
   <data encoding="csv">
@@ -97,11 +97,12 @@
  <objectgroup id="4" name="mountains">
   <object id="9" name="mountain" type="mountain" x="256" y="320" width="64" height="64"/>
   <object id="10" name="mountain" type="mountain" x="320" y="320" width="64" height="64"/>
-  <object id="11" name="mountain" type="mountain" x="384" y="320" width="64" height="64"/>
-  <object id="12" name="mountain" type="mountain" x="448" y="320" width="64" height="64"/>
-  <object id="16" name="mountain" type="mountain" x="0" y="128" width="64" height="64"/>
-  <object id="15" name="mountain" type="mountain" x="64" y="128" width="64" height="64"/>
-  <object id="14" name="mountain" type="mountain" x="128" y="128" width="64" height="64"/>
-  <object id="13" name="mountain" type="mountain" x="192" y="128" width="64" height="64"/>
+  <object id="11" name="mountain" type="mountain" x="256" y="256" width="64" height="64"/>
+  <object id="12" name="mountain" type="mountain" x="320" y="256" width="64" height="64"/>
+  <object id="16" name="mountain" type="mountain" x="128" y="192" width="64" height="64"/>
+  <object id="15" name="mountain" type="mountain" x="256" y="192" width="64" height="64"/>
+  <object id="14" name="mountain" type="mountain" x="192" y="256" width="64" height="64"/>
+  <object id="13" name="mountain" type="mountain" x="192" y="192" width="64" height="64"/>
+  <object id="412" name="mountain" type="mountain" x="192" y="128" width="64" height="64"/>
  </objectgroup>
 </map>

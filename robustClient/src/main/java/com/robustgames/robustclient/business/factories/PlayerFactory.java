@@ -20,7 +20,7 @@ import static com.robustgames.robustclient.business.logic.Player.PLAYER1;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER2;
 
 public class PlayerFactory implements EntityFactory {
-    private static final int HP = 10;
+    private static final int HP = 3;
 
     @Spawns("tank1")
     public Entity spawnTankPlayer1(SpawnData data) {
@@ -37,7 +37,6 @@ public class PlayerFactory implements EntityFactory {
                 .with(new RotateComponent())
                 .with(new APComponent(5))
                 .onClick(clickedTank ->{
-                    //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
                     if (TurnService.currentPlayer == Player.PLAYER1){
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
@@ -75,7 +74,7 @@ public class PlayerFactory implements EntityFactory {
         Entity tank = FXGL.entityBuilder(data)
                 .type(TANK)
                 .with(hpComp)
-                .viewWithBBox("tank_down_right.png")
+                .viewWithBBox("green_tank_down_right.png")
                 .zIndex(10)
                 .with(new ActionComponent())
                 .with(new RotateComponent())

@@ -5,6 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Direction;
+import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 
@@ -19,17 +20,18 @@ public class RotateService {
 
 
     public static String rotateTank(Entity selectedTank,  Direction direction) {
-        String newTankView;
+        TankDataComponent tankData = selectedTank.getComponent(TankDataComponent.class);
+        String newTankView = "";
 
         initialTankTexture = selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture();
         newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture();
         initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
 
         if (direction == Direction.LEFT){
-            newTankView = rotateTankLeft(initialTankView);
+            newTankView = newTankView + rotateTankLeft(initialTankView);
         }
         else if (direction == Direction.RIGHT){
-            newTankView = rotateTankRight(initialTankView);
+            newTankView = newTankView + rotateTankRight(initialTankView);
         }
         else throw new IllegalArgumentException("Invalid direction in rotateTank of RotateService: " + direction);
 
@@ -39,8 +41,14 @@ public class RotateService {
             selectedTank.getViewComponent().removeChild(initialTankTexture);
         }
         else {
+            // First remove the old newTankTexture if it exists
+            if (selectedTank.getViewComponent().getChildren().contains(newTankTexture)) {
+                selectedTank.getViewComponent().removeChild(newTankTexture);
+            }
+
             Texture tankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
-            newTankTexture.set(tankTexture);
+            newTankTexture = tankTexture; // Direct assignment instead of set()
+            selectedTank.getViewComponent().addChild(newTankTexture);
         }
         selectedTank.getComponent(TankDataComponent.class).setNewTankTexture(newTankTexture);
         return newTankView;
@@ -54,8 +62,11 @@ public class RotateService {
         String newTankHullView;
         Texture newTankHullTexture = tankData.getHullTexture();
 
-        String newTankTurretView;
-        Texture newTankTurretTexture = tankData.getTurretTexture();;
+        String newTankTurretView = "";
+
+        if (tankData.getOwner().equals(Player.PLAYER2))
+            newTankTurretView = "green_";
+        Texture newTankTurretTexture = tankData.getTurretTexture();
 
         newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture();
         initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
@@ -71,6 +82,7 @@ public class RotateService {
             newTankHullView = changeTankHull(initialTankView);
             newTankHullTexture = FXGL.getAssetLoader().loadTexture(newTankHullView);
 
+            // Make sure to remove any existing textures before adding the new hull texture
             if (selectedTank.getViewComponent().getChildren().contains(initialTankTexture)) {
                 selectedTank.getViewComponent().addChild(newTankHullTexture);
                 selectedTank.getViewComponent().removeChild(initialTankTexture);
@@ -80,33 +92,33 @@ public class RotateService {
                 selectedTank.getViewComponent().removeChild(newTankTexture);
             }
             tankData.setHullTexture(newTankHullTexture);
-
         }
 
         if (diff.getX() > 0 && diff.getY() == 0) {
-            newTankTurretView = "tank_turret_down_right.png";
+            newTankTurretView = newTankTurretView + "tank_turret_down_right.png";
         } else if (diff.getX() > 0 && diff.getY() > 0 && diff.getX() == diff.getY()) {
-            newTankTurretView = "tank_turret_down.png";
+            newTankTurretView = newTankTurretView + "tank_turret_down.png";
         }else if (diff.getX() == 0 && diff.getY() > 0) {
-            newTankTurretView = "tank_turret_down_left.png";
+            newTankTurretView = newTankTurretView + "tank_turret_down_left.png";
         }else if (diff.getX() < 0 && diff.getY() > 0 && abs(diff.getX()) == diff.getY()) {
-            newTankTurretView = "tank_turret_left.png";
+            newTankTurretView = newTankTurretView + "tank_turret_left.png";
         }else if (diff.getX() < 0 && diff.getY() == 0) {
-            newTankTurretView = "tank_turret_top_left.png";
+            newTankTurretView = newTankTurretView + "tank_turret_top_left.png";
         }else if (diff.getX() < 0 && diff.getY() < 0 && diff.getX() == diff.getY()) {
-            newTankTurretView = "tank_turret_top.png";
+            newTankTurretView = newTankTurretView + "tank_turret_top.png";
         }else if (diff.getX() == 0 && diff.getY() < 0) {
-            newTankTurretView = "tank_turret_top_right.png";
+            newTankTurretView = newTankTurretView + "tank_turret_top_right.png";
         }else if (diff.getX() > 0 && diff.getY() < 0 && diff.getX() == abs(diff.getY())) {
-            newTankTurretView = "tank_turret_right.png";
+            newTankTurretView = newTankTurretView + "tank_turret_right.png";
         }else{
             if (newTankTurretTexture != null)
                 newTankTurretView = tankData.getTurretTextureName();
             else
-                newTankTurretView = "tank_turret_top_left.png";
+                newTankTurretView = newTankTurretView + "tank_turret_top_left.png";
         }
 
-        if (newTankTurretTexture != null) {
+        // Always remove the old turret texture if it exists
+        if (newTankTurretTexture != null && selectedTank.getViewComponent().getChildren().contains(newTankTurretTexture)) {
             selectedTank.getViewComponent().removeChild(newTankTurretTexture);
         }
 
@@ -124,6 +136,10 @@ public class RotateService {
             case "tank_top_left.png" -> newTankView = "tank_down_left.png";
             case "tank_down_left.png" -> newTankView = "tank_down_right.png";
             case "tank_down_right.png" -> newTankView = "tank_top_right.png";
+            case "green_tank_top_right.png" -> newTankView = "green_tank_top_left.png";
+            case "green_tank_top_left.png" -> newTankView = "green_tank_down_left.png";
+            case "green_tank_down_left.png" -> newTankView = "green_tank_down_right.png";
+            case "green_tank_down_right.png" -> newTankView = "green_tank_top_right.png";
         }
         return newTankView;
     }
@@ -134,6 +150,10 @@ public class RotateService {
             case "tank_top_left.png" -> newTankView = "tank_top_right.png";
             case "tank_down_left.png" -> newTankView = "tank_top_left.png";
             case "tank_down_right.png" -> newTankView = "tank_down_left.png";
+            case "green_tank_top_right.png" -> newTankView = "green_tank_down_right.png";
+            case "green_tank_top_left.png" -> newTankView = "green_tank_top_right.png";
+            case "green_tank_down_left.png" -> newTankView = "green_tank_top_left.png";
+            case "green_tank_down_right.png" -> newTankView = "green_tank_down_left.png";
         }
         return newTankView;
     }
@@ -144,6 +164,10 @@ public class RotateService {
             case "tank_top_left.png" -> newTankHullView = "tank_top_left_alt.png";
             case "tank_down_left.png" -> newTankHullView = "tank_down_left_alt.png";
             case "tank_down_right.png" -> newTankHullView = "tank_down_right_alt.png";
+            case "green_tank_top_right.png" -> newTankHullView = "green_tank_top_right_alt.png";
+            case "green_tank_top_left.png" -> newTankHullView = "green_tank_top_left_alt.png";
+            case "green_tank_down_left.png" -> newTankHullView = "green_tank_down_left_alt.png";
+            case "green_tank_down_right.png" -> newTankHullView = "green_tank_down_right_alt.png";
         }
         return newTankHullView;
     }

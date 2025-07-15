@@ -41,6 +41,7 @@ public class MovementService {
             selectedTank.removeComponent(SelectableComponent.class);
             selectedTank.addComponent(new SelectableComponent());
             selectedTank.removeComponent(MovementComponent.class);
+            selectedTank.addComponent(new MovementComponent());
 
             ActionComponent ac = selectedTank.getComponent(ActionComponent.class);
             ac.addAction(new MovementAction(clickedCell));
@@ -61,7 +62,6 @@ public class MovementService {
      */
     public static Set<Point2D> getTankMoveTargets(Point2D tankPos) {
         Set<Point2D> moveTargets = new HashSet<>();
-        //Set<Set<Point2D>> move2Targets = new HashSet<>();
         Entity selectedTank = MapService.findSelectedTank();
 
         if (selectedTank == null) {
@@ -71,7 +71,7 @@ public class MovementService {
         int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
 
         if (ap <= 0){
-            getNotificationService().pushNotification("Not enough Action Points!");
+            //getNotificationService().pushNotification("Not enough Action Points!");
             return moveTargets;
         }
         String state = "";
@@ -89,9 +89,9 @@ public class MovementService {
         // 2) Choose axes
         Direction[] axes;
 
-        if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png")) {
+        if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png") || state.equals("green_tank_top_left.png") || state.equals("green_tank_down_right.png")) {
             axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
-        } else if (state.equals("tank_top_right.png") || state.equals("tank_down_left.png")) {
+        } else if (state.equals("tank_top_right.png") || state.equals("tank_down_left.png") || state.equals("green_tank_top_right.png") || state.equals("green_tank_down_left.png")) {
             axes = new Direction[]{ Direction.UP, Direction.DOWN };
         }
         else throw new IllegalArgumentException("Invalid Tank State! in MapService getTankMoveTargets: " + state + " is not a valid state for a tank!");

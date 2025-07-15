@@ -60,18 +60,28 @@ public class ShootService {
 
         // Spawn shell
         if (target.getType() != TILE) {
-            spawnShell(tank, target.getPosition());
+            spawnShell(tank, target.getCenter());
         }
         else {
             spawnShell(tank, target.getPosition().add(64, 1) );
         }
+        FXGL.play("tank_shoot.wav");
 
         // Add explosion animation after bullet travels there
         getGameTimer().runOnceAfter(() -> {
-            if (target.getType() != TILE)
-                target.addComponent(new AnimExplosionComponent(0,0));
-            else
-                target.addComponent(new AnimExplosionComponent(0,-64));
+            if (target.getType() != TILE) {
+                if (target.getType() == TANK) {
+                    FXGL.play("hit_tile.wav"); //TODO Change sound
+                } else if (target.getType() == MOUNTAIN) {
+                    FXGL.play("hit_mountain.wav");
+                } else if (target.getType() == CITY) {
+                    FXGL.play("hit_city.wav");
+                }
+                target.addComponent(new AnimExplosionComponent(0, 0));
+            } else {
+                target.addComponent(new AnimExplosionComponent(0, -64));
+                FXGL.play("hit_tile.wav");
+            }
         }, Duration.millis(target.distance(tank)));
 
         // Remove explosion and the target (if it dies) after animation completes
@@ -95,14 +105,22 @@ public class ShootService {
             }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
     }
 
-    public static void spawnAttackTarget(Entity target, Entity attackingTank) {
+    public static void spawnAttackTarget(Entity target, Entity attackingTank, boolean duringAction) {
         Point2D targetPosition = target.getPosition();
         String targetName = "Tile_attack_selection";
 
         if (target.getType() != TILE) {
             if (target.getType() == TANK) {
+
                 TankDataComponent tankData = target.getComponent(TankDataComponent.class);
-                String initialTankView = tankData.getInitialTankView();
+                String initialTankView;
+                if (duringAction) {
+                    return;
+                }
+                else
+                {
+                    initialTankView = tankData.getInitialTankView();
+                }
                 targetName = initialTankView.substring(0, initialTankView.lastIndexOf(".")) + "_attack";
             } else {
                 List<Node> viewChildren = target.getViewComponent().getChildren();
@@ -157,7 +175,7 @@ public class ShootService {
      */
     private static int calculateDirectionalDamage(Entity targetTank, Entity shooterTank) {
         // Get the texture name to determine the target tank's orientation
-        TankDataComponent targetData = targetTank.getComponent(TankDataComponent.class);
+ /*       TankDataComponent targetData = targetTank.getComponent(TankDataComponent.class);
         Texture targetTexture = targetData.getInitialTankTexture();
         String targetOrientation = targetTexture.getImage().getUrl();
         targetOrientation = targetOrientation.substring(targetOrientation.lastIndexOf("/") + 1);
@@ -221,7 +239,7 @@ public class ShootService {
                     return 3; // Back hit
                 }
             }
-        }
+        }*/
 
         // Default to 1 damage if orientation can't be determined
         return 1;

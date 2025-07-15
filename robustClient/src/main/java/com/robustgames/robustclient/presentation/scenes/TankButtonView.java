@@ -1,8 +1,8 @@
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.entity.Entity;
+import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.scene.control.Button;
@@ -19,9 +19,6 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSEL
 public class TankButtonView extends Pane {
     Button btnMove;
     Button btnShoot;
-    Button btnRotate;
-    Button btnRotateLeft;
-    Button btnRotateRight;
     Label btnMoveText;
     Label btnShootText;
     Label btnRotateText;
@@ -29,7 +26,6 @@ public class TankButtonView extends Pane {
     Label btnRotateRightText;
     Tooltip shootingTooltip = new Tooltip("Costs 3AP, but Ends your Turn\nDeal one Damage to whatever you hit");
     Tooltip movingTooltip = new Tooltip("Costs one AP per tile moved");
-    Tooltip rotatingTooltip = new Tooltip("Rotate your Tank to change direction to drive in\nCosts one AP");
 
 
     public TankButtonView() {
@@ -55,8 +51,13 @@ public class TankButtonView extends Pane {
         btnMove.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                resetActionComponents(tank);
-                tank.addComponent(new MovementComponent());
+                if (tank.getComponent(APComponent.class).getValue() < 1) {
+                    getNotificationService().pushNotification("Not enough Action Points!");
+                }
+            else {
+                    resetActionComponents(tank);
+                    tank.addComponent(new MovementComponent());
+                }
 
             }
 
@@ -69,66 +70,29 @@ public class TankButtonView extends Pane {
         btnShoot.setOnAction(e -> {
             Entity tank = MapService.findSelectedTank();
             if (tank != null) {
-                resetActionComponents(tank);
-                tank.addComponent(new ShootComponent());
-
-            }
-        });
-
-        btnRotateLeft = new Button();
-        btnRotateLeft.setGraphic(btnRotateLeftText);
-        btnRotateLeft.getStyleClass().add("robust-btn");
-        btnRotateLeft.setOnAction(e -> {
-            Entity tank = MapService.findSelectedTank();
-            if (tank != null) {
-                if (tank.hasComponent(MovementComponent.class)){
-                    tank.getComponent(RotateComponent.class).rotateLeft();
-                    tank.removeComponent(MovementComponent.class);
-                    tank.addComponent(new MovementComponent());
+                if (tank.getComponent(APComponent.class).getValue() < 1) {
+                    getNotificationService().pushNotification("Not enough Action Points!");
                 }
                 else {
                     resetActionComponents(tank);
-                    tank.getComponent(RotateComponent.class).rotateLeft();
+                    tank.addComponent(new ShootComponent());
                 }
             }
-
-        });
-        btnRotateRight = new Button();
-        btnRotateRight.setGraphic(btnRotateRightText);
-        btnRotateRight.getStyleClass().add("robust-btn");
-        btnRotateRight.setOnAction(e -> {
-            Entity tank = MapService.findSelectedTank();
-            if (tank != null) {
-                if (tank.hasComponent(MovementComponent.class)){
-                    tank.getComponent(RotateComponent.class).rotateRight();
-                    tank.removeComponent(MovementComponent.class);
-                    tank.addComponent(new MovementComponent());
-                }
-                else {
-                    {
-                        resetActionComponents(tank);
-                        tank.getComponent(RotateComponent.class).rotateRight();
-                    }
-                }
-            }
-
         });
 
         buttonBox.getChildren().addAll(
                 btnMove, btnShoot
         );
-        //buttonBox.setAlignment(Pos.CENTER);
+
         this.setTranslateX(getAppWidth() / 32.0);
         this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 100);
         this.getChildren().add(buttonBox);
 
     }
 
-    // Einheitliches Entfernen der Components
     private void resetActionComponents(Entity tank) {
         tank.removeComponent(MovementComponent.class);
         tank.removeComponent(ShootComponent.class);
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 }
-//FXGL.runOnce(() -> tank.getComponent(RotateComponent.class).rotateLeft(), Duration.seconds(0.01));

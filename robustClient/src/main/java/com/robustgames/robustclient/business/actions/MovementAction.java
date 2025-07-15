@@ -40,6 +40,7 @@ public class MovementAction extends Action {
     protected void onCompleted() {
         super.onCompleted();
         entity.getComponent(TankDataComponent.class).setInitialPos();
+        entity.getComponent(TankDataComponent.class).resetBeforeTurn();
 
     }
 

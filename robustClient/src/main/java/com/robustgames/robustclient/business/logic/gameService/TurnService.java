@@ -28,7 +28,7 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
-            getNotificationService().pushNotification(currentPlayer + "'S TURN" );
+            //getNotificationService().pushNotification(currentPlayer + "'S TURN" );
         }
         else {
             player2Ready = true;
@@ -71,7 +71,7 @@ public class TurnService {
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
                 entity.getComponent(APComponent.class).reset();
         });
-        getNotificationService().pushNotification(currentPlayer + "'S TURN" );
+        //getNotificationService().pushNotification(currentPlayer + "'S TURN" );
     }
 }
 

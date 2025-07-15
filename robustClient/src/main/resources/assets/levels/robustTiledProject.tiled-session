@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "mapTest.tmx",
+    "activeFile": "map1.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -41,14 +41,14 @@
         },
         "map1.tmx": {
             "expandedObjectLayers": [
-                11,
-                4
+                4,
+                11
             ],
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 640.3333333333333,
-                "y": 351.66666666666663
+                "x": 757.3333333333333,
+                "y": 354
             }
         },
         "map1.tmx#EnvironmentEdited": {
@@ -79,15 +79,15 @@
         },
         "mapTest.tmx": {
             "expandedObjectLayers": [
-                5,
                 4,
+                5,
                 3
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 672,
-                "y": 299
+                "x": 640.5,
+                "y": 351.5
             }
         },
         "mapTest.tmx#EnvironmentEdited": {
@@ -119,12 +119,13 @@
             "expandedObjectLayers": [
                 4,
                 2,
-                7
+                7,
+                3
             ],
             "scale": 1,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 641,
+                "x": 601,
                 "y": 319
             }
         },
@@ -133,6 +134,25 @@
             "scaleInEditor": 1
         },
         "mapTest2.tmx#sprite": {
+            "scaleInDock": 1
+        },
+        "mapTest3.tmx": {
+            "expandedObjectLayers": [
+                2,
+                7,
+                3
+            ],
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 640,
+                "y": 480
+            }
+        },
+        "mapTest3.tmx#EnvironmentEdited": {
+            "scaleInDock": 1
+        },
+        "mapTest3.tmx#sprite": {
             "scaleInDock": 1
         },
         "maptest.tmx": {
@@ -165,14 +185,16 @@
         "map1.tmx",
         "mapTest.tmx",
         "mapTest1.tmx",
-        "mapTest2.tmx"
+        "mapTest2.tmx",
+        "mapTest3.tmx"
     ],
     "project": "robustTiledProject.tiled-project",
     "recentFiles": [
-        "map1.tmx",
+        "mapTest3.tmx",
         "mapTest2.tmx",
         "mapTest1.tmx",
         "mapTest.tmx",
+        "map1.tmx",
         "maptest.tmx",
         "map2D.tmx",
         "EnvironmentEdited.tsx"

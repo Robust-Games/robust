@@ -3,6 +3,7 @@ package com.robustgames.robustclient.business.logic.gameService;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.ProgressBar;
 import com.robustgames.robustclient.business.entitiy.components.CityDataComponent;
+import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -24,16 +25,19 @@ public class GameState {
         List<Entity> tankList = getGameWorld().getEntitiesByType(TANK);
         getGameTimer().runOnceAfter(() -> {
             if (cityList.isEmpty() || tankList.isEmpty() || (cityList.size() == 1 && tankList.size() == 1)) {
+                System.out.println("Game Over - Draw -> City List size = " + cityList.size() + " tank List size = " + tankList.size());
                 getDialogService().showMessageBox("The Game Ends in a Draw", getGameController()::exit);
                 return;
             }
             if (cityList.size() == 1) {
+                System.out.println("Game Over - CityList Size = " + cityList.size() );
                 winner = cityList.getFirst().getComponent(CityDataComponent.class).getOwner();
                 getDialogService().showMessageBox(winner + " wins", getGameController()::exit);
                 return;
             }
             if (tankList.size() == 1) {
-                winner = tankList.getFirst().getComponent(CityDataComponent.class).getOwner();
+                System.out.println("Game Over - TankList Size = " + tankList.size());
+                winner = tankList.getFirst().getComponent(TankDataComponent.class).getOwner();
                 getDialogService().showMessageBox(winner + " wins", getGameController()::exit);
                 return;
             }
