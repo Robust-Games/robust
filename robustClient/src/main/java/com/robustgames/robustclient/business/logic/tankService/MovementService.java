@@ -29,9 +29,8 @@ public class MovementService {
     public static void moveTank(Entity clickedCell) {
         Entity selectedTank = MapService.findSelectedTank();
         if (selectedTank != null) {
-            int distance = (int)selectedTank.distance(clickedCell)/64;
+            int distance = (int) selectedTank.distance(clickedCell) / 64;
             Point2D target = clickedCell.getPosition();
-
             selectedTank.setPosition(target.getX(), target.getY());
             changeMountainLayer(selectedTank);
             selectedTank.getComponent(APComponent.class).use(distance);
@@ -51,6 +50,19 @@ public class MovementService {
 
         }
     }
+
+//    public static void moveTankSended(double toX, double toY, Entity selectedTank) {
+//        Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
+//        Point2D direction = screenTarget.subtract(selectedTank.getPosition()).normalize();
+//        selectedTank.translate(direction.multiply(tpf * 200));  // z. B. in einem Timer
+//
+//        if (selectedTank.distance(screenTarget) < 5) {
+//            selectedTank.setPosition(screenTarget);
+//            MovementService.changeMountainLayer(selectedTank);
+//        }
+//    }
+
+
 
     /**
      * Calculates all valid move targets for a tank based on its current position.
@@ -140,19 +152,15 @@ public class MovementService {
             int zIndexMountain = (int) (mountainPos.getX() + mountainPos.getY());
             mountain.setZIndex(zIndexMountain);
 
-            if (entityPosition.add(1,0).equals(mountainPos)
-                    || entityPosition.add(0,1).equals(mountainPos)
-                    || entityPosition.add(1,1).equals(mountainPos)) {
+            if (entityPosition.add(1, 0).equals(mountainPos)
+                    || entityPosition.add(0, 1).equals(mountainPos)
+                    || entityPosition.add(1, 1).equals(mountainPos)) {
                 mountain.setOpacity(0.5);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(true));
-            }
-            else if(inputEntity.isType(TANK)){
+            } else if (inputEntity.isType(TANK)) {
                 mountain.setOpacity(1);
                 mountain.getViewComponent().getChildren().forEach(node -> node.setMouseTransparent(false));
             }
-
-
-
         });
     }
     /**

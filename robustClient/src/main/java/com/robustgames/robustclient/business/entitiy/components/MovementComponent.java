@@ -32,7 +32,7 @@ public class MovementComponent extends Component {
             apCost = abs((tankPos.getX()+tankPos.getY()) - (target.getX()+target.getY()));
             Point2D pos1 = MapService.isoGridToScreen(target);
             getGameWorld().spawn("moveTiles",
-                    new SpawnData(pos1.getX()-64, pos1.getY()-64)
+                    new SpawnData(pos1.getX() - 64, pos1.getY() - 64)
                             .put("tank", entity)
                             .put("apCost", apCost));
         }

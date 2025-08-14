@@ -15,7 +15,7 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.CITY;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 /**
- *  Manages turn order, win conditions, etc.
+ * Manages turn order, win conditions, etc.
  */
 public class GameState {
     static Player winner;
@@ -44,11 +44,10 @@ public class GameState {
             getDialogService().showMessageBox("Nobody wins", getGameController()::exit);
 
         }, Duration.millis(2000));
-
     }
 
 
-    public static ProgressBar hpBarInit(int maxHP){
+    public static ProgressBar hpBarInit(int maxHP) {
         var hpBar = new ProgressBar();
         hpBar.setWidth(90);
         hpBar.setHeight(15);

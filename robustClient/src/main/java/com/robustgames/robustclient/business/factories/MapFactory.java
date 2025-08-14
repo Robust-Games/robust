@@ -98,6 +98,7 @@ public class MapFactory implements EntityFactory {
 
         return floor;
     }
+
     @Spawns("floorTileMountain")
     public Entity spawnMountainFloor(SpawnData data) {
         var hpComp = new HealthIntComponent(2);
@@ -220,7 +221,7 @@ public class MapFactory implements EntityFactory {
         return FXGL.entityBuilder(data)
                 .onClick(e -> ShootService.planShoot(target, attackingTank))
                 .type(ACTIONSELECTION)
-                .zIndex(target.getZIndex()+1)
+                .zIndex(target.getZIndex() + 1)
                 .with(hpComp)
                 .with(new AnimCityComponent(true))
                 .build();

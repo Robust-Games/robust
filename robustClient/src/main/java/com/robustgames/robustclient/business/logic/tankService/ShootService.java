@@ -133,7 +133,6 @@ public class ShootService {
                 }
             }
         }
-
         else if (target.getType() == TILE) {
             targetPosition = targetPosition.subtract(0, 63);
         }

@@ -8,6 +8,10 @@ import com.robustgames.robustclient.business.entitiy.components.TankDataComponen
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**
@@ -28,11 +32,12 @@ public class MapService {
      * @return the corresponding position in grid coordinates
      */
     public static Point2D isoScreenToGrid(Point2D screenPos) {
-        Point2D gridPos2D = new Point2D(screenPos.getX()/TILE_WIDTH_ISO, screenPos.getY()/TILE_HEIGHT);
+        Point2D gridPos2D = new Point2D(screenPos.getX() / TILE_WIDTH_ISO, screenPos.getY() / TILE_HEIGHT);
         int x = (int) ((gridPos2D.getY() - ISO_TILE_ORIGIN_Y) + (gridPos2D.getX() - ISO_TILE_ORIGIN_X));
         int y = (int) ((gridPos2D.getY() - ISO_TILE_ORIGIN_Y) - (gridPos2D.getX() - ISO_TILE_ORIGIN_X));
         return new Point2D(x, y);
     }
+
     /**
      * Converts a screen-space point from isometric coordinates to grid coordinates.
      * This transformation is based on the specified tile dimensions and origin offsets.
@@ -45,16 +50,17 @@ public class MapService {
         return isoScreenToGrid(new Point2D(screenPositionX, screenPositionY));
     }
 
-        /**
-         * Converts an isometric grid position represented by a {@link Point2D}
-         * to its corresponding screen coordinates.
-         *
-         * @param position the position in isometric grid coordinates
-         * @return the corresponding screen coordinates as a {@link Point2D}
-         */
+    /**
+     * Converts an isometric grid position represented by a {@link Point2D}
+     * to its corresponding screen coordinates.
+     *
+     * @param position the position in isometric grid coordinates
+     * @return the corresponding screen coordinates as a {@link Point2D}
+     */
     public static Point2D isoGridToScreen(Point2D position) {
         return isoGridToScreen(position.getX(), position.getY());
     }
+
     /**
      * Converts isometric grid coordinates to screen coordinates, considering the tile dimensions and origin.
      *
@@ -63,8 +69,8 @@ public class MapService {
      * @return a {@code Point2D} representing the equivalent screen coordinates
      */
     public static Point2D isoGridToScreen(double gridX, double gridY) {
-        double screenX = (ISO_TILE_ORIGIN_X * TILE_WIDTH_ISO) + (gridX - gridY) * (TILE_WIDTH_ISO /2.0);
-        double screenY = ISO_TILE_ORIGIN_Y * TILE_HEIGHT + (gridX + gridY) * (TILE_HEIGHT /2.0);
+        double screenX = (ISO_TILE_ORIGIN_X * TILE_WIDTH_ISO) + (gridX - gridY) * (TILE_WIDTH_ISO / 2.0);
+        double screenY = ISO_TILE_ORIGIN_Y * TILE_HEIGHT + (gridX + gridY) * (TILE_HEIGHT / 2.0);
         return new Point2D(screenX, screenY);
     }
 
@@ -94,7 +100,8 @@ public class MapService {
         double worldY = gridY * TILE_HEIGHT;
         return new Point2D(worldX, worldY);
     }
-    public static Entity findTankOfPlayer(Player player){
+
+    public static Entity findTankOfPlayer(Player player) {
         for (Entity tank : FXGL.getGameWorld().getEntitiesByComponent(TankDataComponent.class)) {
             if (tank.getComponent(TankDataComponent.class).getOwner().equals(player)) {
                 return tank;
@@ -103,7 +110,13 @@ public class MapService {
         return null;
     }
 
-    public static Entity findSelectedTank(){
+    /**
+     * This method searches through all entities in the game world for the one that has the {@code SelectableComponent}.
+     * The game only allows one tank to be selected at all times.
+     *
+     * @return the selected tank entity, or {@code null} if no such entity is marked as selected.
+     */
+    public static Entity findSelectedTank() {
         for (Entity e : FXGL.getGameWorld().getEntities()) {
             if (e.hasComponent(SelectableComponent.class))
                 return e;
@@ -111,6 +124,12 @@ public class MapService {
         return null;
     }
 
+    /**
+     * Checks if there is a mountain entity at the specified grid position.
+     *
+     * @param gridPos the grid position to check for a mountain entity
+     * @return {@code true} if a mountain entity exists at the given position; {@code false} otherwise
+     */
     public static boolean hasMountainAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(EntityType.MOUNTAIN)
                 .stream().anyMatch(e -> {

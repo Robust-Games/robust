@@ -30,5 +30,4 @@ public class SelectableComponent extends Component {
         entity.removeComponent(AnimTankComponent.class);
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
-
 }

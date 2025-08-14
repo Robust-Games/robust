@@ -14,14 +14,12 @@ public class AnimSelectionComponent extends Component {
         tankSelectionMarker = new AnimationChannel(FXGL.image("Tank_selected_Border.png"), 4, 128, 128, Duration.seconds(0.4), 0, 3);
         texture = new AnimatedTexture(tankSelectionMarker);
         texture.setTranslateY(-64);
-
     }
 
     @Override
     public void onAdded() {
         entity.getViewComponent().addChild(texture);
         texture.loopAnimationChannel(tankSelectionMarker);
-
     }
     @Override
     public void onUpdate(double tpf) {

@@ -27,7 +27,6 @@ public class TankButtonView extends Pane {
     Tooltip shootingTooltip = new Tooltip("Costs 3AP, but Ends your Turn\nDeal one Damage to whatever you hit");
     Tooltip movingTooltip = new Tooltip("Costs one AP per tile moved");
 
-
     public TankButtonView() {
         String cssPath = getClass().getResource("/assets/ui/css/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);
@@ -58,9 +57,7 @@ public class TankButtonView extends Pane {
                     resetActionComponents(tank);
                     tank.addComponent(new MovementComponent());
                 }
-
             }
-
         });
 
         btnShoot = new Button();
@@ -90,6 +87,12 @@ public class TankButtonView extends Pane {
 
     }
 
+    /**
+     * Removes movement and shoot components from the specified tank entity,
+     * and deletes all action selection entities from the game world.
+     *
+     * @param tank the tank entity to clear action-related components from
+     */
     private void resetActionComponents(Entity tank) {
         tank.removeComponent(MovementComponent.class);
         tank.removeComponent(ShootComponent.class);
