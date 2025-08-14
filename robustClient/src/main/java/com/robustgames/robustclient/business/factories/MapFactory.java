@@ -59,23 +59,23 @@ public class MapFactory implements EntityFactory {
                 .build();
     }
 
-    //Tile Grafik, aktuell nicht genutzt
     @Spawns("floorTile")
     public Entity spawnFloor(SpawnData data) {
         var hpComp = new HealthIntComponent(2);
         Texture floorTexture = FXGL.getAssetLoader().loadTexture("floor_tile1.png");
 
-        ObjectProperty<Image> imageProp = new SimpleObjectProperty<>(FXGL.getAssetLoader().loadImage("floor_tile1.png"));
-        floorTexture.imageProperty().bind(imageProp);
+        //ObjectProperty<Image> imageProp = new SimpleObjectProperty<>(FXGL.getAssetLoader().loadImage("floor_tile1.png"));
+        //floorTexture.imageProperty().bind(imageProp);
 
         hpComp.valueProperty().addListener((obs, old, newHP) -> {
             if (newHP.intValue() >1) {
-                imageProp.set(FXGL.getAssetLoader().loadImage("floor_tile1.png"));
+                floorTexture.set(FXGL.getAssetLoader().loadTexture("floor_tile1.png"));
             }
             else if (newHP.intValue() == 1)
-                imageProp.set(FXGL.getAssetLoader().loadImage("floor_tile2.png"));
+                floorTexture.set(FXGL.getAssetLoader().loadTexture("floor_tile2.png"));
             else if (newHP.intValue() == 0)
-                floorTexture.imageProperty().unbind();
+                System.err.println("A");
+                //floorTexture.imageProperty().unbind();
         });
 
         var floor = FXGL.entityBuilder(data).type(TILE)
@@ -105,7 +105,7 @@ public class MapFactory implements EntityFactory {
         Texture floorTexture = FXGL.getAssetLoader().loadTexture("floorTileMountain1.png");
 
         ObjectProperty<Image> imageProp = new SimpleObjectProperty<>(FXGL.getAssetLoader().loadImage("floorTileMountain1.png"));
-        floorTexture.imageProperty().bind(imageProp);
+/*        floorTexture.imageProperty().bind(imageProp);
         hpComp.valueProperty().addListener((obs, old, newHP) -> {
             if (newHP.intValue() > 1) {
                 imageProp.set(FXGL.getAssetLoader().loadImage("floorTileMountain1.png"));
@@ -113,7 +113,7 @@ public class MapFactory implements EntityFactory {
                 imageProp.set(FXGL.getAssetLoader().loadImage("floorTileMountain2.png"));
             else if (newHP.intValue() == 0)
                 floorTexture.imageProperty().unbind();
-        });
+        });*/
 
         var floorMountain = FXGL.entityBuilder(data).type(TILE)
                 .zIndex(-1)

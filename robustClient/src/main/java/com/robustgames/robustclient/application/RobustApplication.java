@@ -2,7 +2,6 @@ package com.robustgames.robustclient.application;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
@@ -21,7 +20,6 @@ import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
 import com.robustgames.robustclient.business.factories.IDFactory;
-import com.almasb.fxgl.ui.FontType;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
@@ -36,16 +34,14 @@ import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import com.robustgames.robustclient.presentation.scenes.menus.RobustMainMenu;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
-import javafx.scene.text.Font;
-
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -55,7 +51,7 @@ import static javafx.scene.text.Font.loadFont;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
 
 public class RobustApplication extends GameApplication {
-    private Gamemode selectedGamemode = null;
+    public Gamemode selectedGamemode = null;
     private VBox gamemodeMenu;
     private VBox waitingBox;
 
@@ -183,42 +179,38 @@ public class RobustApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        showGamemodeMenu();
+        if (selectedGamemode != null ) {
+            if (selectedGamemode == Gamemode.ONLINE) {
+                showGamemodeMenu();
+            }
+            else if (selectedGamemode == Gamemode.LOCAL) {
+                initLocalGameLogicAndUI();
+            }
+        }
     }
 
-    private void showGamemodeMenu() {
+   private void showGamemodeMenu() {
         gamemodeMenu = new VBox(30);
         gamemodeMenu.setTranslateX(WIDTH / 2.0 - 100);
         gamemodeMenu.setTranslateY(HEIGHT / 2.0 - 100);
 
-        Text title = new Text("Choose Gamemode");
-        Button btnLocal = new Button("Local");
-        Button btnOnline = new Button("Online Multiplayer");
-
-        btnLocal.setOnAction(e -> {
-            selectedGamemode = Gamemode.LOCAL;
-            FXGL.getGameScene().removeUINode(gamemodeMenu);
-            startGameAfterMenu();
-        });
+        Text title = new Text("Confirm connection");
+        Button btnOnline = new Button("Connect to Online Services");
 
         btnOnline.setOnAction(e -> {
-            selectedGamemode = Gamemode.ONLINE;
             FXGL.getGameScene().removeUINode(gamemodeMenu);
             startGameAfterMenu();
         });
 
-        gamemodeMenu.getChildren().addAll(title, btnLocal, btnOnline);
+        gamemodeMenu.getChildren().addAll(title, btnOnline);
         FXGL.getGameScene().addUINode(gamemodeMenu);
     }
 
     private void startGameAfterMenu() {
-        if (selectedGamemode == Gamemode.ONLINE) {
             initializeNetworkClient("localhost", 55555);
             showWaitingForOpponent();
-            FXGL.getNotificationService().pushNotification("Waiting for other player to join...");
-        } else if (selectedGamemode == Gamemode.LOCAL) {
-            startLocalGame();
-        }
+            //FXGL.getNotificationService().pushNotification("Waiting for other player to join...");
+
     }
 
     private void showWaitingForOpponent() {
@@ -235,10 +227,6 @@ public class RobustApplication extends GameApplication {
             FXGL.getGameScene().removeUINode(waitingBox);
             waitingBox = null;
         }
-    }
-
-    private void startLocalGame() {
-        continueLocalGameSetup();
     }
 
     private void startOnlineGame() {
@@ -373,10 +361,6 @@ public class RobustApplication extends GameApplication {
         client.connectAsync();
     }
 
-    private void continueLocalGameSetup() {
-        initLocalGameLogicAndUI();
-    }
-
     private void continueOnlineGameSetup() {
         initOnlineGameLogicAndUI();
     }
@@ -388,24 +372,14 @@ public class RobustApplication extends GameApplication {
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
 
-        FXGL.getGameWorld().addEntityFactory(new MapFactory());
-        FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
         FXGL.spawn("MapBorder", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
-        FXGL.setLevelFromMap("mapTest2.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
+        FXGL.setLevelFromMap("mapTest2.tmx");
 
         GameWorld world = getGameWorld();
         List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
         for (Entity entity : allEntities) {
-            Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
-            Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
-            if (entity.isType(TILE)) {
-                entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY()+ 1);
-            }
-            else if(entity.isType(HOVER)) {
-                entity.setPosition(isoScreenPos.getX(), isoScreenPos.getY());
-            } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
-                entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() - 64);
+            moveEntityToIsometric(entity);
         }
         TurnService.startTurn(Player.PLAYER1);
     }
@@ -417,6 +391,7 @@ public class RobustApplication extends GameApplication {
         tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
+
         addUINode(endTurnView);
         addUINode(tankButtonView);
         addUINode(tankDataView);
@@ -426,27 +401,31 @@ public class RobustApplication extends GameApplication {
         tankDataView.setVisible(false);
 
         FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
+        FXGL.spawn("MapBorder", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
         FXGL.setLevelFromMap("mapTest2.tmx");
-
         GameWorld world = getGameWorld();
-        List<Entity> allEntities = world.getEntities();
+        List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
         for (Entity entity : allEntities) {
             if ((entity.isType(TILE) || entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
                     && !entity.hasComponent(IDComponent.class)) {
                 long id = IDFactory.generateId();
                 entity.addComponent(new IDComponent(id));
             }
-            Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
-            Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
-            if (entity.isType(TILE)) {
-                entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY()+ 1);
-            }
-            else if(entity.isType(HOVER)) {
-                entity.setPosition(isoScreenPos.getX(), isoScreenPos.getY());
-            } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
-                entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() - 64);
+            moveEntityToIsometric(entity);
         }
         TurnService.startTurn(Player.PLAYER1);
+    }
+
+    private void moveEntityToIsometric(Entity entity) {
+        Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
+        Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
+        if (entity.isType(TILE)) {
+            entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY()+ 1);
+        }
+        else if(entity.isType(HOVER)) {
+            entity.setPosition(isoScreenPos.getX(), isoScreenPos.getY());
+        } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
+            entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() - 64);
     }
 
     public Connection<Bundle> getConnection() {

@@ -27,7 +27,7 @@ public class TurnService {
                 playerTank.getComponent(TankDataComponent.class).setInitialPos();
             }
         }
-        else if (currentGamemode.equals(Gamemode.ONLINE)){
+        else if (currentGamemode.equals(Gamemode.ONLINE)) {
             String myPlayerName = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
 
             if (myPlayerName != null && myPlayerName.equals(currentPlayer.toString())) {
@@ -47,7 +47,7 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
-            getNotificationService().pushNotification(currentPlayer + "'S TURN");
+            //getNotificationService().pushNotification(currentPlayer + "'S TURN");
         } else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
@@ -91,7 +91,7 @@ public class TurnService {
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
             entity.getComponent(APComponent.class).reset();
         });
-        getNotificationService().pushNotification(currentPlayer + "'S TURN");
+       //getNotificationService().pushNotification(currentPlayer + "'S TURN");
     }
 }
 

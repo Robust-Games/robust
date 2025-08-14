@@ -39,8 +39,8 @@ public class ShootAction extends Action {
      */
     public ShootAction(Entity target) {
         this.originalTarget = target;
-        if (currentGamemode.equals(Gamemode.LOCAL)){
             this.targetScreenPosition = target.getPosition();
+            this.isLocal = true;
 
             if (target.getType() == CITY) {
                 this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
@@ -48,30 +48,18 @@ public class ShootAction extends Action {
                 this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
             } else
                 this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
-        }
-        else if (currentGamemode.equals(Gamemode.ONLINE)){
-            boolean isTargetTile = target.isType(TILE);
-            this.isLocal = true;
-
-            if (isTargetTile) {
-                this.targetScreenPosition = target.getPosition();
-            } else {
-                this.targetScreenPosition = target.getCenter();
-            }
-            this.targetGridPosition = MapService.isoScreenToGrid(targetScreenPosition);
-        }
     }
     public ShootAction(Entity target, boolean isLocal) {
         this.originalTarget = target;
-        boolean isTargetTile = target.isType(TILE);
+        this.targetScreenPosition = target.getPosition();
         this.isLocal = isLocal;
 
-        if (isTargetTile) {
-            this.targetScreenPosition = target.getPosition();
-        } else {
-            this.targetScreenPosition = target.getCenter();
-        }
-        this.targetGridPosition = MapService.isoScreenToGrid(targetScreenPosition);
+        if (target.getType() == CITY) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
+        } else if (target.getType() == TILE) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
+        } else
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
 
 

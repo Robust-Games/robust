@@ -6,7 +6,8 @@ import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
-import javafx.beans.binding.Bindings;
+import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.logic.Gamemode;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -193,8 +194,16 @@ public class RobustMainMenu extends FXGLMenu {
     private Node createStartContent() {
         VBox vbox = new VBox(8);
 
-        var btnOnline = createActionButton("Online", this::fireNewGame,false);
-        var btnHotseat = createActionButton("Hotseat", this::fireNewGame,false);
+        var btnOnline = createActionButton("Online", () -> {
+            FXGL.<RobustApplication>getAppCast().selectedGamemode = Gamemode.ONLINE;
+            fireNewGame();
+        },false);
+
+        var btnHotseat = createActionButton("Hotseat", () -> {
+            FXGL.<RobustApplication>getAppCast().selectedGamemode = Gamemode.LOCAL;
+            fireNewGame();
+        },false);
+
         var btnBack = createActionButton("Back", () -> subMenu.getChildren().clear(),false);
 
         vbox.getChildren().addAll(btnOnline, btnHotseat, btnBack);
