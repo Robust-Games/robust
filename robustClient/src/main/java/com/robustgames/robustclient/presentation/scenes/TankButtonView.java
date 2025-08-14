@@ -85,7 +85,7 @@ public class TankButtonView extends Pane {
         );
 
         this.setTranslateX(getAppWidth() / 32.0);
-        this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 100);
+        this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 200);
         this.getChildren().add(buttonBox);
 
     }

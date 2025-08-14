@@ -2,10 +2,16 @@ package com.robustgames.robustclient.application;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.MenuItem;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.app.scene.StartupScene;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.ui.FontType;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
@@ -14,15 +20,23 @@ import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
+import com.robustgames.robustclient.presentation.scenes.RobustStartupScene;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
+import com.robustgames.robustclient.presentation.scenes.menus.RobustMainMenu;
+import com.robustgames.robustclient.presentation.scenes.menus.RobustPauseMenu;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
+import javafx.scene.text.Font;
+
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
+import static javafx.scene.text.Font.loadFont;
 
 
 public class RobustApplication extends GameApplication  {
@@ -35,10 +49,41 @@ public class RobustApplication extends GameApplication  {
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("ROBUST");
-        settings.setVersion("0.3");
+        settings.setVersion("0.4");
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public FXGLMenu newGameMenu() {
+                return new RobustPauseMenu();
+            }
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new RobustMainMenu(MenuType.MAIN_MENU);
+
+            }
+            @Override
+            public StartupScene newStartup(int width, int height) {
+                return new RobustStartupScene(width, height);
+            }
+
+        });
+        settings.setMainMenuEnabled(true);
+        settings.setGameMenuEnabled(true);
+        settings.setFullScreenAllowed(true);
+        settings.getCredits().addAll(Arrays.asList(
+                "Robust Games\n",
+                "-Developed by-",
+                "Burak Altun",
+                "Carolin Scheffler",
+                "Ersin Yesiltas",
+                "Nico Steiner\n\n",
+
+                "-A Game made for Hochschule RheinMain-"
+        ));
         settings.getCSSList().add("style.css");
         settings.setWidth(WIDTH);
         settings.setHeight(HEIGHT);
+        settings.setFontUI("ARCADE_R.ttf");
+        settings.setFontGame("ARCADE_N.ttf");
         settings.setTicksPerSecond(60);
 
     }
@@ -108,6 +153,7 @@ public class RobustApplication extends GameApplication  {
     }
 
 
+
     @Override
     protected void initGame() {
         getGameScene().getViewport().setY(-100);
@@ -120,7 +166,7 @@ public class RobustApplication extends GameApplication  {
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         FXGL.spawn("Background", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
         FXGL.spawn("MapBorder", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
-        FXGL.setLevelFromMap("map1.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
+        FXGL.setLevelFromMap("mapTest2.tmx"); //map2D.tmx für 2D und mapTest.tmx für Isometrisch
 
         GameWorld world = getGameWorld();
         List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
