@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -20,6 +23,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**
@@ -35,6 +39,7 @@ public class MapFactory implements EntityFactory {
                 .zIndex(-100)
                 .build();
     }
+
     @Spawns("MapBorder")
     public Entity spawnBorder(SpawnData data) {
         return FXGL.entityBuilder(data)
@@ -63,14 +68,13 @@ public class MapFactory implements EntityFactory {
         //floorTexture.imageProperty().bind(imageProp);
 
         hpComp.valueProperty().addListener((obs, old, newHP) -> {
-            if (newHP.intValue() >1) {
+            if (newHP.intValue() > 1) {
                 floorTexture.set(FXGL.getAssetLoader().loadTexture("floor_tile1.png"));
-            }
-            else if (newHP.intValue() == 1)
+            } else if (newHP.intValue() == 1)
                 floorTexture.set(FXGL.getAssetLoader().loadTexture("floor_tile2.png"));
             else if (newHP.intValue() == 0)
                 System.err.println("A");
-                //floorTexture.imageProperty().unbind();
+            //floorTexture.imageProperty().unbind();
         });
 
         var floor = FXGL.entityBuilder(data).type(TILE)
@@ -86,8 +90,7 @@ public class MapFactory implements EntityFactory {
                 if (!floor.getViewComponent().getChildren().contains(hoverTexture)) {
                     floor.getViewComponent().addChild(hoverTexture);
                 }
-            }
-            else if (wasHovered)
+            } else if (wasHovered)
                 floor.getViewComponent().removeChild(hoverTexture);
         });
 
@@ -123,8 +126,7 @@ public class MapFactory implements EntityFactory {
                 if (!floorMountain.getViewComponent().getChildren().contains(hoverTexture)) {
                     floorMountain.getViewComponent().addChild(hoverTexture);
                 }
-            }
-            else if (wasHovered)
+            } else if (wasHovered)
                 floorMountain.getViewComponent().removeChild(hoverTexture);
         });
 
@@ -136,7 +138,7 @@ public class MapFactory implements EntityFactory {
         double apCost = data.get("apCost");
         Texture floorTexture = FXGL.getAssetLoader().loadTexture("Tile_move_selection.png");
         Texture hoverTexture = FXGL.getAssetLoader().loadTexture("Tile_move_selection.png");
-        Tooltip tooltip = new Tooltip("AP Cost: " + (int)apCost);
+        Tooltip tooltip = new Tooltip("AP Cost: " + (int) apCost);
 
         var moveTile = FXGL.entityBuilder(data)
                 .onClick(MovementService::moveTank)
@@ -147,13 +149,12 @@ public class MapFactory implements EntityFactory {
         hoverTexture.mouseTransparentProperty().setValue(true);
         floorTexture.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
             if (isNowHovered) {
-                Point2D screenCoords = floorTexture.localToScreen(0,0);
-                tooltip.show(floorTexture, screenCoords.getX(), screenCoords.getY()+30);
+                Point2D screenCoords = floorTexture.localToScreen(0, 0);
+                tooltip.show(floorTexture, screenCoords.getX(), screenCoords.getY() + 30);
                 if (!moveTile.getViewComponent().getChildren().contains(hoverTexture)) {
                     moveTile.getViewComponent().addChild(hoverTexture);
                 }
-            }
-            else if (wasHovered) {
+            } else if (wasHovered) {
                 tooltip.hide();
                 moveTile.getViewComponent().removeChild(hoverTexture);
             }
@@ -171,24 +172,23 @@ public class MapFactory implements EntityFactory {
         Texture floorTexture;
         Texture hoverTexture;
 
-        if (target.getType() != TILE){
+        if (target.getType() != TILE) {
             floorTexture = FXGL.getAssetLoader().loadTexture(targetName + ".png");
-        }
-        else {
+        } else {
             floorTexture = FXGL.getAssetLoader().loadTexture("Tile_attack_selection.png");
         }
 
         var attackTile = FXGL.entityBuilder(data)
-                    .onClick(e -> ShootService.planShoot(target, attackingTank))
-                    .type(ACTIONSELECTION)
-                    .zIndex(target.getZIndex()+1)
-                    .viewWithBBox(floorTexture)
-                    .build();
+                .onClick(e -> ShootService.planShoot(target, attackingTank))
+                .type(ACTIONSELECTION)
+                .zIndex(target.getZIndex() + 1)
+                .viewWithBBox(floorTexture)
+                .build();
 
-        if (target.getType() == TILE){
+        if (target.getType() == TILE) {
             hoverTexture = FXGL.getAssetLoader().loadTexture("Tile_attack_selection.png");
-        }else
-            hoverTexture = FXGL.getAssetLoader().loadTexture(targetName+"_hover.png");
+        } else
+            hoverTexture = FXGL.getAssetLoader().loadTexture(targetName + "_hover.png");
         hoverTexture.mouseTransparentProperty().setValue(true);
 
         floorTexture.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
@@ -196,8 +196,7 @@ public class MapFactory implements EntityFactory {
                 if (!attackTile.getViewComponent().getChildren().contains(hoverTexture)) {
                     attackTile.getViewComponent().addChild(hoverTexture);
                 }
-            }
-            else if (wasHovered)
+            } else if (wasHovered)
                 attackTile.getViewComponent().removeChild(hoverTexture);
         });
 
@@ -205,6 +204,7 @@ public class MapFactory implements EntityFactory {
 
         return attackTile;
     }
+
     @Spawns("attackTargetCity")
     public Entity spawnAttackTargetCity(SpawnData data) {
         Entity target = data.get("target");
@@ -232,6 +232,7 @@ public class MapFactory implements EntityFactory {
                 .with(new ShellComponent(targetLocation))
                 .build();
     }
+
     @Spawns("rotateRight")
     public Entity spawnRightArrow(SpawnData data) {
         Entity tank = data.get("tank");
@@ -251,11 +252,10 @@ public class MapFactory implements EntityFactory {
 
         arrowTexture.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
             if (isNowHovered) {
-                Point2D screenCoords = arrowTexture.localToScreen(0,0);
-                tooltip.show(arrowTexture, screenCoords.getX(), screenCoords.getY()-30);
+                Point2D screenCoords = arrowTexture.localToScreen(0, 0);
+                tooltip.show(arrowTexture, screenCoords.getX(), screenCoords.getY() - 30);
                 arrowTexture.set(hoverTexture);
-            }
-            else if (wasHovered) {
+            } else if (wasHovered) {
                 tooltip.hide();
                 arrowTexture.set(FXGL.getAssetLoader().loadTexture("Tank_rotate_right.png"));
             }
@@ -264,6 +264,7 @@ public class MapFactory implements EntityFactory {
         MovementService.changeMountainLayer(rotateLeftButton);
         return rotateLeftButton;
     }
+
     @Spawns("rotateLeft")
     public Entity spawnLeftArrow(SpawnData data) {
         Entity tank = data.get("tank");
@@ -283,11 +284,10 @@ public class MapFactory implements EntityFactory {
 
         arrowTexture.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
             if (isNowHovered) {
-                Point2D screenCoords = arrowTexture.localToScreen(0,0);
-                tooltip.show(arrowTexture, screenCoords.getX() + 64, screenCoords.getY()-30);
+                Point2D screenCoords = arrowTexture.localToScreen(0, 0);
+                tooltip.show(arrowTexture, screenCoords.getX() + 64, screenCoords.getY() - 30);
                 arrowTexture.set(hoverTexture);
-            }
-            else if (wasHovered) {
+            } else if (wasHovered) {
                 tooltip.hide();
                 arrowTexture.set(FXGL.getAssetLoader().loadTexture("Tank_rotate_left.png"));
             }

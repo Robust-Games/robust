@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.tankService;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -17,9 +20,7 @@ public class RotateService {
     static Texture newTankTexture;
 
 
-
-
-    public static String rotateTank(Entity selectedTank,  Direction direction) {
+    public static String rotateTank(Entity selectedTank, Direction direction) {
         TankDataComponent tankData = selectedTank.getComponent(TankDataComponent.class);
         String newTankView = "";
 
@@ -27,20 +28,17 @@ public class RotateService {
         newTankTexture = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture();
         initialTankView = newTankTexture.getImage().getUrl().substring(newTankTexture.getImage().getUrl().lastIndexOf("/") + 1);
 
-        if (direction == Direction.LEFT){
+        if (direction == Direction.LEFT) {
             newTankView = newTankView + rotateTankLeft(initialTankView);
-        }
-        else if (direction == Direction.RIGHT){
+        } else if (direction == Direction.RIGHT) {
             newTankView = newTankView + rotateTankRight(initialTankView);
-        }
-        else throw new IllegalArgumentException("Invalid direction in rotateTank of RotateService: " + direction);
+        } else throw new IllegalArgumentException("Invalid direction in rotateTank of RotateService: " + direction);
 
         if (selectedTank.getViewComponent().getChildren().contains(initialTankTexture)) {
             newTankTexture = FXGL.getAssetLoader().loadTexture(newTankView);
             selectedTank.getViewComponent().addChild(newTankTexture);
             selectedTank.getViewComponent().removeChild(initialTankTexture);
-        }
-        else {
+        } else {
             // First remove the old newTankTexture if it exists
             if (selectedTank.getViewComponent().getChildren().contains(newTankTexture)) {
                 selectedTank.getViewComponent().removeChild(newTankTexture);
@@ -56,7 +54,7 @@ public class RotateService {
     }
 
 
-    public static void rotateTurret(Point2D tileGridPos, Entity selectedTank){
+    public static void rotateTurret(Point2D tileGridPos, Entity selectedTank) {
         TankDataComponent tankData = selectedTank.getComponent(TankDataComponent.class);
 
         String newTankHullView;
@@ -78,7 +76,7 @@ public class RotateService {
         System.out.println("diff = " + diff);*/
 
         // Only instantiated once, afterwards only the turret rotates
-        if(newTankHullTexture == null){
+        if (newTankHullTexture == null) {
             newTankHullView = changeTankHull(initialTankView);
             newTankHullTexture = FXGL.getAssetLoader().loadTexture(newTankHullView);
 
@@ -86,8 +84,7 @@ public class RotateService {
             if (selectedTank.getViewComponent().getChildren().contains(initialTankTexture)) {
                 selectedTank.getViewComponent().addChild(newTankHullTexture);
                 selectedTank.getViewComponent().removeChild(initialTankTexture);
-            }
-            else if (selectedTank.getViewComponent().getChildren().contains(newTankTexture)) {
+            } else if (selectedTank.getViewComponent().getChildren().contains(newTankTexture)) {
                 selectedTank.getViewComponent().addChild(newTankHullTexture);
                 selectedTank.getViewComponent().removeChild(newTankTexture);
             }
@@ -98,19 +95,19 @@ public class RotateService {
             newTankTurretView = newTankTurretView + "tank_turret_down_right.png";
         } else if (diff.getX() > 0 && diff.getY() > 0 && diff.getX() == diff.getY()) {
             newTankTurretView = newTankTurretView + "tank_turret_down.png";
-        }else if (diff.getX() == 0 && diff.getY() > 0) {
+        } else if (diff.getX() == 0 && diff.getY() > 0) {
             newTankTurretView = newTankTurretView + "tank_turret_down_left.png";
-        }else if (diff.getX() < 0 && diff.getY() > 0 && abs(diff.getX()) == diff.getY()) {
+        } else if (diff.getX() < 0 && diff.getY() > 0 && abs(diff.getX()) == diff.getY()) {
             newTankTurretView = newTankTurretView + "tank_turret_left.png";
-        }else if (diff.getX() < 0 && diff.getY() == 0) {
+        } else if (diff.getX() < 0 && diff.getY() == 0) {
             newTankTurretView = newTankTurretView + "tank_turret_top_left.png";
-        }else if (diff.getX() < 0 && diff.getY() < 0 && diff.getX() == diff.getY()) {
+        } else if (diff.getX() < 0 && diff.getY() < 0 && diff.getX() == diff.getY()) {
             newTankTurretView = newTankTurretView + "tank_turret_top.png";
-        }else if (diff.getX() == 0 && diff.getY() < 0) {
+        } else if (diff.getX() == 0 && diff.getY() < 0) {
             newTankTurretView = newTankTurretView + "tank_turret_top_right.png";
-        }else if (diff.getX() > 0 && diff.getY() < 0 && diff.getX() == abs(diff.getY())) {
+        } else if (diff.getX() > 0 && diff.getY() < 0 && diff.getX() == abs(diff.getY())) {
             newTankTurretView = newTankTurretView + "tank_turret_right.png";
-        }else{
+        } else {
             if (newTankTurretTexture != null)
                 newTankTurretView = tankData.getTurretTextureName();
             else
@@ -129,6 +126,7 @@ public class RotateService {
             tankData.setTurretTextureName(newTankTurretView);
         }
     }
+
     private static String rotateTankLeft(String tankView) {
         String newTankView = tankView;
         switch (tankView) {
@@ -143,6 +141,7 @@ public class RotateService {
         }
         return newTankView;
     }
+
     private static String rotateTankRight(String tankView) {
         String newTankView = tankView;
         switch (tankView) {
@@ -157,6 +156,7 @@ public class RotateService {
         }
         return newTankView;
     }
+
     public static String changeTankHull(String tankView) {
         String newTankHullView = tankView;
         switch (tankView) {
@@ -175,3 +175,4 @@ public class RotateService {
 /*
 when "aiming" the tank (by adding ShootComponent via button press) I want to display not just the 4 directions of the turret, but the inbetween states as well (since I have the asssets). so, show tank_up.png inbetween tank_top_left.png and tank_top_right.png, how difficult is it to implement that?
  */
+

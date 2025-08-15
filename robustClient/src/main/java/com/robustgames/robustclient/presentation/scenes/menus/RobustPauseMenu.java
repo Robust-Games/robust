@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.scenes.menus;
 
 import com.almasb.fxgl.animation.Animation;
@@ -9,7 +12,6 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.robustgames.robustclient.presentation.UIElements.OptionsView;
 import com.robustgames.robustclient.presentation.UIElements.RobustButton;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -18,12 +20,12 @@ import javafx.util.Duration;
 public class RobustPauseMenu extends FXGLMenu {
     private static final double BUTTON_SPACING = 14.0;
     private final Pane subMenu = new Pane();
-    private OptionsView optionsView;
-    private RobustButton btnContinue = new RobustButton("Continue", () -> fireContinue(), true);
-    private RobustButton btnOptions = new RobustButton("Options",
+    private final OptionsView optionsView;
+    private final RobustButton btnContinue = new RobustButton("Continue", () -> fireContinue(), true);
+    private final RobustButton btnOptions = new RobustButton("Options",
             () -> switchToOptions(), true);
-    private RobustButton btnExit = new RobustButton("Exit", () -> fireExit(), true);
-    private Animation<?> animation;
+    private final RobustButton btnExit = new RobustButton("Exit", () -> fireExit(), true);
+    private final Animation<?> animation;
     int SIZE = 200;
 
     public RobustPauseMenu() {
@@ -55,7 +57,7 @@ public class RobustPauseMenu extends FXGLMenu {
         subMenu.getChildren().setAll(optionsView.getContainer());
     }
 
-        @Override
+    @Override
     public void onCreate() {
         animation.setOnFinished(EmptyRunnable.INSTANCE);
         animation.stop();

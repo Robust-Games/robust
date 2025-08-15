@@ -1,11 +1,14 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Direction;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.event.EventHandler;
@@ -14,17 +17,19 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.List;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.robustgames.robustclient.business.entitiy.EntityType.*;
-import static com.robustgames.robustclient.business.logic.gameService.MapService.isoScreenToGrid;
+import static com.almasb.fxgl.dsl.FXGL.byType;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
+import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 import static com.robustgames.robustclient.business.logic.tankService.MovementService.step;
 
 public class ShootComponent extends Component {
     private EventHandler<MouseEvent> aimHandler;
+
     @Override
     public void onAdded() {
         aimHandler = e -> {
-            Point2D mousePos = new Point2D(e.getSceneX(), e.getSceneY()-100);
+            Point2D mousePos = new Point2D(e.getSceneX(), e.getSceneY() - 100);
             //ROBUST_DEBUG Part One - for checking screen coordinates during aiming shot (Part Two in rotateTurret)
             /*            System.out.println(e.getSceneX() + " " + (e.getSceneY()-100));
             System.out.println(isoScreenToGrid(e.getSceneX(), e.getSceneY()-100) + " ");*/
@@ -32,7 +37,6 @@ public class ShootComponent extends Component {
         };
 
         FXGL.getSceneService().getCurrentScene().getContentRoot().addEventHandler(MouseEvent.MOUSE_MOVED, aimHandler);
-
 
 
         if (entity.getComponent(APComponent.class).canUse(3)) {
@@ -55,7 +59,7 @@ public class ShootComponent extends Component {
                     entityList = getGameWorld().getEntitiesAt(posEntity);
 
                     if (!entityList.isEmpty()) {
-                        if (entityList.size() > 1 ) {
+                        if (entityList.size() > 1) {
                             throw new IllegalStateException("More than one entity found at target position "
                                     + currentGridPos);
                         }
@@ -81,7 +85,7 @@ public class ShootComponent extends Component {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
     }
 
-    public void reset(){
+    public void reset() {
         TankDataComponent tankData = entity.getComponent(TankDataComponent.class);
         boolean hadTextures = false;
 
@@ -101,14 +105,13 @@ public class ShootComponent extends Component {
             hadTextures = true;
         }
 
-        if(!hadTextures){
+        if (!hadTextures) {
             return;
         }
 
-        if (tankData.getNewTankTexture() != tankData.getInitialTankTexture() && !entity.getViewComponent().getChildren().contains(tankData.getNewTankTexture())){
+        if (tankData.getNewTankTexture() != tankData.getInitialTankTexture() && !entity.getViewComponent().getChildren().contains(tankData.getNewTankTexture())) {
             entity.getViewComponent().addChild(tankData.getNewTankTexture());
-        }
-        else if (!entity.getViewComponent().getChildren().contains(tankData.getInitialTankTexture())){
+        } else if (!entity.getViewComponent().getChildren().contains(tankData.getInitialTankTexture())) {
             entity.getViewComponent().addChild(tankData.getInitialTankTexture());
         }
     }

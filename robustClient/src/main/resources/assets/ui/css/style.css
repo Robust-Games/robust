@@ -3,16 +3,6 @@
     src: url('../fonts/ARCADE_N.TTF') format('truetype');
 }
 
-/*.scoreBox {*/
-/*    -fx-background-color: #ba55c2;*/
-/*    -fx-background-radius: 10;*/
-/*    -fx-border-color: white;*/
-/*    -fx-margin: 10px;*/
-/*    -fx-border-radius: 10;*/
-/*    -fx-border-width: 3px;*/
-/*    -fx-font-size: 40px;*/
-/*    -fx-text-fill: white;*/
-/*}*/
 .tooltip{
     -fx-fill: white;
     -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);

@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.entity.Entity;
@@ -52,8 +55,7 @@ public class TankButtonView extends Pane {
             if (tank != null) {
                 if (tank.getComponent(APComponent.class).getValue() < 1) {
                     getNotificationService().pushNotification("Not enough Action Points!");
-                }
-            else {
+                } else {
                     resetActionComponents(tank);
                     tank.addComponent(new MovementComponent());
                 }
@@ -69,8 +71,7 @@ public class TankButtonView extends Pane {
             if (tank != null) {
                 if (tank.getComponent(APComponent.class).getValue() < 1) {
                     getNotificationService().pushNotification("Not enough Action Points!");
-                }
-                else {
+                } else {
                     resetActionComponents(tank);
                     tank.addComponent(new ShootComponent());
                 }

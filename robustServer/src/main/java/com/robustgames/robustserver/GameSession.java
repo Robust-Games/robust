@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas
+ */
 package com.robustgames.robustserver;
 
 import com.almasb.fxgl.core.serialization.Bundle;

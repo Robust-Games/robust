@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.entity.component.Component;
@@ -13,7 +16,7 @@ public class IDComponent extends Component {
     /**
      * The unique identifier assigned to the entity.
      */
-    private long id;
+    private final long id;
 
     /**
      * Constructs an IDComponent with the given unique ID.

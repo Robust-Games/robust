@@ -1,10 +1,12 @@
+/**
+ * @author Burak Altun, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
-import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
@@ -33,7 +35,9 @@ public class TankDataComponent extends Component {
         newTankView = initialTankView;
     }
 
-    public String getInitialTankView() {return initialTankView;}
+    public String getInitialTankView() {
+        return initialTankView;
+    }
 
     public Texture getHullTexture() {
         return hullTexture;
@@ -97,7 +101,7 @@ public class TankDataComponent extends Component {
         return newTankView;
     }
 
-    public void resetBeforeTurn(){
+    public void resetBeforeTurn() {
         // Clean up all textures
         Texture turret = getTurretTexture();
         if (turret != null && entity.getViewComponent().getChildren().contains(turret)) {
@@ -138,3 +142,4 @@ public class TankDataComponent extends Component {
         MovementService.changeMountainLayer(entity);
     }
 }
+

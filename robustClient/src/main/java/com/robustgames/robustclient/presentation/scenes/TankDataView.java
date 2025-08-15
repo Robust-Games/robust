@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -12,7 +15,7 @@ import javafx.scene.text.Text;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 public class TankDataView extends Pane {
-    private Text apText;
+    private final Text apText;
     private Entity selectedTank;
     private APComponent apComponent;
 

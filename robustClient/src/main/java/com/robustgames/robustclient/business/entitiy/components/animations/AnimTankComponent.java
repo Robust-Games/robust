@@ -1,3 +1,6 @@
+/**
+ * @author eyesi001, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components.animations;
 
 import com.almasb.fxgl.dsl.FXGL;

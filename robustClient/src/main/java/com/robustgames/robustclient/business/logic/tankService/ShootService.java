@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.tankService;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -5,7 +8,6 @@ import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.action.ActionComponent;
-import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
@@ -14,7 +16,6 @@ import com.robustgames.robustclient.business.entitiy.components.animations.AnimE
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimMountainComponent;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.logic.gameService.GameState;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -44,9 +45,9 @@ public class ShootService {
     /**
      * This method executes the shot at the target.
      * It's meant to be called from ShootAction during turn execution.
-     * 
+     *
      * @param target The target entity to shoot at
-     * @param tank The tank entity doing the shooting
+     * @param tank   The tank entity doing the shooting
      */
     public static void executeShoot(Entity target, Entity tank) {
         if (tank == null) return;
@@ -61,9 +62,8 @@ public class ShootService {
         // Spawn shell
         if (target.getType() != TILE) {
             spawnShell(tank, target.getCenter());
-        }
-        else {
-            spawnShell(tank, target.getPosition().add(64, 1) );
+        } else {
+            spawnShell(tank, target.getPosition().add(64, 1));
         }
         FXGL.play("tank_shoot.wav");
 
@@ -88,21 +88,19 @@ public class ShootService {
         getGameTimer().runOnceAfter(() -> {
             target.removeComponent(AnimExplosionComponent.class);
             tank.removeComponent(AnimTankTurret.class);
-            if (target.getComponent(HealthIntComponent.class).getValue()<=0) {
+            if (target.getComponent(HealthIntComponent.class).getValue() <= 0) {
                 if (target.getType() == MOUNTAIN) {
                     target.addComponent(new AnimMountainComponent());
-                }
-                else if (target.isType(TANK)||target.isType(CITY)){
+                } else if (target.isType(TANK) || target.isType(CITY)) {
                     getGameTimer().runOnceAfter(() -> {
                         target.removeFromWorld();
                         GameState.gameOver();
                     }, Duration.millis(1500));
-                }
-                else {
+                } else {
                     target.removeFromWorld();
                 }
             }
-            }, Duration.millis(target.distance(tank)+1200)); //1200 = Explosion animation duration
+        }, Duration.millis(target.distance(tank) + 1200)); //1200 = Explosion animation duration
     }
 
     public static void spawnAttackTarget(Entity target, Entity attackingTank, boolean duringAction) {
@@ -116,9 +114,7 @@ public class ShootService {
                 String initialTankView;
                 if (duringAction) {
                     return;
-                }
-                else
-                {
+                } else {
                     initialTankView = tankData.getInitialTankView();
                 }
                 targetName = initialTankView.substring(0, initialTankView.lastIndexOf(".")) + "_attack";
@@ -132,8 +128,7 @@ public class ShootService {
                     }
                 }
             }
-        }
-        else if (target.getType() == TILE) {
+        } else if (target.getType() == TILE) {
             targetPosition = targetPosition.subtract(0, 63);
         }
 
@@ -143,8 +138,7 @@ public class ShootService {
                             .put("attackingTank", attackingTank)
                             .put("target", target)
                             .put("targetName", targetName));
-        }
-        else
+        } else
             FXGL.spawn("attackTargetTiles",
                     new SpawnData(targetPosition)
                             .put("attackingTank", attackingTank)
@@ -168,7 +162,7 @@ public class ShootService {
      * - 2 damage when hit from the side
      * - 1 damage when hit from the front
      *
-     * @param targetTank The tank being hit
+     * @param targetTank  The tank being hit
      * @param shooterTank The tank doing the shooting
      * @return The amount of damage to apply
      */
@@ -244,3 +238,4 @@ public class ShootService {
         return 1;
     }
 }
+

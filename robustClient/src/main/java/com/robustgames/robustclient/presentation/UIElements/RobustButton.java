@@ -1,7 +1,9 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.UIElements;
 
 import com.almasb.fxgl.ui.FXGLButton;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class RobustButton extends FXGLButton {
@@ -10,8 +12,7 @@ public class RobustButton extends FXGLButton {
         Label btnText = new Label(text);
         if (isMenu) {
             btnText.getStyleClass().add("robust-btn-menu-text");
-        }
-        else btnText.getStyleClass().add("robust-btn-text");
+        } else btnText.getStyleClass().add("robust-btn-text");
 
 
         this.setGraphic(btnText);
@@ -20,3 +21,4 @@ public class RobustButton extends FXGLButton {
         this.setOnMouseClicked(e -> action.run());
     }
 }
+

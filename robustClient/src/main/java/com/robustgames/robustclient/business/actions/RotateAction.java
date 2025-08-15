@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, eyesi001, Nico Steiner
+ */
 package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -18,9 +21,9 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
  */
 public class RotateAction extends Action {
     private final Texture newTankTexture;
-    private Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
+    private final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
     private final String textureName;
-    private boolean isLocal;
+    private final boolean isLocal;
 
     /**
      * Constructs a RotateAction for the given texture name.

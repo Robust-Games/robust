@@ -1,3 +1,6 @@
+/**
+ * @author eyesi001, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components.animations;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -8,7 +11,7 @@ import javafx.util.Duration;
 
 public class AnimExplosionComponent extends Component {
     private final AnimatedTexture texture;
-    private AnimationChannel expl;
+    private final AnimationChannel expl;
 
     public AnimExplosionComponent(int xOffset, int yOffset) {
         expl = new AnimationChannel(FXGL.image("explosion.png"), 12, 128, 128, Duration.seconds(1.2), 0, 12);
@@ -29,3 +32,4 @@ public class AnimExplosionComponent extends Component {
         entity.getViewComponent().removeChild(texture);
     }
 }
+

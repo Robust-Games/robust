@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Carolin Scheffler, Ersin Yesiltas
+ */
 package com.robustgames.robustserver;
 
 import com.almasb.fxgl.app.GameApplication;

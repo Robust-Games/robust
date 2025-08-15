@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.gameService;
 
 
@@ -10,24 +13,22 @@ import com.robustgames.robustclient.business.entitiy.components.TankDataComponen
 import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.Player;
 
-import static com.almasb.fxgl.dsl.FXGL.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class TurnService {
     public static Player currentPlayer;
     static boolean player1Ready = false;
     static boolean player2Ready = false;
-    private static Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
+    private static final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
 
     public static void startTurn(Player player) {
         currentPlayer = player;
-        if (currentGamemode.equals(Gamemode.LOCAL)){
+        if (currentGamemode.equals(Gamemode.LOCAL)) {
             Entity playerTank = MapService.findTankOfPlayer(player);
             if (playerTank != null) {
                 playerTank.getComponent(TankDataComponent.class).setInitialPos();
             }
-        }
-        else if (currentGamemode.equals(Gamemode.ONLINE)) {
+        } else if (currentGamemode.equals(Gamemode.ONLINE)) {
             String myPlayerName = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
 
             if (myPlayerName != null && myPlayerName.equals(currentPlayer.toString())) {
@@ -51,7 +52,7 @@ public class TurnService {
         } else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
-            if (currentGamemode.equals(Gamemode.LOCAL)){
+            if (currentGamemode.equals(Gamemode.LOCAL)) {
                 executeActions();
             }
         }
@@ -91,7 +92,9 @@ public class TurnService {
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
             entity.getComponent(APComponent.class).reset();
         });
-       //getNotificationService().pushNotification(currentPlayer + "'S TURN");
+
+        //getNotificationService().pushNotification(currentPlayer + "'S TURN");
     }
 }
+
 

@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.UIElements;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -23,7 +26,8 @@ public class OptionsView {
 
         // Fullscreen toggle
         RobustButton btnFullscreen = new RobustButton("Toggle Fullscreen",
-                () -> {var stage = FXGL.getPrimaryStage();
+                () -> {
+                    var stage = FXGL.getPrimaryStage();
                     stage.setFullScreen(!stage.isFullScreen());
                 }, false);
         btnFullscreen.setStyle("-fx-min-width: 150px;");
@@ -34,11 +38,13 @@ public class OptionsView {
 
         // Music / Sound sliders bound to settings
         Slider musicSlider = FXGL.getUIFactoryService().newSlider();
-        musicSlider.setMin(0); musicSlider.setMax(1);
+        musicSlider.setMin(0);
+        musicSlider.setMax(1);
         musicSlider.valueProperty().bindBidirectional(FXGL.getSettings().globalMusicVolumeProperty());
 
         Slider soundSlider = FXGL.getUIFactoryService().newSlider();
-        soundSlider.setMin(0); soundSlider.setMax(1);
+        soundSlider.setMin(0);
+        soundSlider.setMax(1);
         soundSlider.valueProperty().bindBidirectional(FXGL.getSettings().globalSoundVolumeProperty());
 
         Text musicLabel = FXGL.getUIFactoryService().newText("Music: ", Color.WHITE, FontType.GAME, 20);
@@ -61,10 +67,13 @@ public class OptionsView {
         container.setPrefSize(Math.max(xSIZE, FXGL.getAppHeight() / 2.0), Math.max(ySIZE, FXGL.getAppHeight() / 2.0));
         container.getStyleClass().add("robust-sub-menu");
     }
+
     public VBox getContainer() {
         return container;
     }
+
     public Point2D getSize() {
         return new Point2D(xSIZE, ySIZE);
     }
 }
+

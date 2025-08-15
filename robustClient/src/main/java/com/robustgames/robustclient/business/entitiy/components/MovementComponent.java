@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 
@@ -29,7 +32,7 @@ public class MovementComponent extends Component {
         if (moveTargets.isEmpty())
             return;
         for (Point2D target : moveTargets) {
-            apCost = abs((tankPos.getX()+tankPos.getY()) - (target.getX()+target.getY()));
+            apCost = abs((tankPos.getX() + tankPos.getY()) - (target.getX() + target.getY()));
             Point2D pos1 = MapService.isoGridToScreen(target);
             getGameWorld().spawn("moveTiles",
                     new SpawnData(pos1.getX() - 64, pos1.getY() - 64)
@@ -38,9 +41,9 @@ public class MovementComponent extends Component {
         }
         assert healthBar != null;
         healthBar.setVisible(false);
-        getGameWorld().spawn("rotateLeft",new SpawnData(entity.getPosition())
+        getGameWorld().spawn("rotateLeft", new SpawnData(entity.getPosition())
                 .put("tank", entity));
-        getGameWorld().spawn("rotateRight",new SpawnData(entity.getPosition())
+        getGameWorld().spawn("rotateRight", new SpawnData(entity.getPosition())
                 .put("tank", entity));
     }
 
@@ -52,7 +55,8 @@ public class MovementComponent extends Component {
         getGameWorld().removeEntities(byType(ACTIONSELECTION));
         MovementService.changeMountainLayer(entity);
     }
-    private ProgressBar getHealthBar(){
+
+    private ProgressBar getHealthBar() {
         List<Node> children = entity.getViewComponent().getChildren();
         for (Node child : children) {
             if (child instanceof ProgressBar) {
@@ -62,3 +66,4 @@ public class MovementComponent extends Component {
         return null;
     }
 }
+

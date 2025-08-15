@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components.animations;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -23,27 +26,24 @@ public class AnimCityComponent extends Component {
     boolean underAttack;
 
     public AnimCityComponent(boolean underAttack) {
-        //city1Texture = FXGL.getAssetLoader().loadTexture("city1.png");
-        city1AttackAnimation = new AnimationChannel(FXGL.image("city1_attack.png"), 1, 128,128, Duration.seconds(0), 0, 0);
-        city2AttackAnimation = new AnimationChannel(FXGL.image("city2_attack.png"), 19, 128,128, Duration.seconds(1.9), 0, 18);
-        city3AttackAnimation = new AnimationChannel(FXGL.image("city3_attack.png"), 19, 128,128, Duration.seconds(1.9), 0, 18);
-        city1Animation = new AnimationChannel(FXGL.image("city1.png"), 1, 128,128, Duration.seconds(0), 0, 0);
-        city2Animation = new AnimationChannel(FXGL.image("city2.png"), 19, 128,128, Duration.seconds(1.9), 0, 18);
-        city3Animation = new AnimationChannel(FXGL.image("city3.png"), 19, 128,128, Duration.seconds(1.9), 0, 18);
-        city4Animation = new AnimationChannel(FXGL.image("city4.png"), 19, 128,128, Duration.seconds(1.9), 0, 18);
+        city1AttackAnimation = new AnimationChannel(FXGL.image("city1_attack.png"), 1, 128, 128, Duration.seconds(0), 0, 0);
+        city2AttackAnimation = new AnimationChannel(FXGL.image("city2_attack.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city3AttackAnimation = new AnimationChannel(FXGL.image("city3_attack.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city1Animation = new AnimationChannel(FXGL.image("city1.png"), 1, 128, 128, Duration.seconds(0), 0, 0);
+        city2Animation = new AnimationChannel(FXGL.image("city2.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city3Animation = new AnimationChannel(FXGL.image("city3.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city4Animation = new AnimationChannel(FXGL.image("city4.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
         animatedTexture = new AnimatedTexture(city1Animation);
         this.underAttack = underAttack;
     }
 
     @Override
     public void onAdded() {
-        //city1Texture = entity.getViewComponent().getChild(0,Texture.class);
         entity.getViewComponent().addChild(animatedTexture);
         currentHP = entity.getComponent(HealthIntComponent.class).getValue();
         maxHP = entity.getComponent(HealthIntComponent.class).getMaxValue();
-        //entity.getViewComponent().removeChild(city1Texture);
-
     }
+
     @Override
     public void onUpdate(double tpf) {
         super.onUpdate(tpf);
@@ -52,22 +52,18 @@ public class AnimCityComponent extends Component {
             animatedTexture.loopAnimationChannel(city1AttackAnimation);
         }
         if (maxHP - 1 == currentHP) {
-            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack){
+            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack) {
                 animatedTexture.loopAnimationChannel(city2AttackAnimation);
-            }
-            else if (animatedTexture.getAnimationChannel() == city1Animation){
+            } else if (animatedTexture.getAnimationChannel() == city1Animation) {
                 animatedTexture.loopAnimationChannel(city2Animation);
             }
-        }
-        else if (maxHP - 2 == currentHP) {
-            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack){
+        } else if (maxHP - 2 == currentHP) {
+            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack) {
                 animatedTexture.loopAnimationChannel(city3AttackAnimation);
-            }
-            else if (animatedTexture.getAnimationChannel() == city2Animation) {
+            } else if (animatedTexture.getAnimationChannel() == city2Animation) {
                 animatedTexture.loopAnimationChannel(city3Animation);
             }
-        }
-        else if (maxHP - 3 == currentHP) {
+        } else if (maxHP - 3 == currentHP) {
             if (animatedTexture.getAnimationChannel() == city3Animation)
                 animatedTexture.loopAnimationChannel(city4Animation);
         }

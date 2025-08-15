@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.entity.Entity;
@@ -30,7 +33,7 @@ public class GameState {
                 return;
             }
             if (cityList.size() == 1) {
-                System.out.println("Game Over - CityList Size = " + cityList.size() );
+                System.out.println("Game Over - CityList Size = " + cityList.size());
                 winner = cityList.getFirst().getComponent(CityDataComponent.class).getOwner();
                 getDialogService().showMessageBox(winner + " wins", getGameController()::exit);
                 return;
@@ -60,3 +63,4 @@ public class GameState {
         return hpBar;
     }
 }
+

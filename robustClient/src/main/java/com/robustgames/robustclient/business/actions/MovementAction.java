@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Carolin Scheffler, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -14,8 +17,8 @@ import javafx.geometry.Point2D;
 
 public class MovementAction extends Action {
     private final Entity target;
-    private boolean isLocal;
-    private double speed = 200; // pixels/sec
+    private final boolean isLocal;
+    private final double speed = 200; // pixels/sec
 
 
     public MovementAction(Entity target) {
@@ -103,4 +106,5 @@ public class MovementAction extends Action {
     }
 
 }
+
 

@@ -1,11 +1,14 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.tankService;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.ActionComponent;
 import com.robustgames.robustclient.business.actions.MovementAction;
-import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
+import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Direction;
@@ -63,7 +66,6 @@ public class MovementService {
 //    }
 
 
-
     /**
      * Calculates all valid move targets for a tank based on its current position.
      * The movement is constrained by the tank's orientation, valid tiles within the map,
@@ -82,17 +84,16 @@ public class MovementService {
         }
         int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
 
-        if (ap <= 0){
+        if (ap <= 0) {
             //getNotificationService().pushNotification("Not enough Action Points!");
             return moveTargets;
         }
         String state = "";
-        if (selectedTank.getViewComponent().getChildren().contains(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture())){
+        if (selectedTank.getViewComponent().getChildren().contains(selectedTank.getComponent(TankDataComponent.class).getInitialTankTexture())) {
             state = selectedTank.getComponent(TankDataComponent.class)
                     .getInitialTankTexture().getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class)
                             .getInitialTankTexture().getImage().getUrl().lastIndexOf("/") + 1);
-        }
-        else{
+        } else {
             state = selectedTank.getComponent(TankDataComponent.class).getNewTankTexture()
                     .getImage().getUrl().substring(selectedTank.getComponent(TankDataComponent.class).getNewTankTexture()
                             .getImage().getUrl().lastIndexOf("/") + 1);
@@ -102,18 +103,18 @@ public class MovementService {
         Direction[] axes;
 
         if (state.equals("tank_top_left.png") || state.equals("tank_down_right.png") || state.equals("green_tank_top_left.png") || state.equals("green_tank_down_right.png")) {
-            axes = new Direction[]{ Direction.LEFT, Direction.RIGHT };
+            axes = new Direction[]{Direction.LEFT, Direction.RIGHT};
         } else if (state.equals("tank_top_right.png") || state.equals("tank_down_left.png") || state.equals("green_tank_top_right.png") || state.equals("green_tank_down_left.png")) {
-            axes = new Direction[]{ Direction.UP, Direction.DOWN };
-        }
-        else throw new IllegalArgumentException("Invalid Tank State! in MapService getTankMoveTargets: " + state + " is not a valid state for a tank!");
+            axes = new Direction[]{Direction.UP, Direction.DOWN};
+        } else
+            throw new IllegalArgumentException("Invalid Tank State! in MapService getTankMoveTargets: " + state + " is not a valid state for a tank!");
 
         // 3) Jump along each axis until it hits a mountain or the edge
         for (Direction dir : axes) {
             Point2D current = tankPos;
             for (int stepCount = 1; stepCount <= ap; stepCount++) {
                 current = step(current, dir);
-                if (MapService.hasDestroyedTileAt(current) || !MapService.isWithinMapLimits(current) || MapService.hasMountainAt(current)){
+                if (MapService.hasDestroyedTileAt(current) || !MapService.isWithinMapLimits(current) || MapService.hasMountainAt(current)) {
                     break;
                 }
                 if (!MapService.hasTankAt(current) && !MapService.hasCityAt(current)) {
@@ -163,13 +164,14 @@ public class MovementService {
             }
         });
     }
+
     /**
      * Calculates the Manhattan distance between two points on a grid.
      * The Manhattan distance is the sum of the absolute differences of
      * their x and y coordinates.
      *
      * @param fromGrid the starting point on the grid
-     * @param toGrid the target point on the grid
+     * @param toGrid   the target point on the grid
      * @return the Manhattan distance as an integer between the two points
      */
     public static int gridDistance(Point2D fromGrid, Point2D toGrid) {
@@ -177,7 +179,8 @@ public class MovementService {
         System.out.println("FromX = " + fromGrid.getX() + ", ToX = " + toGrid.getX());
         System.out.println(dx);
         double dy = Math.abs(toGrid.getY() - fromGrid.getY());
-        return (int)(dx + dy);
+        return (int) (dx + dy);
     }
 }
+
 

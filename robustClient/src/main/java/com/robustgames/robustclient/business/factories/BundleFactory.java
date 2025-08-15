@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Carolin Scheffler, Ersin Yesiltas
+ */
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.core.serialization.Bundle;

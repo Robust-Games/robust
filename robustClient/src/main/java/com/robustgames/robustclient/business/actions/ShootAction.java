@@ -1,16 +1,19 @@
+/**
+ * @author Burak Altun, eyesi001, Nico Steiner
+ */
 package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
-import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
-import com.robustgames.robustclient.business.logic.Gamemode;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
-import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.application.RobustApplication;
+import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
 import com.robustgames.robustclient.business.factories.BundleFactory;
+import com.robustgames.robustclient.business.logic.Gamemode;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
@@ -37,16 +40,17 @@ public class ShootAction extends Action {
      */
     public ShootAction(Entity target) {
         this.originalTarget = target;
-            this.targetScreenPosition = target.getPosition();
-            this.isLocal = true;
+        this.targetScreenPosition = target.getPosition();
+        this.isLocal = true;
 
-            if (target.getType() == CITY) {
-                this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
-            } else if (target.getType() == TILE) {
-                this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
-            } else
-                this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
+        if (target.getType() == CITY) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
+        } else if (target.getType() == TILE) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
+        } else
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
+
     public ShootAction(Entity target, boolean isLocal) {
         this.originalTarget = target;
         this.targetScreenPosition = target.getPosition();
@@ -59,7 +63,6 @@ public class ShootAction extends Action {
         } else
             this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
-
 
 
     /**
@@ -80,11 +83,9 @@ public class ShootAction extends Action {
             Entity currentTarget;
             if (originalTarget.isType(TILE)) {
                 currentTarget = findEntityAtPosition(originalTarget, true);
-            }
-            else if (originalTarget.isType(TANK)) {
+            } else if (originalTarget.isType(TANK)) {
                 currentTarget = findEntityAtPosition(originalTarget, false);
-            }
-            else currentTarget = originalTarget;
+            } else currentTarget = originalTarget;
 
             if (currentTarget != null) {
                 if (currentTarget.hasComponent(com.almasb.fxgl.dsl.components.HealthIntComponent.class)) {
@@ -118,11 +119,9 @@ public class ShootAction extends Action {
                             + targetGridPosition);
                 }
                 return entityList.getFirst();
-            }
-            else return targetEntity;
+            } else return targetEntity;
 
-        }
-        else{
+        } else {
             if (targetEntity.getPosition().equals(targetScreenPosition))
                 return targetEntity;
             else {
@@ -134,8 +133,8 @@ public class ShootAction extends Action {
                                 + targetGridPosition);
                     }
                     return tileList.getFirst();
-                }
-                else throw new IllegalStateException("No Tile found at target position @findEntityAtPosition - ShootAction");
+                } else
+                    throw new IllegalStateException("No Tile found at target position @findEntityAtPosition - ShootAction");
             }
         }
     }
@@ -147,7 +146,7 @@ public class ShootAction extends Action {
 
     @Override
     protected void onQueued() {
-        if (currentGamemode.equals(Gamemode.ONLINE)){
+        if (currentGamemode.equals(Gamemode.ONLINE)) {
             if (!isLocal) return;
 
             RobustApplication app = FXGL.getAppCast();
@@ -162,9 +161,10 @@ public class ShootAction extends Action {
     @Override
     protected void onCompleted() {
         super.onCompleted();
-        if (currentGamemode.equals(Gamemode.LOCAL)){
+        if (currentGamemode.equals(Gamemode.LOCAL)) {
             entity.getComponent(TankDataComponent.class).resetBeforeTurn();
         }
     }
 
 }
+

@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -8,11 +11,8 @@ import com.robustgames.robustclient.business.entitiy.components.TankDataComponen
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.geometry.Point2D;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static com.robustgames.robustclient.business.entitiy.EntityType.*;
+import static com.robustgames.robustclient.business.entitiy.EntityType.CITY;
+import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 /**
  * Tracks the tile logic, currently in Orthographic 2D
@@ -133,18 +133,19 @@ public class MapService {
     public static boolean hasMountainAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(EntityType.MOUNTAIN)
                 .stream().anyMatch(e -> {
-                    Point2D pos = isoScreenToGrid(e.getPosition().add(64,64));
+                    Point2D pos = isoScreenToGrid(e.getPosition().add(64, 64));
                     return pos.equals(gridPos);
                 });
     }
+
     public static boolean hasDestroyedTileAt(Point2D gridPos) {
-        return FXGL.getGameWorld().getEntitiesAt(isoGridToScreen(gridPos).add(-64,1)).isEmpty();
+        return FXGL.getGameWorld().getEntitiesAt(isoGridToScreen(gridPos).add(-64, 1)).isEmpty();
     }
 
-        public static boolean hasCityAt(Point2D gridPos) {
+    public static boolean hasCityAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(CITY)
                 .stream().anyMatch(e -> {
-                    Point2D pos = isoScreenToGrid(e.getPosition().add(64,64));
+                    Point2D pos = isoScreenToGrid(e.getPosition().add(64, 64));
                     return pos.equals(gridPos);
                 });
     }
@@ -152,7 +153,7 @@ public class MapService {
     public static boolean hasTankAt(Point2D gridPos) {
         return FXGL.getGameWorld().getEntitiesByType(TANK)
                 .stream().anyMatch(e -> {
-                    Point2D pos = isoScreenToGrid(e.getPosition().add(64,64));
+                    Point2D pos = isoScreenToGrid(e.getPosition().add(64, 64));
                     return pos.equals(gridPos);
                 });
     }
@@ -163,3 +164,4 @@ public class MapService {
     }
 
 }
+

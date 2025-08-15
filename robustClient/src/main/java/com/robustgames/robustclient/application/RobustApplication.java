@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Carolin Scheffler, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.application;
 
 import com.almasb.fxgl.app.GameApplication;
@@ -7,38 +10,35 @@ import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.app.scene.StartupScene;
 import com.almasb.fxgl.core.serialization.Bundle;
-import com.almasb.fxgl.entity.action.ActionComponent;
-import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.action.ActionComponent;
+import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.business.actions.MovementAction;
 import com.robustgames.robustclient.business.actions.RotateAction;
 import com.robustgames.robustclient.business.actions.ShootAction;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.IDComponent;
+import com.robustgames.robustclient.business.entitiy.components.*;
 import com.robustgames.robustclient.business.factories.IDFactory;
-import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
-import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
-import com.robustgames.robustclient.business.entitiy.components.ShootComponent;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.Gamemode;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
+import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import com.robustgames.robustclient.presentation.scenes.RobustStartupScene;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
-import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import com.robustgames.robustclient.presentation.scenes.menus.RobustMainMenu;
 import com.robustgames.robustclient.presentation.scenes.menus.RobustPauseMenu;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -47,9 +47,6 @@ import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
-import static javafx.scene.text.Font.loadFont;
-
-import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
 
 public class RobustApplication extends GameApplication {
     public Gamemode selectedGamemode = null;
@@ -61,7 +58,7 @@ public class RobustApplication extends GameApplication {
     TankButtonView tankButtonView;
     TankDataView tankDataView;
     EndTurnView endTurnView;
-    private int clientId = -1; // -1 = nicht gesetzt
+    private int clientId = -1; // -1 = not set
 
     private Connection<Bundle> connection;
 
@@ -87,11 +84,13 @@ public class RobustApplication extends GameApplication {
             public FXGLMenu newGameMenu() {
                 return new RobustPauseMenu();
             }
+
             @Override
             public FXGLMenu newMainMenu() {
                 return new RobustMainMenu(MenuType.MAIN_MENU);
 
             }
+
             @Override
             public StartupScene newStartup(int width, int height) {
                 return new RobustStartupScene(width, height);
@@ -137,8 +136,7 @@ public class RobustApplication extends GameApplication {
 
     @Override
     protected void initUI() {
-        if (selectedGamemode != null && selectedGamemode.equals(Gamemode.LOCAL))
-        {
+        if (selectedGamemode != null && selectedGamemode.equals(Gamemode.LOCAL)) {
             endTurnView.setVisible(true);
             tankButtonView.setVisible(false);
             tankDataView.setVisible(false);
@@ -148,6 +146,7 @@ public class RobustApplication extends GameApplication {
         }
 
     }
+
     /**
      * Selects a tank by adding the {@code SelectableComponent} and making its UI elements visible
      */
@@ -158,12 +157,13 @@ public class RobustApplication extends GameApplication {
             tankDataView.setSelectedTank(tank);
         }
     }
+
     /**
      * Deselects the currently selected tank by removing its {@code SelectableComponent}.
      * This method identifies the selected tank by checking for an entity with a {@code SelectableComponent}
      * which only tanks get assigned.
      */
-    public void deSelectTank(){
+    public void deSelectTank() {
         Entity tank = MapService.findSelectedTank();
         if (tank != null) {
             tank.removeComponent(SelectableComponent.class);
@@ -180,17 +180,16 @@ public class RobustApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        if (selectedGamemode != null ) {
+        if (selectedGamemode != null) {
             if (selectedGamemode == Gamemode.ONLINE) {
                 showGamemodeMenu();
-            }
-            else if (selectedGamemode == Gamemode.LOCAL) {
+            } else if (selectedGamemode == Gamemode.LOCAL) {
                 initLocalGameLogicAndUI();
             }
         }
     }
 
-   private void showGamemodeMenu() {
+    private void showGamemodeMenu() {
         gamemodeMenu = new VBox(30);
         gamemodeMenu.setTranslateX(WIDTH / 2.0 - 100);
         gamemodeMenu.setTranslateY(HEIGHT / 2.0 - 100);
@@ -208,9 +207,9 @@ public class RobustApplication extends GameApplication {
     }
 
     private void startGameAfterMenu() {
-            initializeNetworkClient("localhost", 55555);
-            showWaitingForOpponent();
-            //FXGL.getNotificationService().pushNotification("Waiting for other player to join...");
+        initializeNetworkClient("localhost", 55555);
+        showWaitingForOpponent();
+        //FXGL.getNotificationService().pushNotification("Waiting for other player to join...");
 
     }
 
@@ -290,7 +289,7 @@ public class RobustApplication extends GameApplication {
                     }
 
                     case "RotateAction" -> {
-                        System.out.println("RotateAction empfangen: " + responseBundle);
+                        System.out.println("Received RotateAction: " + responseBundle);
 
                         long entityId = responseBundle.get("entityId");
                         String textureName = responseBundle.get("direction") + ".png";
@@ -301,7 +300,7 @@ public class RobustApplication extends GameApplication {
                                 .orElse(null);
 
                         if (tank == null) {
-                            System.err.println("Tank mit ID " + entityId + " nicht gefunden");
+                            System.err.println("Tank with ID " + entityId + " not found.");
                             return;
                         }
 
@@ -328,17 +327,18 @@ public class RobustApplication extends GameApplication {
                             shooter.getComponent(ActionComponent.class).addAction(shootAction);
                             shooter.getComponent(ActionComponent.class).pause();
                         } else {
-                            System.err.println("Shooter oder Target nicht gefunden");
+                            System.err.println("Shooter or Target not found");
                         }
                     }
                     case "ExecuteTurn" -> {
-                        System.out.println("ExecuteTurn empfangen - Aktionen starten");
+                        System.out.println("ExecuteTurn recieved - starting turn actions");
 
                         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(tank -> {
                             ActionComponent ac = tank.getComponent(ActionComponent.class);
                             if (ac.isPaused()) {
                                 ac.resume();
                             }
+                            Platform.runLater(() -> FXGL.<RobustApplication>getAppCast().getEndTurnView().disableProperty().setValue(false));
                             tank.getComponent(APComponent.class).reset();
                         });
                     }
@@ -347,11 +347,11 @@ public class RobustApplication extends GameApplication {
                     case "assign_id" -> {
                         int id = responseBundle.get("clientId");
                         setClientId(id);
-                        System.out.println("Client-ID erhalten: " + id);
+                        System.out.println("received Client-ID: " + id);
                         startOnlineGame();
                     }
                     case "hello" -> {
-                        System.out.println("Hello vom Server erhalten");
+                        System.out.println("received Hello from Server");
                     }
                     default -> {
                         System.out.println("Unhandled bundle: " + responseBundle.getName());
@@ -367,7 +367,7 @@ public class RobustApplication extends GameApplication {
     }
 
     private void initLocalGameLogicAndUI() {
-        addEntityFactoriesOnce(); // WICHTIG: Nur einmal registrieren!
+        addEntityFactoriesOnce(); // IMPORTANT: only register once!
         getGameScene().getViewport().setY(-100);
         tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
@@ -378,17 +378,18 @@ public class RobustApplication extends GameApplication {
         FXGL.setLevelFromMap("mapTest2.tmx");
 
         GameWorld world = getGameWorld();
-        List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
+        List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> because the textures are entities that we can't filter by type
         for (Entity entity : allEntities) {
             moveEntityToIsometric(entity);
         }
         TurnService.startTurn(Player.PLAYER1);
     }
+
     private void initOnlineGameLogicAndUI() {
-        addEntityFactoriesOnce(); // WICHTIG: Nur einmal registrieren!
+        addEntityFactoriesOnce(); // IMPORTANT: only register once!
         getGameScene().getViewport().setY(-100);
 
-        // UI hier initialisieren!
+        // initialise UI here
         tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
         endTurnView = new EndTurnView();
@@ -421,9 +422,8 @@ public class RobustApplication extends GameApplication {
         Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
         Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
         if (entity.isType(TILE)) {
-            entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY()+ 1);
-        }
-        else if(entity.isType(HOVER)) {
+            entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() + 1);
+        } else if (entity.isType(HOVER)) {
             entity.setPosition(isoScreenPos.getX(), isoScreenPos.getY());
         } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
             entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() - 64);
@@ -441,7 +441,12 @@ public class RobustApplication extends GameApplication {
         return selectedGamemode;
     }
 
+    public Pane getEndTurnView() {
+        return endTurnView;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
 }
+

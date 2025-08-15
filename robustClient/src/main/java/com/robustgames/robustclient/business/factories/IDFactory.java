@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas
+ */
 package com.robustgames.robustclient.business.factories;
 
 public class IDFactory {
@@ -8,3 +11,4 @@ public class IDFactory {
         return nextId++;
     }
 }
+

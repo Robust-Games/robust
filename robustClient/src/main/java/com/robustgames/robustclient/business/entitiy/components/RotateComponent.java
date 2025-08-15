@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.entity.action.ActionComponent;
@@ -8,6 +11,7 @@ import com.robustgames.robustclient.business.logic.tankService.RotateService;
 
 public class RotateComponent extends Component {
     String newTankTexture;
+
     public void rotateLeft() {
         if (entity.getComponent(APComponent.class).canUse(1)) {
             newTankTexture = RotateService.rotateTank(entity, Direction.LEFT);

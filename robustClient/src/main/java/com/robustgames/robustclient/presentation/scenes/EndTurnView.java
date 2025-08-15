@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Carolin Scheffler, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -8,14 +11,15 @@ import com.robustgames.robustclient.business.entitiy.components.SelectableCompon
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.Gamemode;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 public class EndTurnView extends Pane {
     Button btnEndTurn;
@@ -42,12 +46,14 @@ public class EndTurnView extends Pane {
             playerTank.removeComponent(SelectableComponent.class);
             playerTank.getComponent(APComponent.class).setCurrentAP(0);
             if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)) {
-                BundleFactory.signalTurnFinished(); // sendet Nachricht
+                btnEndTurn.disableProperty().setValue(true);
+                BundleFactory.signalTurnFinished();
             }
-            if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.LOCAL))
+            if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.LOCAL)) {
                 playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
-
+            }
             TurnService.nextPlayer();
         });
     }
 }
+

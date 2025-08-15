@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.scenes.menus;
 
 import com.almasb.fxgl.animation.Interpolators;
@@ -15,7 +18,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -117,6 +121,7 @@ public class RobustMainMenu extends FXGLMenu {
         OptionsView options = new OptionsView(subMenu);
         return options.getContainer();
     }
+
     private Node createCreditsContent() {
         Text title = FXGL.getUIFactoryService().newText("CREDITS", Color.WHITE, FontType.GAME, 36);
         title.setEffect(new DropShadow(8, Color.BLACK));
@@ -135,20 +140,21 @@ public class RobustMainMenu extends FXGLMenu {
 
         return container;
     }
+
     private Node createStartContent() {
         VBox vbox = new VBox(8);
 
         var btnOnline = createActionButton("Online", () -> {
             FXGL.<RobustApplication>getAppCast().selectedGamemode = Gamemode.ONLINE;
             fireNewGame();
-        },false);
+        }, false);
 
         var btnHotseat = createActionButton("Hotseat", () -> {
             FXGL.<RobustApplication>getAppCast().selectedGamemode = Gamemode.LOCAL;
             fireNewGame();
-        },false);
+        }, false);
 
-        var btnBack = createActionButton("Back", () -> subMenu.getChildren().clear(),false);
+        var btnBack = createActionButton("Back", () -> subMenu.getChildren().clear(), false);
 
         vbox.getChildren().addAll(btnOnline, btnHotseat, btnBack);
 
@@ -160,3 +166,4 @@ public class RobustMainMenu extends FXGLMenu {
     }
 
 }
+

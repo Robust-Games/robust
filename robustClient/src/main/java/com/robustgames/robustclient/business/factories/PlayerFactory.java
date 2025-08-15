@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -11,16 +14,13 @@ import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.*;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimCityComponent;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
-import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
-import com.robustgames.robustclient.business.entitiy.components.SelectableComponent;
 import com.robustgames.robustclient.business.logic.Gamemode;
-import com.robustgames.robustclient.business.logic.gameService.GameState;
-import com.robustgames.robustclient.business.entitiy.components.*;
 import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.gameService.GameState;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
 
-import static com.robustgames.robustclient.business.entitiy.EntityType.*;
+import static com.robustgames.robustclient.business.entitiy.EntityType.CITY;
+import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER1;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER2;
 
@@ -41,7 +41,7 @@ public class PlayerFactory implements EntityFactory {
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
-                .onClick(clickedTank ->{
+                .onClick(clickedTank -> {
                     String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
                     Player owner = clickedTank.getComponent(TankDataComponent.class).getOwner();
                     Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
@@ -50,14 +50,12 @@ public class PlayerFactory implements EntityFactory {
                         System.out.println("Nicht dein Panzer. Klick ignoriert.");
                         return;
                     }
-                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)){
+                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)) {
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
-                    }
-
-                    else if (currentGamemode.equals(Gamemode.LOCAL)){
-                        if (TurnService.currentPlayer == Player.PLAYER1){
+                    } else if (currentGamemode.equals(Gamemode.LOCAL)) {
+                        if (TurnService.currentPlayer == Player.PLAYER1) {
                             FXGL.<RobustApplication>getAppCast().deSelectTank();
                             clickedTank.addComponent(new SelectableComponent());
                             FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
@@ -110,14 +108,12 @@ public class PlayerFactory implements EntityFactory {
                         System.out.println("Nicht dein Panzer. Klick ignoriert.");
                         return;
                     }
-                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)){
+                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)) {
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
-                    }
-
-                    else if (currentGamemode.equals(Gamemode.LOCAL)){
-                        if (TurnService.currentPlayer == Player.PLAYER2){
+                    } else if (currentGamemode.equals(Gamemode.LOCAL)) {
+                        if (TurnService.currentPlayer == Player.PLAYER2) {
                             FXGL.<RobustApplication>getAppCast().deSelectTank();
                             clickedTank.addComponent(new SelectableComponent());
                             FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
@@ -146,3 +142,4 @@ public class PlayerFactory implements EntityFactory {
         return city;
     }
 }
+

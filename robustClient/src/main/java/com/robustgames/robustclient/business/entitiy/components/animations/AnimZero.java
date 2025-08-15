@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components.animations;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -6,9 +9,9 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
 
-public class AnimZero extends Component{
-    private AnimatedTexture texture;
-    private AnimationChannel zeroChannel;
+public class AnimZero extends Component {
+    private final AnimatedTexture texture;
+    private final AnimationChannel zeroChannel;
 
     public AnimZero() {
         zeroChannel = new AnimationChannel(FXGL.image("oneZero.png"), 60, 1, 1, Duration.seconds(1), 0, 59);
@@ -23,6 +26,7 @@ public class AnimZero extends Component{
         texture.loopAnimationChannel(zeroChannel);
 
     }
+
     @Override
     public void onUpdate(double tpf) {
         super.onUpdate(tpf);
@@ -34,3 +38,4 @@ public class AnimZero extends Component{
         entity.getViewComponent().removeChild(texture);
     }
 }
+

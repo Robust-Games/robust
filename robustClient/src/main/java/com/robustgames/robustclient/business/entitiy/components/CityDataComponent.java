@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.entity.component.Component;
@@ -35,3 +38,4 @@ public class CityDataComponent extends Component {
         return owner;
     }
 }
+
