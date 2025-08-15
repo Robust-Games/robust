@@ -34,6 +34,7 @@ import com.robustgames.robustclient.presentation.scenes.TankButtonView;
 import com.robustgames.robustclient.presentation.scenes.TankDataView;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import com.robustgames.robustclient.presentation.scenes.menus.RobustMainMenu;
+import com.robustgames.robustclient.presentation.scenes.menus.RobustPauseMenu;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
@@ -82,10 +83,10 @@ public class RobustApplication extends GameApplication {
         settings.setTitle("ROBUST");
         settings.setVersion("0.4");
         settings.setSceneFactory(new SceneFactory() {
-/*            @Override
+            @Override
             public FXGLMenu newGameMenu() {
                 return new RobustPauseMenu();
-            }*/
+            }
             @Override
             public FXGLMenu newMainMenu() {
                 return new RobustMainMenu(MenuType.MAIN_MENU);

@@ -8,7 +8,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.IrremovableComponent;
 import com.almasb.fxgl.texture.Texture;
-import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.MovementComponent;
 import com.robustgames.robustclient.business.entitiy.components.RotateComponent;
 import com.robustgames.robustclient.business.entitiy.components.ShellComponent;
@@ -21,10 +20,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Popup;
-
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 /**

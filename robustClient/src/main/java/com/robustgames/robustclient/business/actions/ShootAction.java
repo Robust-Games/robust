@@ -2,7 +2,6 @@ package com.robustgames.robustclient.business.actions;
 
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
 import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
@@ -12,7 +11,6 @@ import com.robustgames.robustclient.business.entitiy.components.TankDataComponen
 import com.almasb.fxgl.net.Connection;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.factories.BundleFactory;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
@@ -28,8 +26,8 @@ public class ShootAction extends Action {
     private final Point2D targetGridPosition;
     private final Point2D targetScreenPosition;
     private final Entity originalTarget;
-    private boolean isLocal;
-    private Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
+    private final boolean isLocal;
+    private final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
 
     /**
      * Creates a new ShootAction targeting the position of the entity
