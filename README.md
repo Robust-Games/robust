@@ -25,6 +25,11 @@ Ein Multiplayer-Panzerduell mit Explosionen & Animationen, zeigt wie man Spielme
 - Nico Steiner
 - Carolin Scheffler  
 
+## Credits
+
+[AlmasB FXGL](https://github.com/AlmasB/FXGL)
+Aktiver Entwickler und Ansprechpartner von FXGL
+
 ---
 
 ✨ Viel Spaß beim Ausprobieren und Entwickeln!
