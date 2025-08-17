@@ -41,8 +41,6 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
 
 public class RobustApplication extends GameApplication {
     private Gamemode selectedGamemode = null;
-    private VBox gamemodeMenu;
-    private VBox waitingBox;
 
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
@@ -73,6 +71,18 @@ public class RobustApplication extends GameApplication {
         settings.getCSSList().add("style.css");
         settings.setWidth(WIDTH);
         settings.setHeight(HEIGHT);
+
+        // Menüs aktivieren
+        settings.setMainMenuEnabled(true);
+        settings.setGameMenuEnabled(false);
+
+        // <<< Menü via SceneFactory registrieren >>>
+        settings.setSceneFactory(new com.almasb.fxgl.app.scene.SceneFactory() {
+            @Override
+            public com.almasb.fxgl.app.scene.FXGLMenu newMainMenu() {
+                return new com.robustgames.robustclient.presentation.scenes.menu.RobustMainMenu(RobustApplication.this);
+            }
+        });
     }
 
     @Override
@@ -109,66 +119,13 @@ public class RobustApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        showGamemodeMenu();
-    }
-
-    private void showGamemodeMenu() {
-        gamemodeMenu = new VBox(30);
-        gamemodeMenu.setTranslateX(WIDTH / 2.0 - 100);
-        gamemodeMenu.setTranslateY(HEIGHT / 2.0 - 100);
-
-        Text title = new Text("Choose Gamemode");
-        Button btnLocal = new Button("Local");
-        Button btnOnline = new Button("Online Multiplayer");
-
-        btnLocal.setOnAction(e -> {
-            selectedGamemode = Gamemode.LOCAL;
-            FXGL.getGameScene().removeUINode(gamemodeMenu);
-            startGameAfterMenu();
-        });
-
-        btnOnline.setOnAction(e -> {
-            selectedGamemode = Gamemode.ONLINE;
-            FXGL.getGameScene().removeUINode(gamemodeMenu);
-            startGameAfterMenu();
-        });
-
-        gamemodeMenu.getChildren().addAll(title, btnLocal, btnOnline);
-        FXGL.getGameScene().addUINode(gamemodeMenu);
-    }
-
-    private void startGameAfterMenu() {
-        if (selectedGamemode == Gamemode.ONLINE) {
-            initializeNetworkClient("localhost", 55555);
-            showWaitingForOpponent();
-            FXGL.getNotificationService().pushNotification("Waiting for other player to join...");
-        } else if (selectedGamemode == Gamemode.LOCAL) {
-            startLocalGame();
-        }
-    }
-
-    private void showWaitingForOpponent() {
-        waitingBox = new VBox(30);
-        waitingBox.setTranslateX(WIDTH / 2.0 - 100);
-        waitingBox.setTranslateY(HEIGHT / 2.0 - 100);
-        Text waitingText = new Text("Waiting for other player to join..");
-        waitingBox.getChildren().add(waitingText);
-        FXGL.getGameScene().addUINode(waitingBox);
-    }
-
-    private void hideWaitingForOpponent() {
-        if (waitingBox != null) {
-            FXGL.getGameScene().removeUINode(waitingBox);
-            waitingBox = null;
+        if (selectedGamemode == Gamemode.LOCAL) {
+            continueGameSetup();
         }
     }
 
     private void startLocalGame() {
-        continueLocalGameSetup();
-    }
-
-    private void startOnlineGame() {
-        continueOnlineGameSetup();
+        continueGameSetup();
     }
 
     private void addEntityFactoriesOnce() {
@@ -181,32 +138,37 @@ public class RobustApplication extends GameApplication {
 
     private void initializeNetworkClient(String ip, int port) {
         Client<Bundle> client = getNetService().newTCPClient(ip, port);
+
         client.setOnConnected(conn -> {
             connection = conn;
 
+            // Begrüßung an Server
             Bundle hello = new Bundle("hello");
             conn.send(hello);
 
+            // Alle Server-Messages kommen bereits auf dem FX-Thread an (addMessageHandlerFX)
             conn.addMessageHandlerFX((c, responseBundle) -> {
                 System.out.println("Received from server: " + responseBundle);
 
                 switch (responseBundle.getName()) {
                     case "GameStart" -> {
+                        // Server hat Rollen zugewiesen -> jetzt erst Spielwelt aufbauen
                         assignedPlayer = responseBundle.get("assignedPlayer");
                         System.out.println("Assigned role: " + assignedPlayer);
-                        hideWaitingForOpponent();
-                        continueOnlineGameSetup();
+                        // Kein hideWaitingForOpponent() mehr – das alte UI ist weg
+                        continueGameSetup();     // oder: continueOnlineGameSetup(), falls du das getrennt haben willst
                     }
+
                     case "ServerACK" -> {
                         System.out.println("ACK received: " + responseBundle.get("originalBundle"));
                     }
+
                     case "Reject" -> {
                         System.out.println("Rejected: " + responseBundle.get("message"));
                         getGameController().exit();
                     }
-                    case "MoveAction" -> {
-                        System.out.println("MoveAction empfangen: " + responseBundle);
 
+                    case "MoveAction" -> {
                         long entityId = responseBundle.get("entityId");
                         double toX = responseBundle.get("toX");
                         double toY = responseBundle.get("toY");
@@ -227,8 +189,6 @@ public class RobustApplication extends GameApplication {
                     }
 
                     case "RotateAction" -> {
-                        System.out.println("RotateAction empfangen: " + responseBundle);
-
                         long entityId = responseBundle.get("entityId");
                         String textureName = responseBundle.get("direction") + ".png";
 
@@ -268,6 +228,7 @@ public class RobustApplication extends GameApplication {
                             System.err.println("Shooter oder Target nicht gefunden");
                         }
                     }
+
                     case "ExecuteTurn" -> {
                         System.out.println("ExecuteTurn empfangen - Aktionen starten");
 
@@ -280,30 +241,29 @@ public class RobustApplication extends GameApplication {
                         });
                     }
 
-
                     case "assign_id" -> {
                         int id = responseBundle.get("clientId");
                         setClientId(id);
                         System.out.println("Client-ID erhalten: " + id);
-                        startOnlineGame();
+                        // KEIN startOnlineGame() mehr hier!
+                        // Das eigentliche Setup startet, wenn "GameStart" kommt.
                     }
+
                     case "hello" -> {
                         System.out.println("Hello vom Server erhalten");
                     }
+
                     default -> {
                         System.out.println("Unhandled bundle: " + responseBundle.getName());
                     }
                 }
             });
         });
+
         client.connectAsync();
     }
 
-    private void continueLocalGameSetup() {
-        initGameLogicAndUI();
-    }
-
-    private void continueOnlineGameSetup() {
+    private void continueGameSetup() {
         initGameLogicAndUI();
     }
 
@@ -354,6 +314,18 @@ public class RobustApplication extends GameApplication {
 
     public Gamemode getSelectedGamemode() {
         return selectedGamemode;
+    }
+
+    // --- Menü-Bridge: NICHTS SONST ÄNDERN ---
+    public void startLocalFromMenu() {
+        selectedGamemode = Gamemode.LOCAL;
+    }
+
+    public void startOnlineFromMenu(String ip, int port) {
+        selectedGamemode = Gamemode.ONLINE;
+        initializeNetworkClient(ip, port);
+        com.almasb.fxgl.dsl.FXGL.getNotificationService()
+                .pushNotification("Waiting for other player to join...");
     }
 
     public static void main(String[] args) {
