@@ -16,7 +16,7 @@ Ein Multiplayer-Panzerduell mit Explosionen & Animationen, zeigt wie man Spielme
  - **Schnell, strategisch** → kurze Runden
  
 
-**Mehr Details in unserem [Wiki]([../../wiki/Home](https://github.com/Robust-Games/robust/wiki)).**
+**Mehr Details in unserem [Wiki](https://github.com/Robust-Games/robust/wiki).**
 
 ## Team
 
