@@ -24,7 +24,6 @@ public class TankButtonView extends Pane {
     Button btnShoot;
     Label btnMoveText;
     Label btnShootText;
-    Label btnRotateText;
     Label btnRotateLeftText;
     Label btnRotateRightText;
     Tooltip shootingTooltip = new Tooltip("Costs 3AP, but Ends your Turn\nDeal one Damage to whatever you hit");
@@ -37,10 +36,8 @@ public class TankButtonView extends Pane {
         VBox buttonBox = new VBox(10);
         btnMoveText = new Label("Move");
         btnShootText = new Label("Shoot");
-        btnRotateText = new Label("Rotate");
         btnRotateLeftText = new Label("Rotate Left");
         btnRotateRightText = new Label("Rotate Right");
-        btnRotateText.getStyleClass().add("robust-btn-text");
         btnMoveText.getStyleClass().add("robust-btn-text");
         btnShootText.getStyleClass().add("robust-btn-text");
         btnRotateLeftText.getStyleClass().add("robust-btn-text");
@@ -83,7 +80,7 @@ public class TankButtonView extends Pane {
         );
 
         this.setTranslateX(getAppWidth() / 32.0);
-        this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 200);
+        this.setTranslateY(getAppHeight() - buttonBox.getHeight() - 150);
         this.getChildren().add(buttonBox);
 
     }

@@ -12,8 +12,11 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.robustgames.robustclient.presentation.UIElements.OptionsView;
 import com.robustgames.robustclient.presentation.UIElements.RobustButton;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 
@@ -21,23 +24,26 @@ public class RobustPauseMenu extends FXGLMenu {
     private static final double BUTTON_SPACING = 14.0;
     private final Pane subMenu = new Pane();
     private final OptionsView optionsView;
-    private final RobustButton btnContinue = new RobustButton("Continue", () -> fireContinue(), true);
+    private final RobustButton btnContinue = new RobustButton("Continue", () -> fireResume(), true);
     private final RobustButton btnOptions = new RobustButton("Options",
             () -> switchToOptions(), true);
     private final RobustButton btnExit = new RobustButton("Exit", () -> fireExit(), true);
     private final Animation<?> animation;
-    int SIZE = 200;
 
     public RobustPauseMenu() {
         super(MenuType.GAME_MENU);
+        Rectangle background = new Rectangle(FXGL.getAppWidth(), FXGL.getAppHeight());
+        background.setFill(Color.TRANSPARENT);
         VBox menuBox = new VBox(BUTTON_SPACING);
         optionsView = new OptionsView(subMenu);
         Point2D optionsDimension = optionsView.getSize();
+        menuBox.getChildren().addAll(btnContinue, btnOptions, btnExit);
 
-        menuBox.setTranslateX(FXGL.getAppWidth() / 2.0 - SIZE);
-        menuBox.setTranslateY(FXGL.getAppHeight() / 2.0 - SIZE);
+        menuBox.setTranslateX(FXGL.getAppWidth() / 2.0 - 175); // button width / 2
+        menuBox.setTranslateY(FXGL.getAppHeight() / 2.0 - 114.5); //(3 buttons + 14 BUTTON_SPACING) / 2
         subMenu.setTranslateX(FXGL.getAppWidth() / 2.0 - optionsDimension.getX() / 2);
         subMenu.setTranslateY(FXGL.getAppHeight() / 2.0 - optionsDimension.getY() / 2);
+
 
         animation = FXGL.animationBuilder()
                 .duration(Duration.seconds(0.66))
@@ -45,11 +51,11 @@ public class RobustPauseMenu extends FXGLMenu {
                 .scale(getContentRoot())
                 .from(new Point2D(0, 0))
                 .to(new Point2D(1, 1))
+                .origin(new Point2D(FXGL.getAppWidth() / 2.0, FXGL.getAppHeight() / 2.0))
                 .build();
 
 
-        menuBox.getChildren().addAll(btnContinue, btnOptions, btnExit);
-        getContentRoot().getChildren().addAll(menuBox, subMenu);
+        getContentRoot().getChildren().addAll(background, menuBox, subMenu);
 
     }
 

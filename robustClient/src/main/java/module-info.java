@@ -5,6 +5,7 @@ open module com.robustgames.robustclient {
     requires java.desktop;
     requires javafx.graphics;
     requires com.almasb.fxgl.scene;
+    requires com.almasb.fxgl.core;
 
     exports com.robustgames.robustclient.business.entitiy.components;
     exports com.robustgames.robustclient.business.logic;

@@ -27,6 +27,7 @@ import com.robustgames.robustclient.business.factories.PlayerFactory;
 import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.gameService.SoundService;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import com.robustgames.robustclient.presentation.scenes.RobustStartupScene;
@@ -37,11 +38,14 @@ import com.robustgames.robustclient.presentation.scenes.menus.RobustPauseMenu;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
+import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,6 +55,7 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 public class RobustApplication extends GameApplication {
     public Gamemode selectedGamemode = null;
     private VBox gamemodeMenu;
+    Pane waitingPane;
     private VBox waitingBox;
 
     private static final int WIDTH = 1280;
@@ -182,7 +187,7 @@ public class RobustApplication extends GameApplication {
     protected void initGame() {
         if (selectedGamemode != null) {
             if (selectedGamemode == Gamemode.ONLINE) {
-                showGamemodeMenu();
+                startGameAfterMenu();
             } else if (selectedGamemode == Gamemode.LOCAL) {
                 initLocalGameLogicAndUI();
             }
@@ -214,17 +219,24 @@ public class RobustApplication extends GameApplication {
     }
 
     private void showWaitingForOpponent() {
+        waitingPane = new Pane();
         waitingBox = new VBox(30);
         waitingBox.setTranslateX(WIDTH / 2.0 - 100);
         waitingBox.setTranslateY(HEIGHT / 2.0 - 100);
-        Text waitingText = new Text("Waiting for other player to join..");
+
+        Text waitingText = new Text("Waiting for other player to join");
+        waitingText.getStyleClass().add("robust-btn-menu-text");
+        ImageView background = texture("background.png", getAppWidth(), getAppHeight());
+
         waitingBox.getChildren().add(waitingText);
-        FXGL.getGameScene().addUINode(waitingBox);
+        waitingPane.getChildren().addAll(background, waitingBox);
+
+        FXGL.getGameScene().addUINode(waitingPane);
     }
 
     private void hideWaitingForOpponent() {
         if (waitingBox != null) {
-            FXGL.getGameScene().removeUINode(waitingBox);
+            FXGL.getGameScene().removeUINode(waitingPane);
             waitingBox = null;
         }
     }
@@ -245,7 +257,6 @@ public class RobustApplication extends GameApplication {
         Client<Bundle> client = getNetService().newTCPClient(ip, port);
         client.setOnConnected(conn -> {
             connection = conn;
-
             Bundle hello = new Bundle("hello");
             conn.send(hello);
 
@@ -331,14 +342,14 @@ public class RobustApplication extends GameApplication {
                         }
                     }
                     case "ExecuteTurn" -> {
-                        System.out.println("ExecuteTurn recieved - starting turn actions");
+                        System.out.println("ExecuteTurn received - starting turn actions");
 
                         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(tank -> {
                             ActionComponent ac = tank.getComponent(ActionComponent.class);
                             if (ac.isPaused()) {
                                 ac.resume();
                             }
-                            Platform.runLater(() -> FXGL.<RobustApplication>getAppCast().getEndTurnView().disableProperty().setValue(false));
+                            Platform.runLater(() -> getEndTurnView().disableProperty().setValue(false));
                             tank.getComponent(APComponent.class).reset();
                         });
                     }
@@ -419,6 +430,7 @@ public class RobustApplication extends GameApplication {
     }
 
     private void moveEntityToIsometric(Entity entity) {
+        Platform.runLater(()->SoundService.pickSong());
         Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
         Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
         if (entity.isType(TILE)) {

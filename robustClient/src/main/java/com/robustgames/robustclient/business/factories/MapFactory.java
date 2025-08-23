@@ -72,7 +72,7 @@ public class MapFactory implements EntityFactory {
                 floorTexture.set(FXGL.getAssetLoader().loadTexture("floor_tile1.png"));
             } else if (newHP.intValue() == 1)
                 floorTexture.set(FXGL.getAssetLoader().loadTexture("floor_tile2.png"));
-            else if (newHP.intValue() == 0)
+            else if (newHP.intValue() <= 0)
                 System.err.println("A");
             //floorTexture.imageProperty().unbind();
         });
