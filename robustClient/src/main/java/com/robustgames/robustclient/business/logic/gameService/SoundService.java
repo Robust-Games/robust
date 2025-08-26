@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.audio.Music;

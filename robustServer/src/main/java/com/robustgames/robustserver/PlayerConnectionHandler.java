@@ -38,7 +38,7 @@ public class PlayerConnectionHandler {
      * Incoming bundles are passed to the {@link GameSession}.
      */
     private void init() {
-        conn.addMessageHandlerFX((c, bundle) -> {
+        conn.addMessageHandler((c, bundle) -> {
             session.handleBundle(playerId, bundle);
         });
     }

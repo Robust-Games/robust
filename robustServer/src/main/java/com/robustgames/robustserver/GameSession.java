@@ -31,17 +31,17 @@ public class GameSession {
     public void tryAddClient(Connection<Bundle> conn) {
         if (player1 == null) {
             player1 = new PlayerConnectionHandler(conn, "PLAYER1", this);
-            System.out.println("[Session] PLAYER1 connected.");
+            System.out.println("[Server - Session] PLAYER1 connected.");
         } else if (player2 == null) {
             player2 = new PlayerConnectionHandler(conn, "PLAYER2", this);
-            System.out.println("[Session] PLAYER2 connected.");
+            System.out.println("[Server - Session] PLAYER2 connected.");
             startGame();
         } else {
-            System.err.println("[Session] Rejected: More than 2 players not supported.");
+            System.err.println("[Server - Session] Rejected: More than 2 players not supported.");
             Bundle reject = new Bundle("Reject");
             reject.put("message", "Session full.");
             conn.send(reject);
-            System.out.println("[Session] Reject sent.");
+            System.out.println("[Server - Session] Reject sent.");
         }
     }
 

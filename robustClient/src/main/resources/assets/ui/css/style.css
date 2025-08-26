@@ -49,15 +49,15 @@
     -fx-border-width: 3px;
     -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
 }
-.robust-btn-menu:pressed {
-    -fx-background-image: url(../../textures/button1_pressed.png);
-    -fx-background-color: #465057;
-    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 0, 0);
-}
 .robust-btn-menu:hover {
     -fx-background-image: url(../../textures/button1_hover.png);
     -fx-background-color: #cadbe6;
     -fx-effect: dropshadow(three-pass-box, black, 5, 0, 4, 4);
+}
+.robust-btn-menu:pressed {
+    -fx-background-image: url(../../textures/button1_pressed.png);
+    -fx-background-color: #465057;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 0, 0);
 }
 .robust-btn {
     -fx-min-height: 50px;
@@ -73,15 +73,15 @@
     -fx-border-width: 3px;
     -fx-effect: dropshadow(three-pass-box, black, 5, 0, 2, 2);
 }
-.robust-btn:pressed {
-    -fx-background-image: url(../../textures/button1_pressed.png);
-    -fx-background-color: #465057;
-    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 0, 0);
-}
 .robust-btn:hover {
     -fx-background-image: url(../../textures/button1_hover.png);
     -fx-background-color: #cadbe6;
     -fx-effect: dropshadow(three-pass-box, black, 5, 0, 4, 4);
+}
+.robust-btn:pressed {
+    -fx-background-image: url(../../textures/button1_pressed.png);
+    -fx-background-color: #465057;
+    -fx-effect: dropshadow(three-pass-box, black, 5, 0, 0, 0);
 }
 
 

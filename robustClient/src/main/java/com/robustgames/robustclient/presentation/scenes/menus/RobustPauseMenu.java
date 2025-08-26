@@ -7,6 +7,7 @@ import com.almasb.fxgl.animation.Animation;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.util.EmptyRunnable;
 import com.almasb.fxgl.dsl.FXGL;
 import com.robustgames.robustclient.presentation.UIElements.OptionsView;
@@ -27,7 +28,7 @@ public class RobustPauseMenu extends FXGLMenu {
     private final RobustButton btnContinue = new RobustButton("Continue", () -> fireResume(), true);
     private final RobustButton btnOptions = new RobustButton("Options",
             () -> switchToOptions(), true);
-    private final RobustButton btnExit = new RobustButton("Exit", () -> fireExit(), true);
+    private final RobustButton btnExit = new RobustButton("Exit", () -> fireExitToMainMenu(), true);
     private final Animation<?> animation;
 
     public RobustPauseMenu() {

@@ -6,18 +6,20 @@ package com.robustgames.robustclient.presentation.scenes.menus;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.audio.Audio;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.logic.Gamemode;
+import com.robustgames.robustclient.presentation.UIElements.ConnectionView;
 import com.robustgames.robustclient.presentation.UIElements.OptionsView;
 import com.robustgames.robustclient.presentation.UIElements.RobustButton;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -28,11 +30,15 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 
 public class RobustMainMenu extends FXGLMenu {
+    private ConnectionView connectionView;
 
     private static final double LEFT_MARGIN = 50.0;
     private static final double BUTTON_SPACING = 14.0;
@@ -45,8 +51,10 @@ public class RobustMainMenu extends FXGLMenu {
 
     public RobustMainMenu(MenuType type) {
         super(type);
-        Music menuMusic = FXGL.getAssetLoader().loadMusic("Gear Up.mp3");
-        FXGL.getAudioPlayer().loopMusic(menuMusic);
+        connectionView = new ConnectionView();
+
+//        Music menuMusic = FXGL.getAssetLoader().loadMusic("Gear Up.mp3");
+//        FXGL.getAudioPlayer().loopMusic(menuMusic);
 
         //Background
         ImageView background = texture("tank_assembly.gif", getAppWidth(), getAppHeight());
@@ -64,24 +72,20 @@ public class RobustMainMenu extends FXGLMenu {
         menuBox.setTranslateX(LEFT_MARGIN);
         menuBox.setTranslateY(startY);
 
-        RobustButton btnNew = createActionButton("Start Game", () -> subMenu.getChildren().setAll(createStartContent()), true);
-        RobustButton btnOptions = createActionButton("Options", () -> subMenu.getChildren().setAll(createOptionsContent()), true);
-        RobustButton btnCredits = createActionButton("Credits", () -> subMenu.getChildren().setAll(createCreditsContent()), true);
-        RobustButton btnExit = createActionButton("Exit", this::fireExit, true);
+        Button btnNew = createActionButton("Start Game", () -> subMenu.getChildren().setAll(createStartContent()), true);
+        Button btnOptions = createActionButton("Options", () -> subMenu.getChildren().setAll(createOptionsContent()), true);
+        Button btnCredits = createActionButton("Credits", () -> subMenu.getChildren().setAll(createCreditsContent()), true);
+        Button btnExit = createActionButton("Exit", this::fireExit, true);
 
         menuBox.getChildren().addAll(btnNew, btnOptions, btnCredits, btnExit);
         subMenu.setTranslateX(menuBox.getTranslateX() + 400); //button width in style.css + extra 50
         subMenu.translateYProperty().bind(menuBox.translateYProperty());
 
-        // Add everything to content root
-        getContentRoot().getChildren().add(menuBox);
-        getContentRoot().getChildren().add(subMenu);
-
-
+        getContentRoot().getChildren().addAll(menuBox, subMenu);
     }
 
 
-    public RobustButton createActionButton(String text, Runnable action, boolean isMenu) {
+    public Button createActionButton(String text, Runnable action, boolean isMenu) {
         RobustButton btn = new RobustButton(text, action, isMenu);
         // add to buttons list for animation in onCreate()
         buttons.add(btn);
@@ -118,7 +122,7 @@ public class RobustMainMenu extends FXGLMenu {
 
 
     // --------------------------------------------------------------------------------------------
-    // Create sub-menus
+    // Creating sub-menus
     // --------------------------------------------------------------------------------------------
     private Node createOptionsContent() {
         OptionsView options = new OptionsView(subMenu);
@@ -148,9 +152,7 @@ public class RobustMainMenu extends FXGLMenu {
         VBox vbox = new VBox(8);
 
         var btnOnline = createActionButton("Online", () -> {
-            FXGL.<RobustApplication>getAppCast().selectedGamemode = Gamemode.ONLINE;
-            fireNewGame();
-            getGameController().startNewGame();
+            subMenu.getChildren().setAll(createOnlineContent());
         }, false);
 
         var btnHotseat = createActionButton("Hotseat", () -> {
@@ -169,5 +171,56 @@ public class RobustMainMenu extends FXGLMenu {
         return container;
     }
 
+    // Add this method to create the online connection content
+    private Node createOnlineContent() {
+        connectionView.clearStatus();
+
+        connectionView.getConnectButton().setOnAction(e -> {
+            String ip = connectionView.getServerIP();
+            RobustApplication app = FXGL.<RobustApplication>getAppCast();
+            app.setServerIP(ip);
+            app.selectedGamemode = Gamemode.ONLINE;
+
+            // Show connecting status
+            connectionView.setStatus("Connecting...", Color.YELLOW);
+
+            // Try to connect with timeout
+            tryConnectWithTimeout(ip, 55555); // 5 second timeout
+        });
+
+        connectionView.getBackButton().setOnAction(e -> {
+            subMenu.getChildren().setAll(createStartContent());
+        });
+
+        return connectionView.getContainer();
+    }
+
+    private void tryConnectWithTimeout(String ip, int port) {
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        //check if the connection was successful
+        executor.schedule(() -> {
+            Platform.runLater(() -> {
+                RobustApplication app = FXGL.<RobustApplication>getAppCast();
+                if (app.getConnection() == null) {
+                    // Connection failed
+                    connectionView.setStatus("Connection failed: Server not responding", Color.RED);
+                    executor.shutdown();
+                }
+            });
+        }, 5000, TimeUnit.MILLISECONDS);
+
+        // Try to connect
+        Platform.runLater(() -> {
+            try {
+                fireNewGame();
+            } catch (Exception e) {
+                connectionView.setStatus("Connection error: " + e.getMessage(), Color.RED);
+                executor.shutdown();
+            }
+        });
+
+
+    }
 }
 

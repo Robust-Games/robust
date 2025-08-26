@@ -13,6 +13,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getAudioPlayer;
 public class RobustButton extends Button {
 
     public RobustButton(String text, Runnable action, boolean isMenu) {
+        super();
         Label btnText = new Label(text);
         if (isMenu) {
             btnText.getStyleClass().add("robust-btn-menu-text");
@@ -27,7 +28,7 @@ public class RobustButton extends Button {
         this.setOnMouseEntered(event -> {
             getAudioPlayer().playSound(hover);
         });
-        this.setOnMouseClicked(e -> {
+        this.setOnAction(e -> {
             getAudioPlayer().playSound(accept);
             action.run();
         });
