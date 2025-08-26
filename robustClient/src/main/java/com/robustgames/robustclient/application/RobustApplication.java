@@ -39,7 +39,6 @@ import com.robustgames.robustclient.presentation.scenes.menus.RobustPauseMenu;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -47,44 +46,41 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
-import static com.almasb.fxgl.dsl.FXGL.texture;
-
-import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.List;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 
 public class RobustApplication extends GameApplication {
-    private String serverIP = "localhost";
-    private int serverPort = 55555;
-    public Gamemode selectedGamemode = null;
-    private VBox gamemodeMenu;
-    Pane waitingPane;
-    private VBox waitingBox;
-
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
+    public Gamemode selectedGamemode = null;
+    Pane waitingPane;
     TankButtonView tankButtonView;
     TankDataView tankDataView;
     EndTurnView endTurnView;
+    private String serverIP = "localhost";
+    private int serverPort = 55555;
+    private VBox waitingBox;
+    private Text waitingText;
     private int clientId = -1; // -1 = not set
 
     private Connection<Bundle> connection;
 
     private String assignedPlayer;
 
-    // New: Factory-Flag!
-    private boolean factoriesAdded = false;
-
-    public void setClientId(int id) {
-        this.clientId = id;
+    public static void main(String[] args) {
+        launch(args);
     }
 
     public int getClientId() {
         return clientId;
+    }
+
+    public void setClientId(int id) {
+        this.clientId = id;
     }
 
     @Override
@@ -112,16 +108,9 @@ public class RobustApplication extends GameApplication {
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
         settings.setFullScreenAllowed(true);
-        settings.getCredits().addAll(Arrays.asList(
-                "Robust Games\n",
-                "-Developed by-",
-                "Burak Altun",
-                "Carolin Scheffler",
-                "Ersin Yesiltas",
-                "Nico Steiner\n\n",
+        settings.getCredits().addAll(Arrays.asList("Robust Games\n", "-Developed by-", "Burak Altun", "Carolin Scheffler", "Ersin Yesiltas", "Nico Steiner\n\n",
 
-                "-A Game made for Hochschule RheinMain-"
-        ));
+                "-A Game made for Hochschule RheinMain-"));
         settings.getCSSList().add("style.css");
         settings.setWidth(WIDTH);
         settings.setHeight(HEIGHT);
@@ -201,30 +190,13 @@ public class RobustApplication extends GameApplication {
         }
     }
 
-    private void showGamemodeMenu() {
-        gamemodeMenu = new VBox(30);
-        gamemodeMenu.setTranslateX(WIDTH / 2.0 - 100);
-        gamemodeMenu.setTranslateY(HEIGHT / 2.0 - 100);
-
-        Text title = new Text("Confirm connection");
-        Button btnOnline = new Button("Connect to Online Services");
-
-        btnOnline.setOnAction(e -> {
-            FXGL.getGameScene().removeUINode(gamemodeMenu);
-            startGameAfterMenu();
-        });
-
-        gamemodeMenu.getChildren().addAll(title, btnOnline);
-        FXGL.getGameScene().addUINode(gamemodeMenu);
-    }
-
     private void startGameAfterMenu() {
         showWaitingForOpponent();
         initializeNetworkClient(serverIP, serverPort);
     }
 
     private void showWaitingForOpponent() {
-        Text waitingText = FXGL.getUIFactoryService().newText("CONNECTING TO SERVER", Color.WHITE, FontType.GAME, 36);
+        waitingText = FXGL.getUIFactoryService().newText("Connecting to Server", Color.WHITE, FontType.GAME, 36);
         waitingText.setEffect(new DropShadow(8, Color.BLACK));
         waitingText.getStyleClass().add("robust-btn-menu-text");
 
@@ -249,18 +221,6 @@ public class RobustApplication extends GameApplication {
         }
     }
 
-    private void startOnlineGame() {
-        continueOnlineGameSetup();
-    }
-
-    private void addEntityFactoriesOnce() {
-        if (!factoriesAdded) {
-            FXGL.getGameWorld().addEntityFactory(new MapFactory());
-            FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
-            factoriesAdded = true;
-        }
-    }
-
     private void initializeNetworkClient(String ip, int port) {
         try {
             Client<Bundle> client = getNetService().newTCPClient(ip, port);
@@ -277,9 +237,16 @@ public class RobustApplication extends GameApplication {
                             assignedPlayer = responseBundle.get("assignedPlayer");
                             System.out.println("Assigned role: " + assignedPlayer);
                             hideWaitingForOpponent();
-                            continueOnlineGameSetup();
+                            initOnlineGameLogicAndUI();
                         }
                         case "ServerACK" -> {
+                            if (waitingBox != null && waitingBox.getChildren().contains(waitingText)) {
+                                Platform.runLater(()->{
+                                    Text newWaitingText = (Text) waitingBox.getChildren().getFirst();
+                                    newWaitingText.setText("Waiting for other player");
+                                    waitingBox.setTranslateX(getAppWidth() / 2.0 - waitingText.getLayoutBounds().getWidth() / 2.0);
+                                });
+                            }
                             System.out.println("ACK received: " + responseBundle.get("originalBundle"));
                         }
                         case "Reject" -> {
@@ -287,16 +254,13 @@ public class RobustApplication extends GameApplication {
                             getGameController().exit();
                         }
                         case "MoveAction" -> {
-                            System.out.println("MoveAction empfangen: " + responseBundle);
+                            System.out.println("MoveAction received: " + responseBundle);
 
                             long entityId = responseBundle.get("entityId");
                             double toX = responseBundle.get("toX");
                             double toY = responseBundle.get("toY");
 
-                            Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
-                                    .filter(e -> e.getComponent(IDComponent.class).getId() == entityId)
-                                    .findFirst()
-                                    .orElse(null);
+                            Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
 
                             if (tank != null) {
                                 Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
@@ -314,10 +278,7 @@ public class RobustApplication extends GameApplication {
                             long entityId = responseBundle.get("entityId");
                             String textureName = responseBundle.get("direction") + ".png";
 
-                            Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
-                                    .filter(e -> e.getComponent(IDComponent.class).getId() == entityId)
-                                    .findFirst()
-                                    .orElse(null);
+                            Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
 
                             if (tank == null) {
                                 System.err.println("Tank with ID " + entityId + " not found.");
@@ -334,13 +295,9 @@ public class RobustApplication extends GameApplication {
                             long shooterId = responseBundle.get("shooterId");
                             long targetId = responseBundle.get("targetId");
 
-                            Entity shooter = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
-                                    .filter(e -> e.getComponent(IDComponent.class).getId() == shooterId)
-                                    .findFirst().orElse(null);
+                            Entity shooter = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == shooterId).findFirst().orElse(null);
 
-                            Entity target = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream()
-                                    .filter(e -> e.getComponent(IDComponent.class).getId() == targetId)
-                                    .findFirst().orElse(null);
+                            Entity target = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == targetId).findFirst().orElse(null);
 
                             if (shooter != null && target != null) {
                                 ShootAction shootAction = new ShootAction(target, false);
@@ -368,7 +325,6 @@ public class RobustApplication extends GameApplication {
                             int id = responseBundle.get("clientId");
                             setClientId(id);
                             System.out.println("received Client-ID: " + id);
-                            startOnlineGame();
                         }
                         case "hello" -> {
                             System.out.println("received Hello from Server");
@@ -385,12 +341,11 @@ public class RobustApplication extends GameApplication {
             // Set a timeout for connection
             Thread connectionTimeoutThread = new Thread(() -> {
                 try {
-                    Thread.sleep(5000); // 5 second timeout
+                    Thread.sleep(5000); // 5-second timeout
                     if (connection == null) {
                         Platform.runLater(() -> {
                             hideWaitingForOpponent();
-                            getDialogService().showMessageBox("Connection timed out: Server not responding",
-                                    () -> getGameController().gotoMainMenu());
+                            getDialogService().showMessageBox("Connection timed out: Server not responding", () -> getGameController().gotoMainMenu());
                         });
                     }
                 } catch (InterruptedException e) {
@@ -403,18 +358,14 @@ public class RobustApplication extends GameApplication {
         } catch (Exception e) {
             Platform.runLater(() -> {
                 hideWaitingForOpponent();
-                getDialogService().showMessageBox("Connection error: " + e.getMessage(),
-                        () -> getGameController().gotoMainMenu());
+                getDialogService().showMessageBox("Connection error: " + e.getMessage(), () -> getGameController().gotoMainMenu());
             });
         }
     }
 
-    private void continueOnlineGameSetup() {
-        initOnlineGameLogicAndUI();
-    }
-
     private void initLocalGameLogicAndUI() {
-        addEntityFactoriesOnce(); // IMPORTANT: only register once!
+        FXGL.getGameWorld().addEntityFactory(new MapFactory());
+        FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         getGameScene().getViewport().setY(-100);
         tankButtonView = new TankButtonView();
         tankDataView = new TankDataView();
@@ -425,7 +376,7 @@ public class RobustApplication extends GameApplication {
         FXGL.setLevelFromMap("mapTest2.tmx");
 
         GameWorld world = getGameWorld();
-        List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> because the textures are entities that we can't filter by type
+        List<Entity> allEntities = world.getEntities();
         for (Entity entity : allEntities) {
             moveEntityToIsometric(entity);
         }
@@ -433,7 +384,8 @@ public class RobustApplication extends GameApplication {
     }
 
     private void initOnlineGameLogicAndUI() {
-        addEntityFactoriesOnce(); // IMPORTANT: only register once!
+        FXGL.getGameWorld().addEntityFactory(new MapFactory());
+        FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         getGameScene().getViewport().setY(-100);
 
         // initialise UI here
@@ -453,10 +405,9 @@ public class RobustApplication extends GameApplication {
         FXGL.spawn("MapBorder", new SpawnData(0, -100).put("width", WIDTH).put("height", HEIGHT));
         FXGL.setLevelFromMap("mapTest2.tmx");
         GameWorld world = getGameWorld();
-        List<Entity> allEntities = world.getEntities(); //.subList(2, world.getEntities().size()) -> weil die Texturen Entitaeten sind, die wir nicht mit TYPE filtern koennen
+        List<Entity> allEntities = world.getEntities();
         for (Entity entity : allEntities) {
-            if ((entity.isType(TILE) || entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
-                    && !entity.hasComponent(IDComponent.class)) {
+            if ((entity.isType(TILE) || entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY)) && !entity.hasComponent(IDComponent.class)) {
                 long id = IDFactory.generateId();
                 entity.addComponent(new IDComponent(id));
             }
@@ -466,7 +417,7 @@ public class RobustApplication extends GameApplication {
     }
 
     private void moveEntityToIsometric(Entity entity) {
-        Platform.runLater(()->SoundService.pickSong());
+        Platform.runLater(() -> SoundService.pickSong());
         Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
         Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
         if (entity.isType(TILE)) {
@@ -492,12 +443,13 @@ public class RobustApplication extends GameApplication {
     public Pane getEndTurnView() {
         return endTurnView;
     }
+
     public void setServerIP(String ip) {
         this.serverIP = ip;
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void setServerPort(int port){
+        this.serverPort = port;
     }
 }
 

@@ -22,6 +22,7 @@ public class ConnectionView {
     private final int ySIZE = 500;
 
     private TextField ipTextField;
+    private TextField portTextField;
     private Button connectButton;
     private Button backButton;
     private Text statusText;
@@ -34,11 +35,16 @@ public class ConnectionView {
         // IP Input
         Text ipLabel = FXGL.getUIFactoryService().newText("Server IP:", Color.WHITE, FontType.GAME, 20);
         ipTextField = new TextField();
-        ipTextField.setPromptText("localhost");
         ipTextField.setMaxWidth(200);
         ipTextField.setText("localhost");
 
-        VBox ipSection = new VBox(5, ipLabel, ipTextField);
+        //Port Input
+        Text portLabel = FXGL.getUIFactoryService().newText("Port:", Color.WHITE, FontType.GAME, 20);
+        portTextField = new TextField();
+        portTextField.setMaxWidth(200);
+        portTextField.setText("55555");
+
+        VBox ipSection = new VBox(5, ipLabel, ipTextField, portLabel, portTextField);
         ipSection.setAlignment(Pos.CENTER_LEFT);
 
         // Status text
@@ -69,7 +75,9 @@ public class ConnectionView {
     public String getServerIP() {
         return ipTextField.getText();
     }
-
+    public String getServerPort() {
+        return portTextField.getText();
+    }
     public Button getConnectButton() {
         return connectButton;
     }

@@ -176,16 +176,19 @@ public class RobustMainMenu extends FXGLMenu {
         connectionView.clearStatus();
 
         connectionView.getConnectButton().setOnAction(e -> {
-            String ip = connectionView.getServerIP();
             RobustApplication app = FXGL.<RobustApplication>getAppCast();
+            String ip = connectionView.getServerIP();
+            int port = Integer.parseInt(connectionView.getServerPort());
+
             app.setServerIP(ip);
+            app.setServerPort(port);
             app.selectedGamemode = Gamemode.ONLINE;
 
             // Show connecting status
             connectionView.setStatus("Connecting...", Color.YELLOW);
 
             // Try to connect with timeout
-            tryConnectWithTimeout(ip, 55555); // 5 second timeout
+            tryConnectWithTimeout(ip, port); // 5 second timeout
         });
 
         connectionView.getBackButton().setOnAction(e -> {

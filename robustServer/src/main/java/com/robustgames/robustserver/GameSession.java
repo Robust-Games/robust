@@ -16,8 +16,8 @@ public class GameSession {
 
     private PlayerConnectionHandler player1;
     private PlayerConnectionHandler player2;
-    private Connection<Bundle> playerOne;
-    private Connection<Bundle> playerTwo;
+    private Connection<Bundle> connection1;
+    private Connection<Bundle> connection2;
 
     private boolean gameStarted = false;
 
@@ -30,9 +30,11 @@ public class GameSession {
      */
     public void tryAddClient(Connection<Bundle> conn) {
         if (player1 == null) {
+            connection1 = conn;
             player1 = new PlayerConnectionHandler(conn, "PLAYER1", this);
             System.out.println("[Server - Session] PLAYER1 connected.");
         } else if (player2 == null) {
+            connection2 = conn;
             player2 = new PlayerConnectionHandler(conn, "PLAYER2", this);
             System.out.println("[Server - Session] PLAYER2 connected.");
             startGame();
@@ -61,7 +63,7 @@ public class GameSession {
             player1.send(start1);
             player2.send(start2);
 
-            System.out.println("[Session] Game started. Players assigned.");
+            System.out.println("[Server - Session] Game started. Players assigned.");
         }
     }
 
@@ -96,7 +98,7 @@ public class GameSession {
      * @return the Connection object for PLAYER1, or null if not assigned
      */
     public Connection<Bundle> getPlayer1() {
-        return playerOne;
+        return connection1;
     }
 
     /**
@@ -105,22 +107,28 @@ public class GameSession {
      * @return the Connection object for PLAYER2, or null if not assigned
      */
     public Connection<Bundle> getPlayer2() {
-        return playerTwo;
+        return connection2;
     }
 
     /**
      * Removes player1 from the session.
      */
-    public void clearPlayer1() {
-        playerOne = null;
+    private void clearPlayer1() {
+        connection1 = null;
+        player1 = null;
         gameStarted = false;
     }
 
     /**
      * Removes player2 from the session.
      */
-    public void clearPlayer2() {
-        playerTwo = null;
+    private void clearPlayer2() {
+        connection2 = null;
+        player2 = null;
         gameStarted = false;
+    }
+    public void handleDisconnect(Connection<Bundle> disconn) {
+        if (disconn == connection1) clearPlayer1();
+        if (disconn == connection2) clearPlayer2();
     }
 }
