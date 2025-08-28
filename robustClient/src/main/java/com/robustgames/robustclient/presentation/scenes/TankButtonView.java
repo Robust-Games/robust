@@ -29,6 +29,9 @@ public class TankButtonView extends Pane {
     Tooltip shootingTooltip = new Tooltip("Costs 3AP, but Ends your Turn\nDeal one Damage to whatever you hit");
     Tooltip movingTooltip = new Tooltip("Costs one AP per tile moved");
 
+    /**
+     * Creates the action buttons (Move, Shoot) for the selected tank and wires their behavior.
+     */
     public TankButtonView() {
         String cssPath = getClass().getResource("/assets/ui/css/style.css").toExternalForm();
         this.getStylesheets().add(cssPath);

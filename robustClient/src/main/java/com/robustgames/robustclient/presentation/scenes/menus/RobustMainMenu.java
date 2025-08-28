@@ -43,6 +43,11 @@ public class RobustMainMenu extends FXGLMenu {
     private final Pane subMenu = new Pane();
 
 
+    /**
+     * Creates the main menu scene and initializes background, title and menu buttons.
+     *
+     * @param type the FXGL menu type
+     */
     public RobustMainMenu(MenuType type) {
         super(type);
         connectionView = new ConnectionView();
@@ -79,6 +84,14 @@ public class RobustMainMenu extends FXGLMenu {
     }
 
 
+    /**
+     * Creates a styled button used in menus and sub-menus, tracks it for enter animations.
+     *
+     * @param text   the button text
+     * @param action the action to execute on click
+     * @param isMenu whether the button should use menu styling
+     * @return a configured JavaFX Button
+     */
     public Button createActionButton(String text, Runnable action, boolean isMenu) {
         RobustButton btn = new RobustButton(text, action, isMenu);
         // add to the button list for animation in onCreate()
@@ -87,6 +100,9 @@ public class RobustMainMenu extends FXGLMenu {
     }
 
     // Called by FXGL when the menu scene is created/activated
+    /**
+     * Plays entry animations for menu buttons when the menu is created.
+     */
     @Override
     public void onCreate() {
         int animIndex = 0;
@@ -118,11 +134,21 @@ public class RobustMainMenu extends FXGLMenu {
     // --------------------------------------------------------------------------------------------
     // sub-menus
     // --------------------------------------------------------------------------------------------
+    /**
+     * Builds the Options sub-menu content.
+     *
+     * @return a node containing the options UI
+     */
     private Node createOptionsContent() {
         OptionsView options = new OptionsView(subMenu);
         return options.getContainer();
     }
 
+    /**
+     * Builds the Credits sub-menu content populated from FXGL settings credits.
+     *
+     * @return a node containing the credits UI
+     */
     private Node createCreditsContent() {
         Text title = FXGL.getUIFactoryService().newText("CREDITS", Color.WHITE, FontType.GAME, 36);
         title.setEffect(new DropShadow(8, Color.BLACK));
@@ -142,6 +168,11 @@ public class RobustMainMenu extends FXGLMenu {
         return container;
     }
 
+    /**
+     * Builds the Start sub-menu with choices for Online and Hotseat play and a Back button.
+     *
+     * @return a node containing the start options UI
+     */
     private Node createStartContent() {
         VBox vbox = new VBox(8);
 
@@ -165,6 +196,12 @@ public class RobustMainMenu extends FXGLMenu {
         return container;
     }
 
+    /**
+     * Builds the Online sub-menu and wires up connect/back button behavior.
+     * On connecting, the selected gamemode is set to ONLINE and a new game is fired.
+     *
+     * @return a node containing the online connection UI
+     */
     private Node createOnlineContent() {
         connectionView.getConnectButton().setOnAction(e -> {
             RobustApplication app = FXGL.getAppCast();

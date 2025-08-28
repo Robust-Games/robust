@@ -22,6 +22,10 @@ import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
+/**
+ * Handles incoming network Bundles from the server and translates them into in-game actions
+ * or UI/state changes on the client. This class is used by {@link ConnectionService}.
+ */
 public class ConnectionMessageHandler {
     private RobustApplication app;
 

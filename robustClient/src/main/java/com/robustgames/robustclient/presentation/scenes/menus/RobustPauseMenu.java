@@ -29,6 +29,10 @@ public class RobustPauseMenu extends FXGLMenu {
     private final RobustButton btnExit = new RobustButton("Exit", () -> fireExitToMainMenu(), true);
     private final Animation<?> animation;
 
+    /**
+     * Creates the in-game pause menu with Continue, Options, and Exit buttons,
+     * and sets up a scale-in animation.
+     */
     public RobustPauseMenu() {
         super(MenuType.GAME_MENU);
         Rectangle background = new Rectangle(FXGL.getAppWidth(), FXGL.getAppHeight());
@@ -58,10 +62,16 @@ public class RobustPauseMenu extends FXGLMenu {
 
     }
 
+    /**
+     * Switches the subMenu content to show the options view.
+     */
     private void switchToOptions() {
         subMenu.getChildren().setAll(optionsView.getContainer());
     }
 
+    /**
+     * Starts the opening animation when the pause menu is created.
+     */
     @Override
     public void onCreate() {
         animation.setOnFinished(EmptyRunnable.INSTANCE);
@@ -69,6 +79,11 @@ public class RobustPauseMenu extends FXGLMenu {
         animation.start();
     }
 
+    /**
+     * Updates the pause menu opening animation.
+     *
+     * @param tpf time per frame
+     */
     @Override
     protected void onUpdate(double tpf) {
         animation.onUpdate(tpf);

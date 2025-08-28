@@ -22,11 +22,23 @@ public class MovementAction extends Action {
     private final double speed = 200; // pixels/sec
 
 
+    /**
+     * Creates a movement action that moves the owning entity towards the given target entity.
+     * The action originates locally and may be sent to the server when queued (online mode).
+     *
+     * @param target the target entity whose position will be used as destination
+     */
     public MovementAction(Entity target) {
         this.target = target;
         this.isLocal = true;
     }
 
+    /**
+     * Creates a movement action with explicit locality flag.
+     *
+     * @param target  the target entity whose position will be used as destination
+     * @param isLocal whether the action originates locally (true) or was received from network (false)
+     */
     public MovementAction(Entity target, boolean isLocal) {
         this.target = target;
         this.isLocal = isLocal;
@@ -65,6 +77,13 @@ public class MovementAction extends Action {
 //        }
     }
 
+    /**
+     * Updates the movement each frame by moving the entity towards the target at a constant speed.
+     * When the entity is close enough to the target, it snaps to the destination, adjusts layers,
+     * and completes the action.
+     *
+     * @param tpf time per frame provided by the engine
+     */
     @Override
     protected void onUpdate(double tpf) {
         Point2D direction = target.getPosition().subtract(entity.getPosition()).normalize();
@@ -77,6 +96,10 @@ public class MovementAction extends Action {
         }
     }
 
+    /**
+     * Called when this action is queued on an entity. If the action originates locally and a connection
+     * is available, a MoveAction bundle is created and sent to the server to synchronize the move.
+     */
     @Override
     protected void onQueued() {
         if (!isLocal) return;
@@ -93,6 +116,10 @@ public class MovementAction extends Action {
     }
 
 
+    /**
+     * Called after the movement action completes. Resets the tank's initial position and
+     * prepares it for the next turn.
+     */
     @Override
     protected void onCompleted() {
         super.onCompleted();

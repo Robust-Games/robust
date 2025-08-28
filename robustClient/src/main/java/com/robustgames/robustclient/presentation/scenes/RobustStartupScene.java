@@ -10,6 +10,12 @@ import javafx.scene.layout.StackPane;
 
 public class RobustStartupScene extends StartupScene {
 
+    /**
+     * Creates a startup scene showing a background and logo image.
+     *
+     * @param appWidth  application width
+     * @param appHeight application height
+     */
     public RobustStartupScene(int appWidth, int appHeight) {
         super(appWidth, appHeight);
 

@@ -28,6 +28,11 @@ public class EndTurnView extends Pane {
     Button btnEndTurn;
     Label btnEndTurnText;
 
+    /**
+     * Creates the End Turn button UI and wires its click behavior for both ONLINE and LOCAL modes.
+     * When clicked, it ends the current player's turn, handles AP and selection state,
+     * and signals the server if in online mode.
+     */
     public EndTurnView() {
         btnEndTurnText = new Label("End Turn");
         btnEndTurnText.getStyleClass().add("robust-end-btn-text");

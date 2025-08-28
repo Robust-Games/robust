@@ -52,6 +52,13 @@ public class ShootAction extends Action {
             this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
 
+    /**
+     * Creates a new ShootAction with explicit locality flag.
+     *
+     * @param target  the entity that was targeted during planning; its position is stored
+     * @param isLocal whether this action originates locally (true) and should be sent to the server
+     *                when queued, or was received from the network (false)
+     */
     public ShootAction(Entity target, boolean isLocal) {
         this.originalTarget = target;
         this.targetScreenPosition = target.getPosition();
@@ -103,11 +110,11 @@ public class ShootAction extends Action {
     }
 
     /**
-     * Finds the entity at the target position.
+     * Finds the entity at the target position
      * This method is called during action execution to determine what entity
      * is currently at the position which was initially targeted during planning. This allows the
      * action to correctly handle cases where entities move between planning and execution.
-     *
+     * @param TargetIsTile true if the target is a tile, false if it is a tank
      * @return The entity at the target position, or null if no entity is found
      */
     private Entity findEntityAtPosition(Entity targetEntity, Boolean TargetIsTile) {
@@ -145,6 +152,11 @@ public class ShootAction extends Action {
 
     }
 
+    /**
+     * Called when the action is queued on the ActionComponent.
+     * If the game is in online mode and this action originated locally, a ShootAction bundle
+     * is created and sent to the server so the opponent can mirror the action.
+     */
     @Override
     protected void onQueued() {
         if (currentGamemode.equals(Gamemode.ONLINE)) {
@@ -158,6 +170,10 @@ public class ShootAction extends Action {
         }
     }
 
+    /**
+     * Called after the action has finished executing.
+     * Resets the tank state before the next turn when playing locally.
+     */
     @Override
     protected void onCompleted() {
         super.onCompleted();
