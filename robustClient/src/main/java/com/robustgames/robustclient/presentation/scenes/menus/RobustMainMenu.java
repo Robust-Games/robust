@@ -6,6 +6,7 @@ package com.robustgames.robustclient.presentation.scenes.menus;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
@@ -52,8 +53,8 @@ public class RobustMainMenu extends FXGLMenu {
         super(type);
         connectionView = new ConnectionView();
 
-//        Music menuMusic = FXGL.getAssetLoader().loadMusic("Gear Up.mp3");
-//        FXGL.getAudioPlayer().loopMusic(menuMusic);
+        Music menuMusic = FXGL.getAssetLoader().loadMusic("Gear Up.mp3");
+        FXGL.getAudioPlayer().loopMusic(menuMusic);
 
         //Background
         ImageView background = texture("tank_assembly.gif", getAppWidth(), getAppHeight());
