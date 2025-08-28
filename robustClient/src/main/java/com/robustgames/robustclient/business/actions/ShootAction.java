@@ -14,6 +14,7 @@ import com.robustgames.robustclient.business.entitiy.components.animations.AnimT
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
@@ -149,8 +150,7 @@ public class ShootAction extends Action {
         if (currentGamemode.equals(Gamemode.ONLINE)) {
             if (!isLocal) return;
 
-            RobustApplication app = FXGL.getAppCast();
-            Connection<Bundle> conn = app.getConnection();
+            Connection<Bundle> conn = FXGL.getService(ConnectionService.class).getConnection();
             if (conn != null) {
                 Bundle shootBundle = BundleFactory.createShootActionBundle(entity, originalTarget);
                 conn.send(shootBundle);

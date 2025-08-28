@@ -122,7 +122,7 @@ public class RobustMainMenu extends FXGLMenu {
 
 
     // --------------------------------------------------------------------------------------------
-    // Creating sub-menus
+    // sub-menus
     // --------------------------------------------------------------------------------------------
     private Node createOptionsContent() {
         OptionsView options = new OptionsView(subMenu);
@@ -171,10 +171,7 @@ public class RobustMainMenu extends FXGLMenu {
         return container;
     }
 
-    // Add this method to create the online connection content
     private Node createOnlineContent() {
-        connectionView.clearStatus();
-
         connectionView.getConnectButton().setOnAction(e -> {
             RobustApplication app = FXGL.<RobustApplication>getAppCast();
             String ip = connectionView.getServerIP();
@@ -184,11 +181,7 @@ public class RobustMainMenu extends FXGLMenu {
             app.setServerPort(port);
             app.selectedGamemode = Gamemode.ONLINE;
 
-            // Show connecting status
-            connectionView.setStatus("Connecting...", Color.YELLOW);
-
-            // Try to connect with timeout
-            tryConnectWithTimeout(ip, port); // 5 second timeout
+            fireNewGame();
         });
 
         connectionView.getBackButton().setOnAction(e -> {
@@ -198,32 +191,6 @@ public class RobustMainMenu extends FXGLMenu {
         return connectionView.getContainer();
     }
 
-    private void tryConnectWithTimeout(String ip, int port) {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-        //check if the connection was successful
-        executor.schedule(() -> {
-            Platform.runLater(() -> {
-                RobustApplication app = FXGL.<RobustApplication>getAppCast();
-                if (app.getConnection() == null) {
-                    // Connection failed
-                    connectionView.setStatus("Connection failed: Server not responding", Color.RED);
-                    executor.shutdown();
-                }
-            });
-        }, 5000, TimeUnit.MILLISECONDS);
-
-        // Try to connect
-        Platform.runLater(() -> {
-            try {
-                fireNewGame();
-            } catch (Exception e) {
-                connectionView.setStatus("Connection error: " + e.getMessage(), Color.RED);
-                executor.shutdown();
-            }
-        });
-
-
-    }
 }
 

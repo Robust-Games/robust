@@ -13,6 +13,7 @@ import com.robustgames.robustclient.business.entitiy.components.SelectableCompon
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Direction;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 
 import java.util.HashSet;
@@ -79,13 +80,17 @@ public class MovementService {
         Entity selectedTank = MapService.findSelectedTank();
 
         if (selectedTank == null) {
-            getNotificationService().pushNotification("Not enough Action Points!");
+            Platform.runLater(()->{
+                getNotificationService().pushNotification("Not enough Action Points!");
+            });
             return moveTargets;
         }
         int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
 
         if (ap <= 0) {
-            //getNotificationService().pushNotification("Not enough Action Points!");
+            Platform.runLater(()->{
+                getNotificationService().pushNotification("Not enough Action Points!");
+            });
             return moveTargets;
         }
         String state = "";

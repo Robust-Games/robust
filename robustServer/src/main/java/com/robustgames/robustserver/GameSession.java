@@ -1,10 +1,14 @@
 /**
- * @author Ersin Yesiltas
+ * @author Ersin Yesiltas, Nico Steiner
  */
 package com.robustgames.robustserver;
 
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.net.Connection;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manages a single game session with up to two connected clients.
@@ -18,7 +22,11 @@ public class GameSession {
     private PlayerConnectionHandler player2;
     private Connection<Bundle> connection1;
     private Connection<Bundle> connection2;
-
+    private long player1LastHeartbeat;
+    private long player2LastHeartbeat;
+    private final ScheduledExecutorService heartbeatChecker = Executors.newSingleThreadScheduledExecutor();
+    private final java.util.List<PlayerConnectionHandler> connectedClients = new java.util.ArrayList<>();
+    private final ScheduledExecutorService heartbeatExecutor = Executors.newSingleThreadScheduledExecutor();
     private boolean gameStarted = false;
 
     /**
@@ -32,12 +40,15 @@ public class GameSession {
         if (player1 == null) {
             connection1 = conn;
             player1 = new PlayerConnectionHandler(conn, "PLAYER1", this);
+            connectedClients.add(player1);
             System.out.println("[Server - Session] PLAYER1 connected.");
         } else if (player2 == null) {
             connection2 = conn;
             player2 = new PlayerConnectionHandler(conn, "PLAYER2", this);
+            connectedClients.add(player2);
             System.out.println("[Server - Session] PLAYER2 connected.");
             startGame();
+
         } else {
             System.err.println("[Server - Session] Rejected: More than 2 players not supported.");
             Bundle reject = new Bundle("Reject");
@@ -63,6 +74,9 @@ public class GameSession {
             player1.send(start1);
             player2.send(start2);
 
+            sendHeartbeats();
+            startHeartbeatChecker();
+
             System.out.println("[Server - Session] Game started. Players assigned.");
         }
     }
@@ -70,8 +84,8 @@ public class GameSession {
     /**
      * Handles an incoming bundle from a connected player.
      * <p>
-     * Currently sends back a simple ACK. Future versions should process and
-     * synchronize actions between both players.
+     * Currently sends back a simple ACK and PlayerAlive to check connection.
+     * Future versions should process and synchronize actions between both players.
      *
      * @param senderId The string identifier of the sending player.
      * @param bundle   The received message bundle.
@@ -89,7 +103,36 @@ public class GameSession {
         } else if (senderId.equals("PLAYER2")) {
             player2.send(ack);
         }
+        if ("PlayerAlive".equals(bundle.getName())) {
+            if ("PLAYER1".equals(senderId)) {
+                player1LastHeartbeat = System.currentTimeMillis();
+            } else {
+                player2LastHeartbeat = System.currentTimeMillis();
+            }
+        }
         // TODO: In future, handle synchronization and action processing here.
+    }
+
+    private void sendHeartbeats() {
+        heartbeatExecutor.scheduleAtFixedRate(() -> {
+            for (PlayerConnectionHandler player : connectedClients) {
+                Bundle heartbeat = new Bundle("heartbeat");
+                player.send(heartbeat);
+            }
+        }, 0, 5, TimeUnit.SECONDS); // Send heartbeat every 5 seconds
+    }
+    private void startHeartbeatChecker() {
+        heartbeatChecker.scheduleAtFixedRate(() -> {
+            long currentTime = System.currentTimeMillis();
+            if (player1 != null && currentTime - player1LastHeartbeat > 15000) {
+                clearPlayer1();
+                System.out.println("[Server] Player 1 disconnected");
+            }
+            if (player2 != null && currentTime - player2LastHeartbeat > 15000) {
+                clearPlayer2();
+                System.out.println("[Server] Player 2 disconnected");
+            }
+        }, 15, 5, TimeUnit.SECONDS); // Check every 5 seconds
     }
 
     /**
@@ -113,21 +156,33 @@ public class GameSession {
     /**
      * Removes player1 from the session.
      */
-    private void clearPlayer1() {
+    public void clearPlayer1() {
+        connectedClients.remove(connection1);
+        connection1.terminate();
         connection1 = null;
         player1 = null;
         gameStarted = false;
+        if (player2 != null) {
+            player2.send(new Bundle("OpponentLeft"));
+        }
+        heartbeatChecker.shutdown();
     }
 
     /**
      * Removes player2 from the session.
      */
-    private void clearPlayer2() {
+    public void clearPlayer2() {
+        connectedClients.remove(connection2);
+        connection2.terminate();
         connection2 = null;
         player2 = null;
         gameStarted = false;
+        if (player1 != null) {
+            player1.send(new Bundle("OpponentLeft"));
+        }
+        heartbeatChecker.shutdown();
     }
-    public void handleDisconnect(Connection<Bundle> disconn) {
+    public void handleServerDisconnect(Connection<Bundle> disconn) {
         if (disconn == connection1) clearPlayer1();
         if (disconn == connection2) clearPlayer2();
     }

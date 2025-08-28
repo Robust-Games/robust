@@ -8,6 +8,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.IDComponent;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import javafx.geometry.Point2D;
 
 /**
@@ -76,6 +77,12 @@ public class BundleFactory {
     public static void signalTurnFinished() {
         Bundle ready = new Bundle("PlayerReady");
         ready.put("clientId", FXGL.<RobustApplication>getAppCast().getClientId());
-        FXGL.<RobustApplication>getAppCast().getConnection().send(ready);
+        FXGL.getService(ConnectionService.class).getConnection().send(ready);
+    }
+
+    public static void signalPlayerAlive() {
+        Bundle alive = new Bundle("PlayerAlive");
+        alive.put("clientId", FXGL.<RobustApplication>getAppCast().getClientId());
+        FXGL.getService(ConnectionService.class).getConnection().send(alive);
     }
 }

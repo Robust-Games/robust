@@ -107,10 +107,10 @@ public class RobustServerApplication {
                 System.out.println("[Server] Client disconnected.");
                 if (disconn.equals(session.getPlayer1())) {
                     System.out.println("[Server - Session] PLAYER1 disconnected.");
-                    session.handleDisconnect(disconn);
+                    session.clearPlayer1();
                 } else if (disconn.equals(session.getPlayer2())) {
                     System.out.println("[Server - Session] PLAYER2 disconnected.");
-                    session.handleDisconnect(disconn);
+                    session.clearPlayer2();
                 }
             });
         });
@@ -136,7 +136,7 @@ public class RobustServerApplication {
                         System.out.println("[Server] Shutting down...");
                         if (server != null) {
                             clientIds.forEach((conn, id) ->{
-                                session.handleDisconnect(conn);
+                                session.handleServerDisconnect(conn);
                                     });
                             server.stop();
                         }

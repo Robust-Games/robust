@@ -12,6 +12,7 @@ import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import com.robustgames.robustclient.business.logic.tankService.MovementService;
 import javafx.geometry.Point2D;
 
@@ -81,7 +82,7 @@ public class MovementAction extends Action {
         if (!isLocal) return;
 
         RobustApplication app = FXGL.getAppCast();
-        Connection<Bundle> conn = app.getConnection();
+        Connection<Bundle> conn = FXGL.getService(ConnectionService.class).getConnection();
         if (conn != null) {
             int clientId = app.getClientId();
             Point2D gridTarget = MapService.isoScreenToGrid(target.getCenter());

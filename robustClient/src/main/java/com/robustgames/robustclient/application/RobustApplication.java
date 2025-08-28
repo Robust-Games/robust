@@ -22,6 +22,7 @@ import com.robustgames.robustclient.business.actions.MovementAction;
 import com.robustgames.robustclient.business.actions.RotateAction;
 import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.*;
+import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.factories.IDFactory;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
@@ -30,6 +31,7 @@ import com.robustgames.robustclient.business.logic.Player;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
 import com.robustgames.robustclient.business.logic.gameService.SoundService;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import com.robustgames.robustclient.presentation.scenes.EndTurnView;
 import com.robustgames.robustclient.presentation.scenes.RobustStartupScene;
 import com.robustgames.robustclient.presentation.scenes.TankButtonView;
@@ -46,9 +48,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
@@ -66,9 +72,6 @@ public class RobustApplication extends GameApplication {
     private VBox waitingBox;
     private Text waitingText;
     private int clientId = -1; // -1 = not set
-
-    private Connection<Bundle> connection;
-
     private String assignedPlayer;
 
     public static void main(String[] args) {
@@ -96,9 +99,7 @@ public class RobustApplication extends GameApplication {
             @Override
             public FXGLMenu newMainMenu() {
                 return new RobustMainMenu(MenuType.MAIN_MENU);
-
             }
-
             @Override
             public StartupScene newStartup(int width, int height) {
                 return new RobustStartupScene(width, height);
@@ -118,6 +119,7 @@ public class RobustApplication extends GameApplication {
         settings.setFontGame("ARCADE_N.ttf");
         settings.setTicksPerSecond(60);
 
+        settings.addEngineService(ConnectionService.class);
     }
 
     @Override
@@ -192,7 +194,7 @@ public class RobustApplication extends GameApplication {
 
     private void startGameAfterMenu() {
         showWaitingForOpponent();
-        initializeNetworkClient(serverIP, serverPort);
+        FXGL.getService(ConnectionService.class).initializeNetworkClient(serverIP, serverPort);
     }
 
     private void showWaitingForOpponent() {
@@ -214,152 +216,10 @@ public class RobustApplication extends GameApplication {
         FXGL.getGameScene().addUINode(waitingPane);
     }
 
-    private void hideWaitingForOpponent() {
+    public void hideWaitingForOpponent() {
         if (waitingBox != null) {
             FXGL.getGameScene().removeUINode(waitingPane);
             waitingBox = null;
-        }
-    }
-
-    private void initializeNetworkClient(String ip, int port) {
-        try {
-            Client<Bundle> client = getNetService().newTCPClient(ip, port);
-            client.setOnConnected(conn -> {
-                connection = conn;
-                Bundle hello = new Bundle("hello");
-                conn.send(hello);
-
-                conn.addMessageHandlerFX((c, responseBundle) -> {
-                    System.out.println("Received from server: " + responseBundle);
-
-                    switch (responseBundle.getName()) {
-                        case "GameStart" -> {
-                            assignedPlayer = responseBundle.get("assignedPlayer");
-                            System.out.println("Assigned role: " + assignedPlayer);
-                            hideWaitingForOpponent();
-                            initOnlineGameLogicAndUI();
-                        }
-                        case "ServerACK" -> {
-                            if (waitingBox != null && waitingBox.getChildren().contains(waitingText)) {
-                                Platform.runLater(()->{
-                                    Text newWaitingText = (Text) waitingBox.getChildren().getFirst();
-                                    newWaitingText.setText("Waiting for other player");
-                                    waitingBox.setTranslateX(getAppWidth() / 2.0 - waitingText.getLayoutBounds().getWidth() / 2.0);
-                                });
-                            }
-                            System.out.println("ACK received: " + responseBundle.get("originalBundle"));
-                        }
-                        case "Reject" -> {
-                            System.out.println("Rejected: " + responseBundle.get("message"));
-                            getGameController().exit();
-                        }
-                        case "MoveAction" -> {
-                            System.out.println("MoveAction received: " + responseBundle);
-
-                            long entityId = responseBundle.get("entityId");
-                            double toX = responseBundle.get("toX");
-                            double toY = responseBundle.get("toY");
-
-                            Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
-
-                            if (tank != null) {
-                                Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
-                                Entity dummyTarget = FXGL.entityBuilder().at(screenTarget).build();
-
-                                MovementAction moveAction = new MovementAction(dummyTarget, false);
-                                tank.getComponent(ActionComponent.class).addAction(moveAction);
-                                tank.getComponent(ActionComponent.class).pause();
-                            }
-                        }
-
-                        case "RotateAction" -> {
-                            System.out.println("Received RotateAction: " + responseBundle);
-
-                            long entityId = responseBundle.get("entityId");
-                            String textureName = responseBundle.get("direction") + ".png";
-
-                            Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
-
-                            if (tank == null) {
-                                System.err.println("Tank with ID " + entityId + " not found.");
-                                return;
-                            }
-
-                            RotateAction rotateAction = new RotateAction(textureName, false);
-                            ActionComponent ac = tank.getComponent(ActionComponent.class);
-                            ac.addAction(rotateAction);
-                            ac.pause();
-                        }
-
-                        case "ShootAction" -> {
-                            long shooterId = responseBundle.get("shooterId");
-                            long targetId = responseBundle.get("targetId");
-
-                            Entity shooter = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == shooterId).findFirst().orElse(null);
-
-                            Entity target = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == targetId).findFirst().orElse(null);
-
-                            if (shooter != null && target != null) {
-                                ShootAction shootAction = new ShootAction(target, false);
-                                shooter.getComponent(ActionComponent.class).addAction(shootAction);
-                                shooter.getComponent(ActionComponent.class).pause();
-                            } else {
-                                System.err.println("Shooter or Target not found");
-                            }
-                        }
-                        case "ExecuteTurn" -> {
-                            System.out.println("ExecuteTurn received - starting turn actions");
-
-                            FXGL.getGameWorld().getEntitiesByType(TANK).forEach(tank -> {
-                                ActionComponent ac = tank.getComponent(ActionComponent.class);
-                                if (ac.isPaused()) {
-                                    ac.resume();
-                                }
-                                Platform.runLater(() -> getEndTurnView().disableProperty().setValue(false));
-                                tank.getComponent(APComponent.class).reset();
-                            });
-                        }
-
-
-                        case "assign_id" -> {
-                            int id = responseBundle.get("clientId");
-                            setClientId(id);
-                            System.out.println("received Client-ID: " + id);
-                        }
-                        case "hello" -> {
-                            System.out.println("received Hello from Server");
-                        }
-                        default -> {
-                            System.out.println("Unhandled bundle: " + responseBundle.getName());
-                        }
-                    }
-                });
-            });
-
-            client.connectAsync();
-
-            // Set a timeout for connection
-            Thread connectionTimeoutThread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000); // 5-second timeout
-                    if (connection == null) {
-                        Platform.runLater(() -> {
-                            hideWaitingForOpponent();
-                            getDialogService().showMessageBox("Connection timed out: Server not responding", () -> getGameController().gotoMainMenu());
-                        });
-                    }
-                } catch (InterruptedException e) {
-                    // Connection succeeded before timeout
-                }
-            });
-            connectionTimeoutThread.setDaemon(true);
-            connectionTimeoutThread.start();
-
-        } catch (Exception e) {
-            Platform.runLater(() -> {
-                hideWaitingForOpponent();
-                getDialogService().showMessageBox("Connection error: " + e.getMessage(), () -> getGameController().gotoMainMenu());
-            });
         }
     }
 
@@ -383,7 +243,7 @@ public class RobustApplication extends GameApplication {
         TurnService.startTurn(Player.PLAYER1);
     }
 
-    private void initOnlineGameLogicAndUI() {
+    public void initOnlineGameLogicAndUI() {
         FXGL.getGameWorld().addEntityFactory(new MapFactory());
         FXGL.getGameWorld().addEntityFactory(new PlayerFactory());
         getGameScene().getViewport().setY(-100);
@@ -427,11 +287,13 @@ public class RobustApplication extends GameApplication {
         } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
             entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() - 64);
     }
-
-    public Connection<Bundle> getConnection() {
-        return this.connection;
+    public Entity getMyTank() {
+        String myPlayer = getAssignedPlayer();
+        return FXGL.getGameWorld().getEntitiesByType(TANK).stream()
+                .filter(e -> e.getComponent(TankDataComponent.class).getOwner().toString().equals(myPlayer))
+                .findFirst()
+                .orElse(null);
     }
-
     public String getAssignedPlayer() {
         return assignedPlayer;
     }
@@ -450,6 +312,10 @@ public class RobustApplication extends GameApplication {
 
     public void setServerPort(int port){
         this.serverPort = port;
+    }
+
+    public void setAssignedPlayer(String assignedPlayer) {
+        this.assignedPlayer = assignedPlayer;
     }
 }
 

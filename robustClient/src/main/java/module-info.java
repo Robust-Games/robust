@@ -6,6 +6,8 @@ open module com.robustgames.robustclient {
     requires javafx.graphics;
     requires com.almasb.fxgl.scene;
     requires com.almasb.fxgl.core;
+    requires annotations;
+    requires com.almasb.fxgl.entity;
 
     exports com.robustgames.robustclient.business.entitiy.components;
     exports com.robustgames.robustclient.business.logic;
@@ -14,5 +16,6 @@ open module com.robustgames.robustclient {
     exports com.robustgames.robustclient.business.entitiy.components.animations;
     exports com.robustgames.robustclient.business.logic.tankService;
     exports com.robustgames.robustclient.business.logic.gameService;
+    exports com.robustgames.robustclient.business.logic.networkService;
 
 }

@@ -12,6 +12,7 @@ import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.logic.Gamemode;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
@@ -64,7 +65,7 @@ public class RotateAction extends Action {
             if (!isLocal) return;
 
             RobustApplication app = FXGL.getAppCast();
-            Connection<Bundle> conn = app.getConnection();
+            Connection<Bundle> conn = FXGL.getService(ConnectionService.class).getConnection();
             if (conn != null) {
                 Bundle rotateBundle = BundleFactory.createRotateActionBundle(entity, textureName);
                 conn.send(rotateBundle);

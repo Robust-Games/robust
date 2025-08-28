@@ -56,8 +56,8 @@ public class EndTurnView extends Pane {
             }
             if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.LOCAL)) {
                 playerTank.getComponent(TankDataComponent.class).resetBeforeTurn();
+                TurnService.nextPlayer();
             }
-            TurnService.nextPlayer();
         });
     }
 }

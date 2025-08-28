@@ -12,7 +12,9 @@ import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.Player;
+import javafx.application.Platform;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class TurnService {
@@ -30,9 +32,10 @@ public class TurnService {
             }
         } else if (currentGamemode.equals(Gamemode.ONLINE)) {
             String myPlayerName = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+            currentPlayer = Player.valueOf(myPlayerName);
+            System.out.println(currentGamemode + " " + currentPlayer);
 
             if (myPlayerName != null && myPlayerName.equals(currentPlayer.toString())) {
-                // Nur dieser Client darf jetzt aktiv sein
                 Entity playerTank = MapService.findTankOfPlayer(player);
                 if (playerTank != null) {
                     playerTank.getComponent(TankDataComponent.class).setInitialPos();
@@ -48,7 +51,9 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
-            //getNotificationService().pushNotification(currentPlayer + "'S TURN");
+            Platform.runLater(()->{
+                getNotificationService().pushNotification(currentPlayer + "'S TURN");
+            });
         } else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
@@ -92,8 +97,9 @@ public class TurnService {
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
             entity.getComponent(APComponent.class).reset();
         });
-
-        //getNotificationService().pushNotification(currentPlayer + "'S TURN");
+        Platform.runLater(()->{
+            getNotificationService().pushNotification(currentPlayer + "'S TURN");
+        });
     }
 }
 
