@@ -3,11 +3,11 @@ plugins {
     application
     id("org.javamodularity.moduleplugin") version "1.8.12"
     id("org.openjfx.javafxplugin") version "0.0.13"
-    id("org.beryx.jlink") version "2.25.0"
+    id("org.beryx.jlink") version "3.1.1"
 }
 
 group = "com.example"
-version = "1.0-SNAPSHOT"
+version = "2"
 
 repositories {
     mavenCentral()
@@ -40,32 +40,29 @@ dependencies {
         exclude(group = "org.openjfx")
         // exclude(group = "org.jetbrains.kotlin")
     }
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.jar {
-    manifest {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        attributes(
-            "Main-Class" to "com.robustgames.robustserver.RobustServerApplication"
-        )
-    }
-    // Fat jar bauen (alle Dependencies reinpacken)
-    from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
-}
-
+val os = org.gradle.internal.os.OperatingSystem.current()
 jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
+    imageZip.set(layout.buildDirectory.file("distributions/app-${javafx.platform.classifier}.zip"))
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
     launcher {
-        name = "app"
+        name = "apps"
+    }
+    jpackage {
+        // Force it to use Java 21
+        jvmArgs = listOf("--enable-preview")
+        // Make sure it bundles the JRE
+        installerOptions = listOf("--resource-dir", "src/main/resources")
+        installerType = when {
+            os.isWindows -> "msi"   // oder "exe"
+            os.isMacOsX  -> "pkg"   // oder "dmg"
+            else         -> "deb"   // Linux
+        }
     }
     addExtraDependencies("kotlin.stdlib")
 }

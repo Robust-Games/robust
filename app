@@ -1,0 +1,1 @@
+/home/carolin/IdeaProjects/robust/robustClient/build/jpackage/app/bin/app
