@@ -23,17 +23,14 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class ConnectionService extends EngineService {
     private static ConnectionService instance;
-
+    private final ConnectionMessageHandler messageHandler;
+    private final boolean firstHeartbeat = true;
+    private final BooleanProperty connected = new SimpleBooleanProperty(false);
+    RobustApplication app;
     private Client<Bundle> client;
     private Connection<Bundle> connection;
     private ScheduledExecutorService heartbeatMonitor;
-    private final ConnectionMessageHandler messageHandler;
     private ScheduledExecutorService connectionMonitor;
-    private boolean firstHeartbeat = true;
-    RobustApplication app;
-
-
-    private final BooleanProperty connected = new SimpleBooleanProperty(false);
     private long lastHeartbeatTime = 0;
 
     public ConnectionService() {
@@ -129,12 +126,15 @@ public class ConnectionService extends EngineService {
             }
         }, 10, 3, TimeUnit.SECONDS);
     }
+
     public Connection<Bundle> getConnection() {
         return this.connection;
     }
+
     public BooleanProperty connectedProperty() {
         return connected;
     }
+
     public boolean isConnected() {
         return connected.get();
     }

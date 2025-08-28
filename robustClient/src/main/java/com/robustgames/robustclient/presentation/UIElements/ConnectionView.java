@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,11 +20,11 @@ public class ConnectionView {
     private final int xSIZE = 700;
     private final int ySIZE = 500;
 
-    private TextField ipTextField;
-    private TextField portTextField;
-    private Button connectButton;
-    private Button backButton;
-    private Text statusText;
+    private final TextField ipTextField;
+    private final TextField portTextField;
+    private final Button connectButton;
+    private final Button backButton;
+    private final Text statusText;
 
     public ConnectionView() {
         // Title
@@ -51,10 +50,12 @@ public class ConnectionView {
         statusText = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.UI, 16);
 
         // Buttons
-        connectButton = new RobustButton("Connect", () -> {}, false);
+        connectButton = new RobustButton("Connect", () -> {
+        }, false);
         connectButton.setStyle("-fx-min-width: 100px;");
 
-        backButton = new RobustButton("Back", () -> {}, false);
+        backButton = new RobustButton("Back", () -> {
+        }, false);
         backButton.setStyle("-fx-min-width: 100px;");
 
         HBox buttonRow = new HBox(10, connectButton, backButton);
@@ -75,9 +76,11 @@ public class ConnectionView {
     public String getServerIP() {
         return ipTextField.getText();
     }
+
     public String getServerPort() {
         return portTextField.getText();
     }
+
     public Button getConnectButton() {
         return connectButton;
     }

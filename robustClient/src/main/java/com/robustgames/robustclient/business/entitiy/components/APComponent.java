@@ -32,20 +32,20 @@ public class APComponent extends RechargeableIntComponent {
         return getValue();
     }
 
-    public double getAPCost() {
-        return apCost;
-    }
-
-    public void setAPCost(double apCost) {
-        this.apCost = apCost;
-    }
-
     /*
     sets the current AP.
     used to set AP after synchronisation with the server
     */
     public void setCurrentAP(int value) {
         this.valueProperty().set(value);
+    }
+
+    public double getAPCost() {
+        return apCost;
+    }
+
+    public void setAPCost(double apCost) {
+        this.apCost = apCost;
     }
 }
 

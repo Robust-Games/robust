@@ -6,7 +6,6 @@ package com.robustgames.robustclient.presentation.scenes.menus;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
@@ -15,7 +14,6 @@ import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.presentation.UIElements.ConnectionView;
 import com.robustgames.robustclient.presentation.UIElements.OptionsView;
 import com.robustgames.robustclient.presentation.UIElements.RobustButton;
-import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -30,19 +28,15 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.animationBuilder;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
 
 public class RobustMainMenu extends FXGLMenu {
-    private ConnectionView connectionView;
-
     private static final double LEFT_MARGIN = 50.0;
     private static final double BUTTON_SPACING = 14.0;
-
+    private final ConnectionView connectionView;
     private final VBox menuBox = new VBox(BUTTON_SPACING);
     private final List<Node> buttons = new ArrayList<>();
 
@@ -87,7 +81,7 @@ public class RobustMainMenu extends FXGLMenu {
 
     public Button createActionButton(String text, Runnable action, boolean isMenu) {
         RobustButton btn = new RobustButton(text, action, isMenu);
-        // add to buttons list for animation in onCreate()
+        // add to the button list for animation in onCreate()
         buttons.add(btn);
         return btn;
     }
@@ -173,7 +167,7 @@ public class RobustMainMenu extends FXGLMenu {
 
     private Node createOnlineContent() {
         connectionView.getConnectButton().setOnAction(e -> {
-            RobustApplication app = FXGL.<RobustApplication>getAppCast();
+            RobustApplication app = FXGL.getAppCast();
             String ip = connectionView.getServerIP();
             int port = Integer.parseInt(connectionView.getServerPort());
 

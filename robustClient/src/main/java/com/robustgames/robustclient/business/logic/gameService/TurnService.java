@@ -18,10 +18,10 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class TurnService {
+    private static final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
     public static Player currentPlayer;
     static boolean player1Ready = false;
     static boolean player2Ready = false;
-    private static final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
 
     public static void startTurn(Player player) {
         currentPlayer = player;
@@ -40,7 +40,7 @@ public class TurnService {
                 System.err.println(playerTank);
                 if (playerTank != null) {
                     playerTank.getComponent(TankDataComponent.class).setInitialPos();
-                    System.err.println("InitialPos set " + playerTank.getComponent(TankDataComponent.class).getInitialPos());;
+                    System.err.println("InitialPos set " + playerTank.getComponent(TankDataComponent.class).getInitialPos());
                 }
             } else {
                 System.out.println("Waiting for other player...");
@@ -53,7 +53,7 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 getNotificationService().pushNotification(currentPlayer + "'S TURN");
             });
         } else {
@@ -99,7 +99,7 @@ public class TurnService {
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
             entity.getComponent(APComponent.class).reset();
         });
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             getNotificationService().pushNotification(currentPlayer + "'S TURN");
         });
     }

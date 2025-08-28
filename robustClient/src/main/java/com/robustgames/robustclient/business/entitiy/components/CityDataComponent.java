@@ -8,9 +8,9 @@ import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.logic.Player;
 
 public class CityDataComponent extends Component {
+    private final Player owner;
     private Texture initialCityTexture;
     private Texture newCityTexture;
-    private final Player owner;
 
     public CityDataComponent(Player player, Texture view) {
         owner = player;

@@ -44,7 +44,7 @@ public class EndTurnView extends Pane {
         Sound endTurn = FXGL.getAssetLoader().loadSound("UIEndTurn.mp3");
 
         btnEndTurn.setOnAction(event -> {
-            Platform.runLater(()->getAudioPlayer().playSound(endTurn));
+            Platform.runLater(() -> getAudioPlayer().playSound(endTurn));
             Player currentPlayer = TurnService.currentPlayer;
             Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
 

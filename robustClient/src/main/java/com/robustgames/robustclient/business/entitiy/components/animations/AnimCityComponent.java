@@ -12,7 +12,6 @@ import com.almasb.fxgl.texture.Texture;
 import javafx.util.Duration;
 
 public class AnimCityComponent extends Component {
-    private Texture city1Texture;
     private final AnimatedTexture animatedTexture;
     private final AnimationChannel city1Animation;
     private final AnimationChannel city2Animation;
@@ -24,6 +23,7 @@ public class AnimCityComponent extends Component {
     int currentHP;
     int maxHP;
     boolean underAttack;
+    private Texture city1Texture;
 
     public AnimCityComponent(boolean underAttack) {
         city1AttackAnimation = new AnimationChannel(FXGL.image("city1_attack.png"), 1, 128, 128, Duration.seconds(0), 0, 0);

@@ -23,7 +23,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class ConnectionMessageHandler {
-    RobustApplication app;
+    private RobustApplication app;
 
     ConnectionMessageHandler() {
         this.app = FXGL.getAppCast();
@@ -44,7 +44,6 @@ public class ConnectionMessageHandler {
             default -> System.out.println("Unhandled bundle: " + bundle.getName());
         }
     }
-
 
     private void handleGameStart(Bundle bundle) {
         String assignedPlayer = bundle.get("assignedPlayer");
@@ -78,12 +77,12 @@ public class ConnectionMessageHandler {
         double toX = bundle.get("toX");
         double toY = bundle.get("toY");
 
-        Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
+        Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(
+                e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
 
         if (tank != null) {
             Point2D screenTarget = MapService.isoGridToScreen(toX, toY).subtract(64, 64);
             Entity dummyTarget = FXGL.entityBuilder().at(screenTarget).build();
-
             MovementAction moveAction = new MovementAction(dummyTarget, false);
             tank.getComponent(ActionComponent.class).addAction(moveAction);
             tank.getComponent(ActionComponent.class).pause();
@@ -96,7 +95,8 @@ public class ConnectionMessageHandler {
         long entityId = bundle.get("entityId");
         String textureName = bundle.get("direction") + ".png";
 
-        Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
+        Entity tank = FXGL.getGameWorld().getEntitiesByComponent(IDComponent.class).stream().filter(
+                e -> e.getComponent(IDComponent.class).getId() == entityId).findFirst().orElse(null);
 
         if (tank == null) {
             System.err.println("Tank with ID " + entityId + " not found.");

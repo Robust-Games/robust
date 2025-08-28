@@ -9,7 +9,7 @@ import com.almasb.fxgl.dsl.FXGL;
 public class SoundService {
     //    int lastNumber = 0;
 
-    public static void pickSong(){
+    public static void pickSong() {
         String[] playlist = new String[]{
                 "Deadly Contracts.mp3",
                 "Final Solitaire.mp3",
@@ -20,7 +20,7 @@ public class SoundService {
                 "The Price of Freedom.mp3"
         };
 
-       int pick = (int) (Math.random() * (playlist.length));
+        int pick = (int) (Math.random() * (playlist.length));
  /*        while (pick == lastNumber){
             pick = randomNumber();
         }*/

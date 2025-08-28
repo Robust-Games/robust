@@ -16,12 +16,12 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
 
 public class TankDataComponent extends Component {
+    private final Player owner;
     private Point2D initialPos;
     private Texture initialTankTexture;
     private String initialTankView;
     private String newTankView;
     private Texture newTankTexture;
-    private final Player owner;
     private Texture turretTexture;
     private String turretTextureName = "";
     private Texture hullTexture;

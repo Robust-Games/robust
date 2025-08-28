@@ -80,7 +80,7 @@ public class MovementService {
         Entity selectedTank = MapService.findSelectedTank();
 
         if (selectedTank == null) {
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 getNotificationService().pushNotification("Not enough Action Points!");
             });
             return moveTargets;
@@ -88,7 +88,7 @@ public class MovementService {
         int ap = selectedTank.getComponent(APComponent.class).getCurrentAP();
 
         if (ap <= 0) {
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 getNotificationService().pushNotification("Not enough Action Points!");
             });
             return moveTargets;

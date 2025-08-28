@@ -9,20 +9,12 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.app.scene.StartupScene;
-import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.action.ActionComponent;
-import com.almasb.fxgl.net.Client;
-import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.ui.FontType;
-import com.robustgames.robustclient.business.actions.MovementAction;
-import com.robustgames.robustclient.business.actions.RotateAction;
-import com.robustgames.robustclient.business.actions.ShootAction;
 import com.robustgames.robustclient.business.entitiy.components.*;
-import com.robustgames.robustclient.business.factories.BundleFactory;
 import com.robustgames.robustclient.business.factories.IDFactory;
 import com.robustgames.robustclient.business.factories.MapFactory;
 import com.robustgames.robustclient.business.factories.PlayerFactory;
@@ -48,13 +40,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.robustgames.robustclient.business.entitiy.EntityType.*;
@@ -100,6 +88,7 @@ public class RobustApplication extends GameApplication {
             public FXGLMenu newMainMenu() {
                 return new RobustMainMenu(MenuType.MAIN_MENU);
             }
+
             @Override
             public StartupScene newStartup(int width, int height) {
                 return new RobustStartupScene(width, height);
@@ -287,6 +276,7 @@ public class RobustApplication extends GameApplication {
         } else if (entity.isType(MOUNTAIN) || entity.isType(TANK) || entity.isType(CITY))
             entity.setPosition(isoScreenPos.getX() - 64, isoScreenPos.getY() - 64);
     }
+
     public Entity getMyTank() {
         String myPlayer = getAssignedPlayer();
         return FXGL.getGameWorld().getEntitiesByType(TANK).stream()
@@ -294,8 +284,13 @@ public class RobustApplication extends GameApplication {
                 .findFirst()
                 .orElse(null);
     }
+
     public String getAssignedPlayer() {
         return assignedPlayer;
+    }
+
+    public void setAssignedPlayer(String assignedPlayer) {
+        this.assignedPlayer = assignedPlayer;
     }
 
     public Gamemode getSelectedGamemode() {
@@ -310,12 +305,8 @@ public class RobustApplication extends GameApplication {
         this.serverIP = ip;
     }
 
-    public void setServerPort(int port){
+    public void setServerPort(int port) {
         this.serverPort = port;
-    }
-
-    public void setAssignedPlayer(String assignedPlayer) {
-        this.assignedPlayer = assignedPlayer;
     }
 }
 
