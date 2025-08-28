@@ -128,8 +128,8 @@ public class ConnectionMessageHandler {
 
     private void handleExecuteTurn(Bundle bundle) {
         System.out.println("ExecuteTurn received - starting turn actions");
-        //Entity myTank = FXGL.<RobustApplication>getAppCast().getMyTank();
-        //myTank.getComponent(TankDataComponent.class).resetBeforeTurn();
+        Entity myTank = FXGL.<RobustApplication>getAppCast().getMyTank();
+        myTank.getComponent(TankDataComponent.class).resetBeforeTurn();
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(tank -> {
             ActionComponent ac = tank.getComponent(ActionComponent.class);
             if (ac.isPaused()) {

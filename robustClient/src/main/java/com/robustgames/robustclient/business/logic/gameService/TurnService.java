@@ -36,9 +36,11 @@ public class TurnService {
             System.out.println(currentGamemode + " " + currentPlayer);
 
             if (myPlayerName != null && myPlayerName.equals(currentPlayer.toString())) {
-                Entity playerTank = MapService.findTankOfPlayer(player);
+                Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
+                System.err.println(playerTank);
                 if (playerTank != null) {
                     playerTank.getComponent(TankDataComponent.class).setInitialPos();
+                    System.err.println("InitialPos set " + playerTank.getComponent(TankDataComponent.class).getInitialPos());;
                 }
             } else {
                 System.out.println("Waiting for other player...");
