@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'robustClient/**'
+      - 'robustServer/**'
+      - '.github/workflows/**'
+
+jobs:
+  build-client:
+    name: Client Build & Package (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: { os: [ubuntu-latest, windows-latest, macos-latest] }
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: robustClient
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+          cache: gradle
+
+      - name: Make gradlew executable (Unix)
+        if: runner.os != 'Windows'
+        run: chmod +x ./gradlew
+
+      - name: Build (compile + tests + jar)
+        run: ./gradlew clean build --no-daemon
+
+      - name: Create installers (jpackage)
+        run: ./gradlew jpackage --no-daemon
+
+      # Artefakte
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: robustclient-jar-${{ runner.os }}
+          path: robustClient/build/libs/*.jar
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload app image (zip)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-image-${{ runner.os }}
+          path: robustClient/build/distributions/app-*.zip
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload Linux .deb
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb
+          path: robustClient/build/jpackage/**/lib/*.deb
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload Windows .msi
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi
+          path: robustClient/build/jpackage/**/*.msi
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload macOS .pkg
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-pkg
+          path: robustClient/build/jpackage/**/*.pkg
+          if-no-files-found: warn
+          retention-days: 14
+
+  build-server:
+    name: Server Build (Jar) (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: { os: [ubuntu-latest, windows-latest, macos-latest] }
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: robustServer
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+          cache: gradle
+
+      - name: Make gradlew executable (Unix)
+        if: runner.os != 'Windows'
+        run: chmod +x ./gradlew
+
+      - name: Build server (jar + tests)
+        run: ./gradlew clean build --no-daemon
+
+      - name: Upload Server JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: robustserver-jar-${{ runner.os }}
+          path: robustServer/build/libs/*.jar
+          if-no-files-found: warn
+          retention-days: 14
+
+
