@@ -98,6 +98,7 @@ public class RobustApplication extends GameApplication {
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
         settings.setFullScreenAllowed(true);
+        settings.setAppIcon("icon.png");
         settings.getCredits().addAll(Arrays.asList("Robust Games\n", "-Developed by-", "Burak Altun", "Carolin Scheffler", "Ersin Yesiltas", "Nico Steiner\n\n",
 
                 "-A Game made for Hochschule RheinMain-"));
@@ -227,6 +228,7 @@ public class RobustApplication extends GameApplication {
         FXGL.setLevelFromMap("mapTest2.tmx");
 
         GameWorld world = getGameWorld();
+        Platform.runLater(() -> SoundService.pickSong());
         List<Entity> allEntities = world.getEntities();
         for (Entity entity : allEntities) {
             moveEntityToIsometric(entity);
@@ -268,7 +270,6 @@ public class RobustApplication extends GameApplication {
     }
 
     private void moveEntityToIsometric(Entity entity) {
-        Platform.runLater(() -> SoundService.pickSong());
         Point2D orthGridPos = MapService.orthScreenToGrid(entity.getPosition());
         Point2D isoScreenPos = MapService.isoGridToScreen(orthGridPos.getX(), orthGridPos.getY());
         if (entity.isType(TILE)) {

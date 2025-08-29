@@ -12,6 +12,7 @@ import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.logic.Gamemode;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import com.robustgames.robustclient.presentation.UIElements.ConnectionView;
 import com.robustgames.robustclient.presentation.UIElements.OptionsView;
 import com.robustgames.robustclient.presentation.UIElements.RobustButton;
@@ -75,7 +76,12 @@ public class RobustMainMenu extends FXGLMenu {
         Button btnNew = createActionButton("Start Game", () -> subMenu.getChildren().setAll(createStartContent()), true);
         Button btnOptions = createActionButton("Options", () -> subMenu.getChildren().setAll(createOptionsContent()), true);
         Button btnCredits = createActionButton("Credits", () -> subMenu.getChildren().setAll(createCreditsContent()), true);
-        Button btnExit = createActionButton("Exit", this::fireExit, true);
+        Button btnExit = createActionButton("Exit", () -> {
+            try {
+                FXGL.getService(ConnectionService.class).robustDisconnect();
+            } catch (Exception ignored) { }
+            this.fireExit();
+        }, true);
 
         menuBox.getChildren().addAll(btnNew, btnOptions, btnCredits, btnExit);
         subMenu.setTranslateX(menuBox.getTranslateX() + 400); //button width in style.css + extra 50

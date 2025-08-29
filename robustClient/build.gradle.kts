@@ -6,7 +6,7 @@ plugins {
     id("org.beryx.jlink") version "3.1.1"
 }
 
-group = "com.example"
+group = "com.robustgames"
 version = "1"
 
 repositories {
@@ -56,5 +56,6 @@ jlink {
             jvmArgs = listOf("--enable-preview")
             // Make sure it bundles the JRE
             installerOptions = listOf("--resource-dir", "src/main/resources")
+            installerOptions = listOf( "--name", "ROBUST", "--vendor", "Robust Games", "--app-version", "0.4.0", "--win-dir-chooser", "--win-menu", "--win-shortcut", "--icon", "src/main/resources/textures/icon.png" )
         }
 }

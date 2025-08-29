@@ -6,7 +6,7 @@ plugins {
     id("org.beryx.jlink") version "3.1.1"
 }
 
-group = "com.example"
+group = "com.robustgames"
 version = "2"
 
 repositories {
@@ -38,20 +38,18 @@ javafx {
 dependencies {
     implementation("com.github.almasb:fxgl:21.1") {
         exclude(group = "org.openjfx")
-        // exclude(group = "org.jetbrains.kotlin")
+       // exclude(group = "org.jetbrains.kotlin")
     }
-}
 
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
 
 val os = org.gradle.internal.os.OperatingSystem.current()
 jlink {
-    imageZip.set(layout.buildDirectory.file("distributions/app-${javafx.platform.classifier}.zip"))
+    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+    forceMerge("kotlin")
     launcher {
-        name = "apps"
+        name = "app"
     }
     jpackage {
         // Force it to use Java 21
@@ -64,5 +62,5 @@ jlink {
             else         -> "deb"   // Linux
         }
     }
-    addExtraDependencies("kotlin.stdlib")
 }
+

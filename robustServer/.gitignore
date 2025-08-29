@@ -15,12 +15,11 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 build/classes
-build/image
 build/generated
-build/libs
-build/tmp
-build/resources
+build/image
 build/reports
+build/resources
+build/tmp
 build/jlinkbase
 ### IntelliJ IDEA ###
 .idea

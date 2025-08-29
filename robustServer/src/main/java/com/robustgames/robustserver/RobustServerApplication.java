@@ -87,6 +87,7 @@ public class RobustServerApplication {
                         }
                         break;
                     }
+                    case "PlayerAlive": {break;}
 
                     default: {
                         int senderId = bundle.get("clientId");

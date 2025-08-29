@@ -24,7 +24,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class ConnectionService extends EngineService {
     private static ConnectionService instance;
     private final ConnectionMessageHandler messageHandler;
-    private final boolean firstHeartbeat = true;
+    private boolean firstHeartbeat = true;
     private final BooleanProperty connected = new SimpleBooleanProperty(false);
     RobustApplication app;
     private Client<Bundle> client;
@@ -32,10 +32,13 @@ public class ConnectionService extends EngineService {
     private ScheduledExecutorService heartbeatMonitor;
     private ScheduledExecutorService connectionMonitor;
     private long lastHeartbeatTime = 0;
+    private static volatile boolean shutdownHookRegistered = false;
 
     public ConnectionService() {
         messageHandler = new ConnectionMessageHandler();
         this.app = FXGL.getAppCast();
+        instance = this;
+        registerShutdownHookIfNeeded();
     }
 
     public void initializeNetworkClient(String ip, int port) {
@@ -52,6 +55,7 @@ public class ConnectionService extends EngineService {
                     if ("heartbeat".equals(responseBundle.getName())) {
                         if (firstHeartbeat) {
                             startConnectionMonitoring();
+                            firstHeartbeat = false;
                         }
                         lastHeartbeatTime = System.currentTimeMillis();
                         BundleFactory.signalPlayerAlive();
@@ -78,19 +82,29 @@ public class ConnectionService extends EngineService {
         connected.set(false);
 
         if (connectionMonitor != null) {
-            connectionMonitor.shutdown();
+            try {
+                connectionMonitor.shutdownNow();
+            } catch (Exception ignored) { }
             connectionMonitor = null;
         }
 
         if (connection != null) {
-            connection.terminate();
+            try {
+                connection.terminate();
+            } catch (Exception ignored) { }
             connection = null;
         }
 
         if (client != null) {
-            client.disconnect();
+            try {
+                client.disconnect();
+            } catch (Exception ignored) { }
             client = null;
         }
+
+        // reset heartbeat state for a clean next connection attempt
+        firstHeartbeat = true;
+        lastHeartbeatTime = 0L;
     }
 
     @NotNull
@@ -113,16 +127,31 @@ public class ConnectionService extends EngineService {
     }
 
     private void startConnectionMonitoring() {
-        connectionMonitor = Executors.newSingleThreadScheduledExecutor();
+        if (connectionMonitor != null && !connectionMonitor.isShutdown()) {
+            return; // already monitoring
+        }
+
+        // Ensure the monitoring thread is a daemon so it won't keep the JVM alive on exit
+        connectionMonitor = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "connection-monitor");
+            t.setDaemon(true);
+            return t;
+        });
+
+        lastHeartbeatTime = System.currentTimeMillis();
+
         connectionMonitor.scheduleAtFixedRate(() -> {
             long currentTime = System.currentTimeMillis();
-            if (currentTime - lastHeartbeatTime > 11000) { // 10 seconds without heartbeat
+            if (currentTime - lastHeartbeatTime > 11000) { // 10+ seconds without heartbeat
                 Platform.runLater(() -> {
                     getDialogService().showMessageBox("Connection to server lost",
                             () -> getGameController().gotoMainMenu());
                 });
                 robustDisconnect();
-                connectionMonitor.shutdown();
+                ScheduledExecutorService monitorRef = connectionMonitor;
+                if (monitorRef != null) {
+                    monitorRef.shutdownNow();
+                }
             }
         }, 10, 3, TimeUnit.SECONDS);
     }
@@ -137,5 +166,22 @@ public class ConnectionService extends EngineService {
 
     public boolean isConnected() {
         return connected.get();
+    }
+
+    private static void registerShutdownHookIfNeeded() {
+        if (shutdownHookRegistered) {
+            return;
+        }
+        try {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    ConnectionService svc = instance;
+                    if (svc != null) {
+                        svc.robustDisconnect();
+                    }
+                } catch (Exception ignored) { }
+            }, "robust-client-shutdown"));
+            shutdownHookRegistered = true;
+        } catch (Exception ignored) { }
     }
 }

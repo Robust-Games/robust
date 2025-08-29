@@ -11,13 +11,13 @@
 *.ipr
 out/
 build/classes
-build/image
 build/generated
-build/libs
-build/tmp
-build/resources
-build/reports
+build/image
 build/jlinkbase
+build/libs
+build/reports
+build/resources
+build/tmp
 !**/src/main/**/out/
 !**/src/test/**/out/
 
