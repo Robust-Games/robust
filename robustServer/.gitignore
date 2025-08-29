@@ -14,7 +14,14 @@ HELP.md
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-
+build/classes
+build/image
+build/generated
+build/libs
+build/tmp
+build/resources
+build/reports
+build/jlinkbase
 ### IntelliJ IDEA ###
 .idea
 *.iws

@@ -104,8 +104,10 @@ public class RobustApplication extends GameApplication {
         settings.getCSSList().add("style.css");
         settings.setWidth(WIDTH);
         settings.setHeight(HEIGHT);
-        settings.setFontUI("ARCADE_R.ttf");
-        settings.setFontGame("ARCADE_N.ttf");
+        settings.setFontUI("ARCADE_N.TTF");
+        settings.setFontGame("ARCADE_N.TTF");
+        settings.setFontText("ARCADE_N.TTF");
+        settings.setFontMono("ARCADE_N.TTF");
         settings.setTicksPerSecond(60);
 
         settings.addEngineService(ConnectionService.class);

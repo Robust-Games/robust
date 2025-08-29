@@ -47,6 +47,7 @@ dependencies {
 jlink {
     imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+    forceMerge("kotlin")
     launcher {
         name = "app"
     }
@@ -56,5 +57,4 @@ jlink {
             // Make sure it bundles the JRE
             installerOptions = listOf("--resource-dir", "src/main/resources")
         }
-    addExtraDependencies("kotlin.stdlib")
 }

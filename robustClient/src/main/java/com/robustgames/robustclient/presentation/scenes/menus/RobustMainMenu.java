@@ -53,7 +53,7 @@ public class RobustMainMenu extends FXGLMenu {
         super(type);
         connectionView = new ConnectionView();
 
-        Music menuMusic = FXGL.getAssetLoader().loadMusic("Gear Up.mp3");
+        Music menuMusic = FXGL.getAssetLoader().loadMusic("Gear_Up.mp3");
         FXGL.getAudioPlayer().loopMusic(menuMusic);
 
         //Background

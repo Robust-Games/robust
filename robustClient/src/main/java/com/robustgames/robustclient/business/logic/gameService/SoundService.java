@@ -11,13 +11,13 @@ public class SoundService {
 
     public static void pickSong() {
         String[] playlist = new String[]{
-                "Deadly Contracts.mp3",
-                "Final Solitaire.mp3",
-                "Going Undercover.mp3",
-                "Hostile Territory.mp3",
-                "Micron By Micron.mp3",
-                "Shadow Operations.mp3",
-                "The Price of Freedom.mp3"
+                "Deadly_Contracts.mp3",
+                "Final_Solitaire.mp3",
+                "Going_Undercover.mp3",
+                "Hostile_Territory.mp3",
+                "Micron_By_Micron.mp3",
+                "Shadow_Operations.mp3",
+                "The_Price_of_Freedom.mp3"
         };
 
         int pick = (int) (Math.random() * (playlist.length));

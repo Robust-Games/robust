@@ -47,7 +47,7 @@ public class ConnectionView {
         ipSection.setAlignment(Pos.CENTER_LEFT);
 
         // Status text
-        statusText = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.UI, 16);
+        statusText = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
 
         // Buttons
         connectButton = new RobustButton("Connect", () -> {

@@ -10,6 +10,14 @@
 *.iml
 *.ipr
 out/
+build/classes
+build/image
+build/generated
+build/libs
+build/tmp
+build/resources
+build/reports
+build/jlinkbase
 !**/src/main/**/out/
 !**/src/test/**/out/
 
