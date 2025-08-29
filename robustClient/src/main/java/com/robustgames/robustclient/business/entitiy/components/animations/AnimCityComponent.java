@@ -1,0 +1,78 @@
+/**
+ * @author Nico Steiner
+ */
+package com.robustgames.robustclient.business.entitiy.components.animations;
+
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
+import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
+import com.almasb.fxgl.texture.Texture;
+import javafx.util.Duration;
+
+public class AnimCityComponent extends Component {
+    private final AnimatedTexture animatedTexture;
+    private final AnimationChannel city1Animation;
+    private final AnimationChannel city2Animation;
+    private final AnimationChannel city3Animation;
+    private final AnimationChannel city1AttackAnimation;
+    private final AnimationChannel city2AttackAnimation;
+    private final AnimationChannel city3AttackAnimation;
+    private final AnimationChannel city4Animation;
+    int currentHP;
+    int maxHP;
+    boolean underAttack;
+    private Texture city1Texture;
+
+    public AnimCityComponent(boolean underAttack) {
+        city1AttackAnimation = new AnimationChannel(FXGL.image("city1_attack.png"), 1, 128, 128, Duration.seconds(0), 0, 0);
+        city2AttackAnimation = new AnimationChannel(FXGL.image("city2_attack.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city3AttackAnimation = new AnimationChannel(FXGL.image("city3_attack.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city1Animation = new AnimationChannel(FXGL.image("city1.png"), 1, 128, 128, Duration.seconds(0), 0, 0);
+        city2Animation = new AnimationChannel(FXGL.image("city2.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city3Animation = new AnimationChannel(FXGL.image("city3.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        city4Animation = new AnimationChannel(FXGL.image("city4.png"), 19, 128, 128, Duration.seconds(1.9), 0, 18);
+        animatedTexture = new AnimatedTexture(city1Animation);
+        this.underAttack = underAttack;
+    }
+
+    @Override
+    public void onAdded() {
+        entity.getViewComponent().addChild(animatedTexture);
+        currentHP = entity.getComponent(HealthIntComponent.class).getValue();
+        maxHP = entity.getComponent(HealthIntComponent.class).getMaxValue();
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+        currentHP = entity.getComponent(HealthIntComponent.class).getValue();
+        if (animatedTexture.getAnimationChannel() == city1Animation && underAttack) {
+            animatedTexture.loopAnimationChannel(city1AttackAnimation);
+        }
+        if (maxHP - 1 == currentHP) {
+            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack) {
+                animatedTexture.loopAnimationChannel(city2AttackAnimation);
+            } else if (animatedTexture.getAnimationChannel() == city1Animation) {
+                animatedTexture.loopAnimationChannel(city2Animation);
+            }
+        } else if (maxHP - 2 == currentHP) {
+            if (animatedTexture.getAnimationChannel() == city1AttackAnimation && underAttack) {
+                animatedTexture.loopAnimationChannel(city3AttackAnimation);
+            } else if (animatedTexture.getAnimationChannel() == city2Animation) {
+                animatedTexture.loopAnimationChannel(city3Animation);
+            }
+        } else if (maxHP - 3 == currentHP) {
+            if (animatedTexture.getAnimationChannel() == city3Animation)
+                animatedTexture.loopAnimationChannel(city4Animation);
+        }
+    }
+
+    @Override
+    public void onRemoved() {
+        super.onRemoved();
+        entity.getViewComponent().removeChild(animatedTexture);
+    }
+
+}

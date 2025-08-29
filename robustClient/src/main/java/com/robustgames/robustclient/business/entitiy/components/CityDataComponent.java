@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.entity.component.Component;
@@ -5,9 +8,9 @@ import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.business.logic.Player;
 
 public class CityDataComponent extends Component {
+    private final Player owner;
     private Texture initialCityTexture;
     private Texture newCityTexture;
-    private final Player owner;
 
     public CityDataComponent(Player player, Texture view) {
         owner = player;
@@ -35,3 +38,4 @@ public class CityDataComponent extends Component {
         return owner;
     }
 }
+

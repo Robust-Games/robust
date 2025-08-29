@@ -1,14 +1,15 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components;
 
 import com.almasb.fxgl.dsl.components.RechargeableIntComponent;
-import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.entity.components.IntegerComponent;
 
 public class APComponent extends RechargeableIntComponent {
     private final int maxAP = 5;
-    //protected int currentAP;
+    private double apCost = 0;
 
-    public APComponent (int maxAP){
+    public APComponent(int maxAP) {
         super(maxAP, 5);
     }
 
@@ -17,7 +18,7 @@ public class APComponent extends RechargeableIntComponent {
     }
 
     public void use(int cost) {
-        if (!canUse(cost)){
+        if (!canUse(cost)) {
             return;
         }
         this.damage(cost);
@@ -31,4 +32,20 @@ public class APComponent extends RechargeableIntComponent {
         return getValue();
     }
 
+    /*
+    sets the current AP.
+    used to set AP after synchronisation with the server
+    */
+    public void setCurrentAP(int value) {
+        this.valueProperty().set(value);
+    }
+
+    public double getAPCost() {
+        return apCost;
+    }
+
+    public void setAPCost(double apCost) {
+        this.apCost = apCost;
+    }
 }
+

@@ -1,3 +1,6 @@
+/**
+ * @author eyesi001, Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components.animations;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -11,7 +14,7 @@ public class AnimTankComponent extends Component {
     private final AnimationChannel tankMotorShake;
 
     public AnimTankComponent() {
-        tankMotorShake = new AnimationChannel(FXGL.image("Tank_selected.png"), 2, 128,128,Duration.seconds(0.2), 0, 1);
+        tankMotorShake = new AnimationChannel(FXGL.image("Tank_selected.png"), 2, 128, 128, Duration.seconds(0.2), 0, 1);
         texture = new AnimatedTexture(tankMotorShake);
     }
 
@@ -21,11 +24,14 @@ public class AnimTankComponent extends Component {
         texture.loopAnimationChannel(tankMotorShake);
     }
 
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+    }
 
     @Override
     public void onRemoved() {
         super.onRemoved();
         entity.getViewComponent().removeChild(texture);
     }
-
 }

@@ -1,3 +1,6 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.presentation.scenes;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -12,7 +15,7 @@ import javafx.scene.text.Text;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 public class TankDataView extends Pane {
-    private Text apText;
+    private final Text apText;
     private Entity selectedTank;
     private APComponent apComponent;
 
@@ -50,9 +53,9 @@ public class TankDataView extends Pane {
             apComponent = selectedTank.getComponent(APComponent.class);
             // Bind directly to the component's value property, just like HP
             apText.textProperty().bind(
-                Bindings.format("AP:%d/%d",
-                    apComponent.valueProperty(),
-                    apComponent.maxValueProperty())
+                    Bindings.format("AP:%d/%d",
+                            apComponent.valueProperty(),
+                            apComponent.maxValueProperty())
             );
         } else {
             apComponent = null;

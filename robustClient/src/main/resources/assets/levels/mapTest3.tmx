@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="128" tileheight="64" infinite="0" nextlayerid="13" nextobjectid="413">
+ <tileset firstgid="1" name="sprite" tilewidth="128" tileheight="128" tilecount="100" columns="10">
+  <image source="sprite.png" width="1280" height="1280"/>
+ </tileset>
+ <tileset firstgid="101" name="EnvironmentEdited" tilewidth="128" tileheight="128" tilecount="160" columns="10">
+  <image source="EnvironmentEdited.png" width="1280" height="2048"/>
+ </tileset>
+ <objectgroup draworder="index" id="7" name="floor" locked="1">
+  <object id="239" type="floorTile" x="0" y="0" width="64" height="64"/>
+  <object id="280" type="floorTile" x="64" y="0" width="64" height="64"/>
+  <object id="281" type="floorTile" x="128" y="0" width="64" height="64"/>
+  <object id="282" type="floorTile" x="192" y="0" width="64" height="64"/>
+  <object id="287" type="floorTile" x="256" y="0" width="64" height="64"/>
+  <object id="288" type="floorTile" x="320" y="0" width="64" height="64"/>
+  <object id="289" type="floorTile" x="384" y="0" width="64" height="64"/>
+  <object id="290" type="floorTile" x="448" y="0" width="64" height="64"/>
+  <object id="291" type="floorTile" x="0" y="64" width="64" height="64"/>
+  <object id="292" type="floorTile" x="64" y="64" width="64" height="64"/>
+  <object id="293" type="floorTile" x="128" y="64" width="64" height="64"/>
+  <object id="294" type="floorTile" x="192" y="64" width="64" height="64"/>
+  <object id="295" type="floorTile" x="256" y="64" width="64" height="64"/>
+  <object id="296" type="floorTile" x="320" y="64" width="64" height="64"/>
+  <object id="297" type="floorTile" x="384" y="64" width="64" height="64"/>
+  <object id="298" type="floorTile" x="448" y="64" width="64" height="64"/>
+  <object id="299" type="floorTileMountain" x="0" y="128" width="64" height="64"/>
+  <object id="300" type="floorTileMountain" x="64" y="128" width="64" height="64"/>
+  <object id="301" type="floorTileMountain" x="128" y="128" width="64" height="64"/>
+  <object id="302" type="floorTileMountain" x="192" y="128" width="64" height="64"/>
+  <object id="303" type="floorTile" x="256" y="128" width="64" height="64"/>
+  <object id="304" type="floorTile" x="320" y="128" width="64" height="64"/>
+  <object id="305" type="floorTile" x="384" y="128" width="64" height="64"/>
+  <object id="306" type="floorTile" x="448" y="128" width="64" height="64"/>
+  <object id="307" type="floorTile" x="0" y="192" width="64" height="64"/>
+  <object id="308" type="floorTile" x="64" y="192" width="64" height="64"/>
+  <object id="309" type="floorTile" x="128" y="192" width="64" height="64"/>
+  <object id="310" type="floorTile" x="192" y="192" width="64" height="64"/>
+  <object id="311" type="floorTile" x="256" y="192" width="64" height="64"/>
+  <object id="312" type="floorTile" x="320" y="192" width="64" height="64"/>
+  <object id="313" type="floorTile" x="384" y="192" width="64" height="64"/>
+  <object id="314" type="floorTile" x="448" y="192" width="64" height="64"/>
+  <object id="315" type="floorTile" x="0" y="256" width="64" height="64"/>
+  <object id="316" type="floorTile" x="64" y="256" width="64" height="64"/>
+  <object id="317" type="floorTile" x="128" y="256" width="64" height="64"/>
+  <object id="318" type="floorTile" x="192" y="256" width="64" height="64"/>
+  <object id="319" type="floorTile" x="256" y="256" width="64" height="64"/>
+  <object id="320" type="floorTile" x="320" y="256" width="64" height="64"/>
+  <object id="321" type="floorTile" x="384" y="256" width="64" height="64"/>
+  <object id="322" type="floorTile" x="448" y="256" width="64" height="64"/>
+  <object id="323" type="floorTile" x="0" y="320" width="64" height="64"/>
+  <object id="324" type="floorTile" x="64" y="320" width="64" height="64"/>
+  <object id="325" type="floorTile" x="128" y="320" width="64" height="64"/>
+  <object id="326" type="floorTile" x="192" y="320" width="64" height="64"/>
+  <object id="327" type="floorTileMountain" x="256" y="320" width="64" height="64"/>
+  <object id="328" type="floorTileMountain" x="320" y="320" width="64" height="64"/>
+  <object id="329" type="floorTileMountain" x="384" y="320" width="64" height="64"/>
+  <object id="330" type="floorTileMountain" x="448" y="320" width="64" height="64"/>
+  <object id="331" type="floorTile" x="0" y="384" width="64" height="64"/>
+  <object id="332" type="floorTile" x="64" y="384" width="64" height="64"/>
+  <object id="333" type="floorTile" x="128" y="384" width="64" height="64"/>
+  <object id="334" type="floorTile" x="192" y="384" width="64" height="64"/>
+  <object id="335" type="floorTile" x="256" y="384" width="64" height="64"/>
+  <object id="336" type="floorTile" x="320" y="384" width="64" height="64"/>
+  <object id="337" type="floorTile" x="384" y="384" width="64" height="64"/>
+  <object id="338" type="floorTile" x="448" y="384" width="64" height="64"/>
+  <object id="339" type="floorTile" x="0" y="448" width="64" height="64"/>
+  <object id="340" type="floorTile" x="64" y="448" width="64" height="64"/>
+  <object id="341" type="floorTile" x="128" y="448" width="64" height="64"/>
+  <object id="342" type="floorTile" x="192" y="448" width="64" height="64"/>
+  <object id="343" type="floorTile" x="256" y="448" width="64" height="64"/>
+  <object id="344" type="floorTile" x="320" y="448" width="64" height="64"/>
+  <object id="345" type="floorTile" x="384" y="448" width="64" height="64"/>
+  <object id="346" type="floorTile" x="448" y="448" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="3" name="Player 2">
+  <object id="7" name="Player 2 City" type="city2" x="0" y="0" width="64" height="64"/>
+  <object id="8" name="Player 2 Tank" type="tank2" x="64" y="192" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="2" name="Player 1">
+  <object id="5" name="Player 1 City" type="city1" x="448" y="448" width="64" height="64"/>
+  <object id="6" name="Player 1 Tank" type="tank1" x="64" y="384" width="64" height="64"/>
+ </objectgroup>
+ <layer id="6" name="Tile Layer 2" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="mountains">
+  <object id="9" name="mountain" type="mountain" x="256" y="320" width="64" height="64"/>
+  <object id="10" name="mountain" type="mountain" x="320" y="320" width="64" height="64"/>
+  <object id="11" name="mountain" type="mountain" x="256" y="256" width="64" height="64"/>
+  <object id="12" name="mountain" type="mountain" x="320" y="256" width="64" height="64"/>
+  <object id="16" name="mountain" type="mountain" x="128" y="192" width="64" height="64"/>
+  <object id="15" name="mountain" type="mountain" x="256" y="192" width="64" height="64"/>
+  <object id="14" name="mountain" type="mountain" x="192" y="256" width="64" height="64"/>
+  <object id="13" name="mountain" type="mountain" x="192" y="192" width="64" height="64"/>
+  <object id="412" name="mountain" type="mountain" x="192" y="128" width="64" height="64"/>
+ </objectgroup>
+</map>

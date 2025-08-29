@@ -1,8 +1,12 @@
+/**
+ * @author Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.gameService;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.ProgressBar;
 import com.robustgames.robustclient.business.entitiy.components.CityDataComponent;
+import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
 import com.robustgames.robustclient.business.logic.Player;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -14,7 +18,7 @@ import static com.robustgames.robustclient.business.entitiy.EntityType.CITY;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 /**
- *  Manages turn order, win conditions, etc.
+ * Manages turn order, win conditions, etc.
  */
 public class GameState {
     static Player winner;
@@ -24,27 +28,29 @@ public class GameState {
         List<Entity> tankList = getGameWorld().getEntitiesByType(TANK);
         getGameTimer().runOnceAfter(() -> {
             if (cityList.isEmpty() || tankList.isEmpty() || (cityList.size() == 1 && tankList.size() == 1)) {
+                System.out.println("Game Over - Draw -> City List size = " + cityList.size() + " tank List size = " + tankList.size());
                 getDialogService().showMessageBox("The Game Ends in a Draw", getGameController()::exit);
                 return;
             }
             if (cityList.size() == 1) {
+                System.out.println("Game Over - CityList Size = " + cityList.size());
                 winner = cityList.getFirst().getComponent(CityDataComponent.class).getOwner();
                 getDialogService().showMessageBox(winner + " wins", getGameController()::exit);
                 return;
             }
             if (tankList.size() == 1) {
-                winner = tankList.getFirst().getComponent(CityDataComponent.class).getOwner();
+                System.out.println("Game Over - TankList Size = " + tankList.size());
+                winner = tankList.getFirst().getComponent(TankDataComponent.class).getOwner();
                 getDialogService().showMessageBox(winner + " wins", getGameController()::exit);
                 return;
             }
             getDialogService().showMessageBox("Nobody wins", getGameController()::exit);
 
         }, Duration.millis(2000));
-
     }
 
 
-    public static ProgressBar hpBarInit(int maxHP){
+    public static ProgressBar hpBarInit(int maxHP) {
         var hpBar = new ProgressBar();
         hpBar.setWidth(90);
         hpBar.setHeight(15);
@@ -57,3 +63,4 @@ public class GameState {
         return hpBar;
     }
 }
+

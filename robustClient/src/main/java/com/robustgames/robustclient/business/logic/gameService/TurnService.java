@@ -1,26 +1,51 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.logic.gameService;
 
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.ActionComponent;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.APComponent;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.Player;
+import javafx.application.Platform;
 
-import static com.almasb.fxgl.dsl.FXGL.getNotificationService;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getNotificationService;
 import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 
 public class TurnService {
+    private static final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
     public static Player currentPlayer;
     static boolean player1Ready = false;
     static boolean player2Ready = false;
 
     public static void startTurn(Player player) {
         currentPlayer = player;
-        Entity playerTank = MapService.findTankOfPlayer(player);
-        if (playerTank != null) {
-            playerTank.getComponent(TankDataComponent.class).setInitialPos();
+        if (currentGamemode.equals(Gamemode.LOCAL)) {
+            Entity playerTank = MapService.findTankOfPlayer(player);
+            if (playerTank != null) {
+                playerTank.getComponent(TankDataComponent.class).setInitialPos();
+            }
+        } else if (currentGamemode.equals(Gamemode.ONLINE)) {
+            String myPlayerName = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+            currentPlayer = Player.valueOf(myPlayerName);
+            System.out.println(currentGamemode + " " + currentPlayer);
+
+            if (myPlayerName != null && myPlayerName.equals(currentPlayer.toString())) {
+                Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
+                System.err.println(playerTank);
+                if (playerTank != null) {
+                    playerTank.getComponent(TankDataComponent.class).setInitialPos();
+                    System.err.println("InitialPos set " + playerTank.getComponent(TankDataComponent.class).getInitialPos());
+                }
+            } else {
+                System.out.println("Waiting for other player...");
+
+            }
         }
     }
 
@@ -28,12 +53,15 @@ public class TurnService {
         if (currentPlayer == Player.PLAYER1) {
             player1Ready = true;
             currentPlayer = Player.PLAYER2;
-            getNotificationService().pushNotification(currentPlayer + "'S TURN" );
-        }
-        else {
+            Platform.runLater(() -> {
+                getNotificationService().pushNotification(currentPlayer + "'S TURN");
+            });
+        } else {
             player2Ready = true;
             currentPlayer = Player.PLAYER1;
-            executeActions();
+            if (currentGamemode.equals(Gamemode.LOCAL)) {
+                executeActions();
+            }
         }
         startTurn(currentPlayer);
 
@@ -69,9 +97,12 @@ public class TurnService {
         player2Ready = false;
 
         FXGL.getGameWorld().getEntitiesByType(TANK).forEach(entity -> {
-                entity.getComponent(APComponent.class).reset();
+            entity.getComponent(APComponent.class).reset();
         });
-        getNotificationService().pushNotification(currentPlayer + "'S TURN" );
+        Platform.runLater(() -> {
+            getNotificationService().pushNotification(currentPlayer + "'S TURN");
+        });
     }
 }
+
 

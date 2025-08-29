@@ -1,3 +1,6 @@
+/**
+ * @author Nico Steiner
+ */
 package com.robustgames.robustclient.business.entitiy.components.animations;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -10,7 +13,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameTimer;
 
 public class AnimTankTurret extends Component {
     private final AnimatedTexture texture;
-    private AnimationChannel shootingBarrel;
+    private final AnimationChannel shootingBarrel;
 
     public AnimTankTurret(String tankTurretView) {
         String tankTurretViewShoot = tankTurretView.substring(0, tankTurretView.lastIndexOf(".")) + "_shoot.png";
@@ -22,12 +25,18 @@ public class AnimTankTurret extends Component {
 
     @Override
     public void onAdded() {
+        texture.loopAnimationChannel(shootingBarrel);
         entity.getViewComponent().addChild(texture);
-        texture.play();
         getGameTimer().runOnceAfter(() -> {
             entity.getViewComponent().removeChild(texture);
+            entity.removeComponent(this.getClass());
         }, Duration.seconds(0.6));
 
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
     }
 
     @Override
@@ -37,3 +46,4 @@ public class AnimTankTurret extends Component {
     }
 
 }
+

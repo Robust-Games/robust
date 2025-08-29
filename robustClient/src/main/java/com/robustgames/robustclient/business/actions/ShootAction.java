@@ -1,50 +1,84 @@
+/**
+ * @author Burak Altun, eyesi001, Nico Steiner
+ */
 package com.robustgames.robustclient.business.actions;
 
+import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.action.Action;
-import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
-import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.almasb.fxgl.net.Connection;
+import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.TankDataComponent;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimTankTurret;
+import com.robustgames.robustclient.business.factories.BundleFactory;
+import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.gameService.MapService;
+import com.robustgames.robustclient.business.logic.networkService.ConnectionService;
 import com.robustgames.robustclient.business.logic.tankService.RotateService;
 import com.robustgames.robustclient.business.logic.tankService.ShootService;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
+
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.robustgames.robustclient.business.entitiy.EntityType.ACTIONSELECTION;
-import static com.robustgames.robustclient.business.entitiy.EntityType.TILE;
+import static com.robustgames.robustclient.business.entitiy.EntityType.*;
 import static com.robustgames.robustclient.business.logic.tankService.ShootService.spawnAttackTarget;
 
 public class ShootAction extends Action {
     private final Point2D targetGridPosition;
     private final Point2D targetScreenPosition;
     private final Entity originalTarget;
+    private final boolean isLocal;
+    private final Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
 
     /**
      * Creates a new ShootAction targeting the position of the entity
+     *
      * @param target The entity that was targeted during planning. This entity's position
      *               is stored, but the entity itself is only used for showing
      */
     public ShootAction(Entity target) {
         this.originalTarget = target;
-        boolean isTargetTile = target.isType(TILE);
+        this.targetScreenPosition = target.getPosition();
+        this.isLocal = true;
 
-        if (isTargetTile) {
-            this.targetScreenPosition = target.getPosition();
-        } else {
-            this.targetScreenPosition = target.getCenter();
-        }
-        this.targetGridPosition = MapService.isoScreenToGrid(targetScreenPosition);
+        if (target.getType() == CITY) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
+        } else if (target.getType() == TILE) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
+        } else
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
     }
+
+    /**
+     * Creates a new ShootAction with explicit locality flag.
+     *
+     * @param target  the entity that was targeted during planning; its position is stored
+     * @param isLocal whether this action originates locally (true) and should be sent to the server
+     *                when queued, or was received from the network (false)
+     */
+    public ShootAction(Entity target, boolean isLocal) {
+        this.originalTarget = target;
+        this.targetScreenPosition = target.getPosition();
+        this.isLocal = isLocal;
+
+        if (target.getType() == CITY) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 64));
+        } else if (target.getType() == TILE) {
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getPosition().add(64, 32));
+        } else
+            this.targetGridPosition = MapService.isoScreenToGrid(target.getCenter());
+    }
+
 
     /**
      * Called when the action starts executing during turn processing.
      * 1. Shows the target
      * 2. After a short delay to compensate for tank movement, removes the AttackTile and finds the entity currently
      * at target position
-     * 3. Executes the shoot action on the current entity at that position (or tile if tank is found)
+     * 3. Executes the shoot action on the current entity at that position (or tile if tank is not found)
      */
     @Override
     protected void onStarted() {
@@ -54,11 +88,20 @@ public class ShootAction extends Action {
 
         getGameTimer().runOnceAfter(() -> {
             getGameWorld().removeEntities(byType(ACTIONSELECTION));
-            Entity currentTarget = findEntityAtPosition();
+            Entity currentTarget;
+            if (originalTarget.isType(TILE)) {
+                currentTarget = findEntityAtPosition(originalTarget, true);
+            } else if (originalTarget.isType(TANK)) {
+                currentTarget = findEntityAtPosition(originalTarget, false);
+            } else currentTarget = originalTarget;
 
             if (currentTarget != null) {
-                entity.addComponent(new AnimTankTurret(entity.getComponent(TankDataComponent.class).getTurretTextureName()));
-                ShootService.executeShoot(currentTarget, entity);
+                if (currentTarget.hasComponent(com.almasb.fxgl.dsl.components.HealthIntComponent.class)) {
+                    entity.addComponent(new AnimTankTurret(entity.getComponent(TankDataComponent.class).getTurretTextureName()));
+                    ShootService.executeShoot(currentTarget, entity);
+                } else {
+                    System.err.println("WARN: Target has no HealthIntComponent! " + currentTarget.getType());
+                }
             } else {
                 System.err.println("No target found at position: " + targetGridPosition);
             }
@@ -67,38 +110,77 @@ public class ShootAction extends Action {
     }
 
     /**
-     * Finds the entity currently at the target position.
+     * Finds the entity at the target position
      * This method is called during action execution to determine what entity
-     * is currently at the position that was targeted during planning. This allows the
+     * is currently at the position which was initially targeted during planning. This allows the
      * action to correctly handle cases where entities move between planning and execution.
-     *
+     * @param TargetIsTile true if the target is a tile, false if it is a tank
      * @return The entity at the target position, or null if no entity is found
      */
-    private Entity findEntityAtPosition() {
-        Point2D entityPos = MapService.isoGridToScreen(targetGridPosition).subtract(64, 64);
+    private Entity findEntityAtPosition(Entity targetEntity, Boolean TargetIsTile) {
+        if (TargetIsTile) {
+            Point2D posEntity = targetScreenPosition.subtract(0, 65);
+            List<Entity> entityList = getGameWorld().getEntitiesAt(posEntity);
+            if (!entityList.isEmpty()) {
+                if (entityList.size() > 1) {
+                    throw new IllegalStateException("More than one entity found at target position "
+                            + targetGridPosition);
+                }
+                return entityList.getFirst();
+            } else return targetEntity;
 
-        List<Entity> entitiesAtPosition = getGameWorld().getEntitiesAt(entityPos);
-        if (!entitiesAtPosition.isEmpty()) {
-            return entitiesAtPosition.getFirst();
+        } else {
+            if (targetEntity.getPosition().equals(targetScreenPosition))
+                return targetEntity;
+            else {
+                Point2D posTile = (targetScreenPosition).add(0, 65);
+                List<Entity> tileList = getGameWorld().getEntitiesAt(posTile);
+                if (!tileList.isEmpty()) {
+                    if (tileList.size() > 1) {
+                        throw new IllegalStateException("More than one entity found at target position "
+                                + targetGridPosition);
+                    }
+                    return tileList.getFirst();
+                } else
+                    throw new IllegalStateException("No Tile found at target position @findEntityAtPosition - ShootAction");
+            }
         }
-
-        // If no entity found at the entity position, check at the tile position
-        List<Entity> tilesAtPosition = getGameWorld().getEntitiesAt(targetScreenPosition);
-        if (!tilesAtPosition.isEmpty()) {
-            return tilesAtPosition.getFirst();
-        }
-
-        return null;
     }
 
     @Override
     protected void onUpdate(double tpf) {
 
     }
+
+    /**
+     * Called when the action is queued on the ActionComponent.
+     * If the game is in online mode and this action originated locally, a ShootAction bundle
+     * is created and sent to the server so the opponent can mirror the action.
+     */
+    @Override
+    protected void onQueued() {
+        if (currentGamemode.equals(Gamemode.ONLINE)) {
+            if (!isLocal) return;
+
+            Connection<Bundle> conn = FXGL.getService(ConnectionService.class).getConnection();
+            if (conn != null) {
+                Bundle shootBundle = BundleFactory.createShootActionBundle(entity, originalTarget);
+                conn.send(shootBundle);
+            }
+        }
+    }
+
+    /**
+     * Called after the action has finished executing.
+     * Resets the tank state before the next turn when playing locally.
+     */
     @Override
     protected void onCompleted() {
         super.onCompleted();
-        entity.getComponent(TankDataComponent.class).resetBeforeTurn();
+        if (currentGamemode.equals(Gamemode.LOCAL)) {
+            entity.getComponent(TankDataComponent.class).resetBeforeTurn();
+        }
     }
 
 }
+

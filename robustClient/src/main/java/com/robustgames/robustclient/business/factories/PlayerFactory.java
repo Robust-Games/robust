@@ -1,3 +1,6 @@
+/**
+ * @author Burak Altun, Ersin Yesiltas, Nico Steiner
+ */
 package com.robustgames.robustclient.business.factories;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -10,11 +13,14 @@ import com.almasb.fxgl.entity.action.ActionComponent;
 import com.almasb.fxgl.texture.Texture;
 import com.robustgames.robustclient.application.RobustApplication;
 import com.robustgames.robustclient.business.entitiy.components.*;
-import com.robustgames.robustclient.business.logic.gameService.GameState;
+import com.robustgames.robustclient.business.entitiy.components.animations.AnimCityComponent;
+import com.robustgames.robustclient.business.logic.Gamemode;
 import com.robustgames.robustclient.business.logic.Player;
+import com.robustgames.robustclient.business.logic.gameService.GameState;
 import com.robustgames.robustclient.business.logic.gameService.TurnService;
 
-import static com.robustgames.robustclient.business.entitiy.EntityType.*;
+import static com.robustgames.robustclient.business.entitiy.EntityType.CITY;
+import static com.robustgames.robustclient.business.entitiy.EntityType.TANK;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER1;
 import static com.robustgames.robustclient.business.logic.Player.PLAYER2;
 
@@ -35,13 +41,27 @@ public class PlayerFactory implements EntityFactory {
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
-                .onClick(clickedTank ->{
-                    //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    if (TurnService.currentPlayer == Player.PLAYER1){
+                .onClick(clickedTank -> {
+                    String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+                    Player owner = clickedTank.getComponent(TankDataComponent.class).getOwner();
+                    Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
+
+                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE) && !owner.toString().equals(myPlayer)) {
+                        System.out.println("Nicht dein Panzer. Klick ignoriert.");
+                        return;
+                    }
+                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)) {
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+                    } else if (currentGamemode.equals(Gamemode.LOCAL)) {
+                        if (TurnService.currentPlayer == Player.PLAYER1) {
+                            FXGL.<RobustApplication>getAppCast().deSelectTank();
+                            clickedTank.addComponent(new SelectableComponent());
+                            FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+                        }
                     }
+
                 })
                 .build();
         tank.addComponent(new TankDataComponent(PLAYER1, tank.getViewComponent().getChild(0, Texture.class)));
@@ -58,7 +78,7 @@ public class PlayerFactory implements EntityFactory {
         Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
                 .with(hpComp)
-                .viewWithBBox("city1.png")
+                .with(new AnimCityComponent(false))
                 .build();
         city.addComponent(new CityDataComponent(PLAYER1, city.getViewComponent().getChild(0, Texture.class)));
         city.getViewComponent().addChild(hpBar);
@@ -74,17 +94,30 @@ public class PlayerFactory implements EntityFactory {
         Entity tank = FXGL.entityBuilder(data)
                 .type(TANK)
                 .with(hpComp)
-                .viewWithBBox("tank_down_right.png")
+                .viewWithBBox("green_tank_down_right.png")
                 .zIndex(10)
                 .with(new ActionComponent())
                 .with(new RotateComponent())
                 .with(new APComponent(5))
-                .onClick(clickedTank ->{
-                    //TODO Make the tile that the tank is standing on, also select the tank. i.e. add a tank property to hovertile
-                    if (TurnService.currentPlayer == PLAYER2){
+                .onClick(clickedTank -> {
+                    String myPlayer = FXGL.<RobustApplication>getAppCast().getAssignedPlayer();
+                    Player owner = clickedTank.getComponent(TankDataComponent.class).getOwner();
+                    Gamemode currentGamemode = FXGL.<RobustApplication>getAppCast().getSelectedGamemode();
+
+                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE) && !owner.toString().equals(myPlayer)) {
+                        System.out.println("Nicht dein Panzer. Klick ignoriert.");
+                        return;
+                    }
+                    if (FXGL.<RobustApplication>getAppCast().getSelectedGamemode().equals(Gamemode.ONLINE)) {
                         FXGL.<RobustApplication>getAppCast().deSelectTank();
                         clickedTank.addComponent(new SelectableComponent());
                         FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+                    } else if (currentGamemode.equals(Gamemode.LOCAL)) {
+                        if (TurnService.currentPlayer == Player.PLAYER2) {
+                            FXGL.<RobustApplication>getAppCast().deSelectTank();
+                            clickedTank.addComponent(new SelectableComponent());
+                            FXGL.<RobustApplication>getAppCast().onTankClicked(clickedTank);
+                        }
                     }
                 })
                 .build();
@@ -102,10 +135,11 @@ public class PlayerFactory implements EntityFactory {
         Entity city = FXGL.entityBuilder(data)
                 .type(CITY)
                 .with(hpComp)
-                .viewWithBBox("city1.png")
+                .with(new AnimCityComponent(false))
                 .build();
         city.addComponent(new CityDataComponent(PLAYER2, city.getViewComponent().getChild(0, Texture.class)));
         city.getViewComponent().addChild(hpBar);
         return city;
     }
 }
+
