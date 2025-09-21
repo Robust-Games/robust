@@ -3,12 +3,8 @@
  */
 package com.robustgames.robustclient.presentation.UIElements;
 
-import com.almasb.fxgl.audio.Sound;
-import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAudioPlayer;
 
 public class RobustButton extends Button {
 
@@ -22,16 +18,9 @@ public class RobustButton extends Button {
         this.setGraphic(btnText);
         this.getStyleClass().add("robust-btn-menu");
 
-        Sound hover = FXGL.getAssetLoader().loadSound("UIHover.mp3");
-        Sound accept = FXGL.getAssetLoader().loadSound("UIAccept.mp3");
-
-        this.setOnMouseEntered(event -> {
-            getAudioPlayer().playSound(hover);
-        });
-        this.setOnAction(e -> {
-            getAudioPlayer().playSound(accept);
-            action.run();
-        });
+        // No audio on hover or click; simply run the provided action.
+        this.setOnMouseEntered(event -> {});
+        this.setOnAction(e -> action.run());
     }
 }
 

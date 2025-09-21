@@ -228,7 +228,6 @@ public class RobustApplication extends GameApplication {
         FXGL.setLevelFromMap("mapTest2.tmx");
 
         GameWorld world = getGameWorld();
-        Platform.runLater(() -> SoundService.pickSong());
         List<Entity> allEntities = world.getEntities();
         for (Entity entity : allEntities) {
             moveEntityToIsometric(entity);

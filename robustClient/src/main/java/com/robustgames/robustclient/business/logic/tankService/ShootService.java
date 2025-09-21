@@ -65,22 +65,13 @@ public class ShootService {
         } else {
             spawnShell(tank, target.getPosition().add(64, 1));
         }
-        FXGL.play("tank_shoot.wav");
 
         // Add explosion animation after bullet travels there
         getGameTimer().runOnceAfter(() -> {
             if (target.getType() != TILE) {
-                if (target.getType() == TANK) {
-                    FXGL.play("hit_tile.wav"); //TODO Change sound
-                } else if (target.getType() == MOUNTAIN) {
-                    FXGL.play("hit_mountain.wav");
-                } else if (target.getType() == CITY) {
-                    FXGL.play("hit_city.wav");
-                }
                 target.addComponent(new AnimExplosionComponent(0, 0));
             } else {
                 target.addComponent(new AnimExplosionComponent(0, -64));
-                FXGL.play("hit_tile.wav");
             }
         }, Duration.millis(target.distance(tank)));
 

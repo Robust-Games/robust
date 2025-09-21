@@ -3,7 +3,6 @@
  */
 package com.robustgames.robustclient.presentation.scenes;
 
-import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.robustgames.robustclient.application.RobustApplication;
@@ -22,7 +21,6 @@ import javafx.scene.layout.Pane;
 
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAudioPlayer;
 
 public class EndTurnView extends Pane {
     Button btnEndTurn;
@@ -46,10 +44,8 @@ public class EndTurnView extends Pane {
         this.setTranslateX(getAppWidth() - 260);
         this.setTranslateY(getAppHeight() - 150);
 
-        Sound endTurn = FXGL.getAssetLoader().loadSound("UIEndTurn.mp3");
-
+        // No sound on End Turn; just execute the logic.
         btnEndTurn.setOnAction(event -> {
-            Platform.runLater(() -> getAudioPlayer().playSound(endTurn));
             Player currentPlayer = TurnService.currentPlayer;
             Entity playerTank = MapService.findTankOfPlayer(currentPlayer);
 

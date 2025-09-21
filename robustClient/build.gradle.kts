@@ -13,6 +13,13 @@ repositories {
     mavenCentral()
 }
 
+val javafxVersion = "17.0.6"
+val platform = when (org.gradle.internal.os.OperatingSystem.current()) {
+    org.gradle.internal.os.OperatingSystem.WINDOWS -> "win"
+    org.gradle.internal.os.OperatingSystem.MAC_OS -> "mac"
+    org.gradle.internal.os.OperatingSystem.LINUX -> "linux"
+    else -> ""
+}
 val junitVersion = "5.10.2"
 
 java {
@@ -40,7 +47,7 @@ dependencies {
         exclude(group = "org.openjfx")
        // exclude(group = "org.jetbrains.kotlin")
     }
-
+    implementation("org.openjfx:javafx-media:${javafxVersion}:${platform}")
 }
 
 
