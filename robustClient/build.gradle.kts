@@ -13,13 +13,6 @@ repositories {
     mavenCentral()
 }
 
-val javafxVersion = "17.0.6"
-val platform = when (org.gradle.internal.os.OperatingSystem.current()) {
-    org.gradle.internal.os.OperatingSystem.WINDOWS -> "win"
-    org.gradle.internal.os.OperatingSystem.MAC_OS -> "mac"
-    org.gradle.internal.os.OperatingSystem.LINUX -> "linux"
-    else -> ""
-}
 val junitVersion = "5.10.2"
 
 java {
@@ -47,12 +40,11 @@ dependencies {
         exclude(group = "org.openjfx")
        // exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("org.openjfx:javafx-media:${javafxVersion}:${platform}")
 }
 
 
 jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
+    imageZip.set(layout.buildDirectory.file("distributions/app-${javafx.platform.classifier}.zip"))
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
     forceMerge("kotlin")
     launcher {

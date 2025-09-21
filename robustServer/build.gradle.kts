@@ -45,7 +45,7 @@ dependencies {
 
 val os = org.gradle.internal.os.OperatingSystem.current()
 jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
+    imageZip.set(layout.buildDirectory.file("distributions/app-${javafx.platform.classifier}.zip"))
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
     forceMerge("kotlin")
     launcher {
